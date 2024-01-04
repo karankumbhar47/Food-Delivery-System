@@ -23,7 +23,7 @@
             android:text="Swiggy lite"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="#FF7700"
+            android:textColor="@color/orange"
             android:textSize="34sp"
             android:textStyle="bold"
             android:translationY="-20dp"
