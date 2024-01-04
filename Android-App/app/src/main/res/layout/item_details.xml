@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <androidx.cardview.widget.CardView  xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/item_details1"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toTopOf="@+id/item_details"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/id1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="205dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="44dp"
+                android:fontFamily="sans-serif-black"
+                android:text="Domino's Pizza"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/itemImage"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/itemImage"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/menu_card_background"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@drawable/ic_launcher_background" />
+
+            <TextView
+                android:id="@+id/ratings"
+                android:layout_width="78dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="2dp"
+                android:text="4.5 (100+)"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+            <TextView
+                android:id="@+id/food_list"
+                android:layout_width="192dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="4dp"
+                android:text="Pizzas, Italian, Pastas, D.."
+                android:textColor="#5F5E5E"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/itemImage"
+                app:layout_constraintTop_toBottomOf="@+id/ratings" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="1dp"
+                android:text="Durg Bhilai"
+                android:textColor="#5F5E5E"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/itemImage"
+                app:layout_constraintTop_toBottomOf="@+id/food_list" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="31dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintStart_toEndOf="@+id/itemImage"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:srcCompat="@android:drawable/btn_star_big_on" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
