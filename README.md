@@ -5,7 +5,7 @@
     - Login Credentials
     - Name
     - Profile Picture
-    - Cart
+    - Cart (In MVP it will be stored locally and not synced)
     - History(d)
   - Vendor:
     - Login Credentials
@@ -25,14 +25,18 @@
     - Available
     - Picked up items(d)
   - Catalog:
+    - Item id (seq integer)
     - Item
-      - Item Add-ons
+      - Item Add-ons (list of addon ids)
+    - Thumbnail picture (base64 encoded string)
+    - Is addon
     - Tags
     - Price
     - Vendor
     - Max Quantity
     - Is Available
     - Current rating(d)
+    - Images (list of urls)
   - Rating:
     - Item, User
     - Stars
