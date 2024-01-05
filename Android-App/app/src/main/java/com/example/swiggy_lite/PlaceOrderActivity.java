@@ -7,33 +7,30 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
-    TextView login_button, register_button;
+public class PlaceOrderActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_place_order);
 
-        setContentView(R.layout.activity_main);
-        login_button = findViewById(R.id.login_button);
-        register_button = findViewById(R.id.regiser_button);
-
-        login_button.setOnClickListener(new View.OnClickListener() {
+        TextView place_order_button = findViewById(R.id.place_order_button);
+        place_order_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainPage.class);
+                Intent intent = new Intent(PlaceOrderActivity.this,MainPage.class);
                 startActivity(intent);
             }
         });
 
-        register_button.setOnClickListener(new View.OnClickListener() {
+        TextView back_button = findViewById(R.id.back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, UserRegistration.class);
+                Intent intent = new Intent(PlaceOrderActivity.this,ItemDetailsActivity.class);
                 startActivity(intent);
             }
         });
-
 
 
     }

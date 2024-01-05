@@ -1,8 +1,11 @@
 package com.example.swiggy_lite.MainFragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,10 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.swiggy_lite.Home_Fragments.category_search;
+import com.example.swiggy_lite.MainPage;
 import com.example.swiggy_lite.R;
-import com.example.swiggy_lite.RecyclerViewActivity;
 import com.example.swiggy_lite.adapters.CategoryAdapter;
 import com.example.swiggy_lite.adapters.ItemDetailsAdapter;
+import com.example.swiggy_lite.ItemDetailsActivity;
 import com.example.swiggy_lite.models.foodModel;
 
 import java.util.ArrayList;
@@ -61,6 +66,12 @@ public class HomeFragment extends Fragment {
         category_recyclerView = view.findViewById(R.id.category_recyclerView);
         category_recyclerView.setLayoutManager(new GridLayoutManager(this.requireContext(), 3, RecyclerView.HORIZONTAL, false));
         categoryAdapter = new CategoryAdapter(categoryLists);
+        CategoryAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                load(new category_search());
+            }
+        });
         category_recyclerView.setAdapter(categoryAdapter);
 
         ArrayList<foodModel> foodItemList = new ArrayList<>();
@@ -86,7 +97,23 @@ public class HomeFragment extends Fragment {
         recommendation_recyclerView = view.findViewById(R.id.recommendation_recyclerView);
         recommendation_recyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(),RecyclerView.VERTICAL,false));
         recommendationAdapter = new ItemDetailsAdapter(foodItemList);
+        ItemDetailsAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(requireContext(), ItemDetailsActivity.class);
+                startActivity(intent);
+            }
+        });
         recommendation_recyclerView.setAdapter(recommendationAdapter);
         return view;
     }
+
+    void load(Fragment fragment){
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame,fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 }

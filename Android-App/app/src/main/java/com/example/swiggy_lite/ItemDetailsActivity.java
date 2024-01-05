@@ -1,43 +1,29 @@
-package com.example.swiggy_lite.Home_Fragments;
+package com.example.swiggy_lite;
 
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.swiggy_lite.ItemDetailsActivity;
-import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.adapters.CategoryAdapter;
 import com.example.swiggy_lite.adapters.ItemDetailsAdapter;
 import com.example.swiggy_lite.models.foodModel;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
-public class category_search extends Fragment {
-
-
-    public category_search() {
-        // Required empty public constructor
-    }
+public class ItemDetailsActivity extends AppCompatActivity {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_category_search, container, false);
+        setContentView(R.layout.activity_item_details);
         ArrayList<foodModel> foodItemList = new ArrayList<>();
         foodItemList.add(new foodModel(1, "Spaghetti Bolognese", "4.5", 12, "Kitchen"));
         foodItemList.add(new foodModel(2, "Chicken Alfredo", "4.8", 15, "Kitchen"));
@@ -58,27 +44,24 @@ public class category_search extends Fragment {
         foodItemList.add(new foodModel(17, "Vegetarian Burrito", "4.7", 17, "Assembly Line"));
         foodItemList.add(new foodModel(18, "Mango Sorbet", "4.4", 8, "Freezer"));
 
-        RecyclerView recyclerView = view.findViewById(R.id.item_details_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(), RecyclerView.VERTICAL, false));
+        RecyclerView recyclerView = findViewById(R.id.item_details_recyclerView);
         RecyclerView.Adapter adapter = new ItemDetailsAdapter(foodItemList);
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,false));
         ItemDetailsAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent = new Intent(requireContext(), ItemDetailsActivity.class);
-                startActivity(intent);
+                Toast.makeText(ItemDetailsActivity.this,"Clicked",Toast.LENGTH_SHORT).show();
             }
         });
         recyclerView.setAdapter(adapter);
 
-        return view;
-    }
-
-    void load(Fragment fragment){
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_frame,fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        TextView cart_button = findViewById(R.id.cart_button);
+        cart_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ItemDetailsActivity.this,PlaceOrderActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

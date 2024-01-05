@@ -21,6 +21,15 @@ public class ItemDetailsAdapter extends RecyclerView.Adapter<ItemDetailsAdapter.
         list = items;
     }
 
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    private static CategoryAdapter.OnItemClickListener listener;
+    public static void setOnItemClickListener(CategoryAdapter.OnItemClickListener clickListener){
+        listener = clickListener;
+    }
+
     @NonNull
     @Override
     public ItemDetailsAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,6 +45,7 @@ public class ItemDetailsAdapter extends RecyclerView.Adapter<ItemDetailsAdapter.
         holder.location.setText(singleItem.getRender_location());
         //holder.item_list.setText();
         holder.item_price.setText(String.valueOf(singleItem.getPrice()));
+        holder.item_pic.setOnClickListener(v -> listener.onItemClick(holder.getAdapterPosition()));
     }
 
     @Override

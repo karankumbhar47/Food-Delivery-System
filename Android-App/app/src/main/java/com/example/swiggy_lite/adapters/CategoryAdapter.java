@@ -20,6 +20,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.viewHo
         list = items;
     }
 
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    private static CategoryAdapter.OnItemClickListener listener;
+    public static void setOnItemClickListener(CategoryAdapter.OnItemClickListener clickListener){
+        listener = clickListener;
+    }
+
     @NonNull
     @Override
     public CategoryAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -31,6 +40,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.viewHo
     public void onBindViewHolder(@NonNull CategoryAdapter.viewHolder holder, int position) {
         String singleItem = list.get(position);
         holder.name.setText(singleItem);
+        holder.picImage.setOnClickListener(v -> listener.onItemClick(holder.getAdapterPosition()));
     }
 
     @Override
