@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
-import com.example.swiggy_lite.adapters.demoAdapter;
+import com.example.swiggy_lite.adapters.CategoryAdapter;
 
 import java.util.ArrayList;
 
@@ -38,7 +38,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.demo_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL , false));
-        adapter = new demoAdapter(info);
-        recyclerView.setAdapter(adapter);
+//        adapter = new CategoryAdapter(info);
+//        recyclerView.setAdapter(adapter);
     }
 }
