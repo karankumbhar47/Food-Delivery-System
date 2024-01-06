@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.example.swiggy_lite.adapters.CategoryAdapter;
 import com.example.swiggy_lite.adapters.demoAdapter;
 
 import java.util.ArrayList;
