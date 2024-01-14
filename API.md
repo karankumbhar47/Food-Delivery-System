@@ -1,22 +1,22 @@
-### Register
+### Register (/register)[POST]
   - Request Header:
   - Request Body:
-    - Requested Username
-    - Password
-    - Name
-    - Phone number
-    - Email-id
-    - Gender
-    - DoB
+    - Requested Username(username)
+    - Password(password)
+    - Name(name)
+    - Phone number(phone)
+    - Email-id(email)
+    - Gender(gender)
+    - DoB(dob)
   - Response Header:
     - Status 200 OK if username is unique and Password valid
         - Response Body:
             - session-id: string(40);
     - Status 403 Forbidden if username is not unique or Password is invalid
         - Response Body:
-          - Username Unique: bool
-          - Password Strength: bool
-### Login:
+          - Username Unique: bool (user_uniq)
+          - Password Strength: bool (pass_val)
+### Login: (/login)[POST]
   - Request:
     - username
     - password
@@ -27,7 +27,7 @@
     - Status 403 Forbidden if invalid credentials
         - Response Body:
 
-### Update Profile:
+### Update Profile: (/profile/update)[POST]
   - session-id in header
   - can return 200 or 401
   - Request Body:
@@ -47,7 +47,7 @@
 
 ## Consumer APIs
 
-### Search
+### Search (/query)[GET]
   - Request
     - query (search query)
     - filters:
@@ -66,7 +66,7 @@
     - Is Available
     - Tags
 
-### Get Product Details
+### Get Product Details[GET]
   - Request:
     - item id
   - Response:

@@ -1,0 +1,298 @@
+openapi: 3.1.0
+info:
+    title: FDS
+    description: |
+        This API allows to communicate with FDS (Food Delivery System) server.
+    version: 0.0.1
+paths:
+    # Registration and Authentication paths
+    /register:
+        post:
+            summary: Register a new consumer?
+            description: Create a new user account with unique username, strong password for authentication and other user info.
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - username
+                                - password
+                                - phone
+                            properties:
+                                username:
+                                    type: string
+                                password:
+                                    type: string
+                                name:
+                                    type: string
+                                phone:
+                                    type: number
+                                email:
+                                    type: string
+                                gender:
+                                    type: string
+                                    enum:
+                                        - Male
+                                        - Female
+                                        - Others
+                                dob:
+                                    type: string
+                required: true
+            response:
+            "200":
+                description: "OK"
+                content:
+                    application/json:
+                        description: Return session id
+                        schema:
+                            type: string
+                            minLength: 40
+                            maxLength: 40
+            "409":
+                description: "Conflict"
+                content:
+                    application/json:
+                        description: Return Conflict type
+                        schema:
+                            type: string
+                            enum:
+                                - Username
+                                - Phone
+                                - Email
+                                - Password
+
+    /login:
+        post:
+            summary: Login to user account
+            description: Get username and password and authenticate the user.
+                Returns SessionID for further requests
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - username
+                                - password
+                            properties:
+                                username:
+                                    type: string
+                                password:
+                                    type: string
+                required: true
+            response:
+            "200":
+                description: "OK"
+                content:
+                    application/json:
+                        description: Return session id
+                        schema:
+                            type: string
+                            minLength: 40
+                            maxLength: 40
+            "403":
+                description: "Forbidden"
+    /profile:
+        get:
+            summary: 
+            description: Get information about the another user from username
+                if the current user is allowed to do so. Anyone can see
+                information about all the Vendors, Delivery Persons and the
+                user himself.
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - username
+                                - sessionId
+                            properties:
+                                username:
+                                    type: string
+                                sessionId:
+                                    type: string
+                                    minLength: 40
+                                    maxLength: 40
+
+                required: true
+            response:
+            "200":
+                description: "OK"
+                content:
+                    application/json:
+                        description: Return allowed fields of the user info
+                        schema:
+                            type: object
+                            properties:
+                                username:
+                                    type: string
+                                name:
+                                    type: string
+                                phone:
+                                    type: number
+                                email:
+                                    type: string
+                                gender:
+                                    type: string
+                                    enum:
+                                        - Male
+                                        - Female
+                                        - Others
+                                dob:
+                                    type: string
+            "401":
+                description: "Unauthorized"
+    
+    
+    /profile/update:
+        post:
+            summary: 
+            description: Update userinfo of the user.
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - sessionId
+                            properties:
+                                sessionId:
+                                    type: string
+                                    minLength: 40
+                                    maxLength: 40
+                                name:
+                                    type: string
+                                phone:
+                                    type: number
+                                email:
+                                    type: string
+                                gender:
+                                    type: string
+                                    enum:
+                                        - Male
+                                        - Female
+                                        - Others
+                                dob:
+                                    type: string
+                required: true
+            response:
+            "200":
+                description: "OK"
+                content:
+                    application/json:
+                        description: Return the updated values
+                        schema:
+                            type: object
+                            properties:
+                                username:
+                                    type: string
+                                name:
+                                    type: string
+                                phone:
+                                    type: number
+                                email:
+                                    type: string
+                                gender:
+                                    type: string
+                                    enum:
+                                        - Male
+                                        - Female
+                                        - Others
+                                dob:
+                                    type: string
+            "401":
+                description: "Unauthorized"
+
+    /query:
+        get:
+            summary: Search for items
+            description: Search for items based on search query and filters
+                (Authentication is not necessary)
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                sessionId:
+                                    type: string
+                                    minLength: 40
+                                    maxLength: 40
+                                query:
+                                    description: Can be empty
+                                    type: string
+                                    # maxLength: 150
+                                filters:
+                                    type: array
+                                    items:
+                                        type: object
+                                        required:
+                                            - property
+                                            - constrainType
+                                            - value
+                                        properties: 
+                                            property:
+                                                type: string
+                                                description: What property to
+                                                    apply filter on.
+                                                enum:
+                                                    - price
+                                                    - veg
+                                                    - rating
+                                                    - vendor
+                                                    - category # (rajasthani, punjabi, bihari, bangali, udpi, kolhapuri, etc)
+                                            constrainType:
+                                                type: string
+                                                emun:
+                                                    - greaterThan
+                                                    - lessThan
+                                                    - equals
+                                                    - notEquals
+                                            value:
+                                                type: string
+                required: true
+            response:
+            "200":
+                description: "OK"
+                content:
+                    application/json:
+                        description: Return values
+                        schema:
+                            type: object
+                            properties:
+            "401":
+                description: "Unauthorized"
+
+#
+# ## Generic template
+#     /path:
+#         post:
+#             summary: 
+#             description: 
+#             requestBody:
+#                 content:
+#                     application/json:
+#                         schema:
+#                             type: object
+#                             required:
+#                                 - sessionId
+#                             properties:
+#                                 sessionId:
+#                                     type: string
+#                                     minLength: 40
+#                                     maxLength: 40
+#                                 # other props
+#                 required: true
+#             response:
+#             "200":
+#                 description: "OK"
+#                 content:
+#                     application/json:
+#                         description: Return values
+#                         schema:
+#                             type: object
+#                             properties:
+#             "401":
+#                 description: "Unauthorized"
