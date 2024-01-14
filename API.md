@@ -1,4 +1,4 @@
-### Register (/register)[POST]
+### Register (/register)[POST] (done)
   - Request Header:
   - Request Body:
     - Requested Username(username)
@@ -16,7 +16,7 @@
         - Response Body:
           - Username Unique: bool (user_uniq)
           - Password Strength: bool (pass_val)
-### Login: (/login)[POST]
+### Login: (/login)[POST] (done)
   - Request:
     - username
     - password
@@ -27,7 +27,9 @@
     - Status 403 Forbidden if invalid credentials
         - Response Body:
 
-### Update Profile: (/profile/update)[POST]
+### Get Profile (/profile)[GET] (done)
+
+### Update Profile: (/profile/update)[POST] (done)
   - session-id in header
   - can return 200 or 401
   - Request Body:
@@ -47,7 +49,7 @@
 
 ## Consumer APIs
 
-### Search (/query)[GET]
+### Search (/query)[GET] (done)
   - Request
     - query (search query)
     - filters:
@@ -66,7 +68,7 @@
     - Is Available
     - Tags
 
-### Get Product Details[GET]
+### Get Product Details(/product/id)[GET]
   - Request:
     - item id
   - Response:
@@ -81,28 +83,37 @@
     - max quantity
     - image urls
 
-### Get file
-  - Request:
-    - file id
-  - Response:
-    - file (only image probably)
-
-### Check availability
+### Check availability(/product/id/available)[GET]
   - Request:
     - Item Id
     - count
   - Response:
     - is available
 
+### Get file(/file)[GET]
+  - Request:
+    - file id
+  - Response:
+    - file (only image probably)
+
+### Put file(/file)[PUT]
+
 ### Add to cart
   - (Response 501 Not Implemented)
 
-### Place order
+### Place order(/order/place)[POST]
   - Request:
     - {item id as key and quantity as value}
     - Location
   - Response
     - Order id
+
+### Confirm Delivery(/order/confirm)[POST]
+  - Request:
+    - order-id
+  - Response:
+    - OTP
+
 
 ### Payment method
   - (Response 501 Not Implemented)
@@ -113,13 +124,8 @@
   - Response:
     - status
 
-### Confirm Delivery
-  - Request:
-    - order-id
-  - Response:
-    - OTP
-
 ### Get History (501)
 ### Send Review (501)
 ### Get contact info (501)
 
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
