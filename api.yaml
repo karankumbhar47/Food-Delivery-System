@@ -253,16 +253,121 @@ paths:
                                                 type: string
                 required: true
             response:
-            "200":
-                description: "OK"
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            description: Return values
+                            schema:
+                                type: array
+                                item:
+                                   type: object
+                                    properties:
+                                        itemId:
+                                            type: string
+                                            minLength: 40
+                                            maxLength: 40
+                                        name:
+                                            type: string
+                                        thumbnail:
+                                            type: string
+                                        vendor:
+                                            type: string
+                                        price:
+                                            type: number
+                                        rating:
+                                            type: number
+                                        ratedBy:
+                                            type: number
+                "401":
+                    description: "Unauthorized"
+
+    /order/place:
+        post:
+            summary: Place the order 
+            description: Place the order from the cart, with item id as key and quantity as value. 
+            requestBody:
                 content:
                     application/json:
-                        description: Return values
                         schema:
                             type: object
+                            required:
+                                - sessionId
+                                - itemCart
+                                - location
                             properties:
-            "401":
-                description: "Unauthorized"
+                                sessionId:
+                                    type: string
+                                    minLength: 40
+                                    maxLength: 40
+                                itemCart:
+                                    type: array
+                                    items: 
+                                        type: object 
+                                        required: 
+                                            - itemId 
+                                            - quantity 
+                                        properties:
+                                            itemId:
+                                                type: string
+                                                minLength: 40
+                                                maxLength: 40
+                                            quantity:
+                                                type: number 
+                                                description: Quantity of the specific item.
+                                location:
+                                    type: string
+                                    description: Delivery location.
+                required: true
+            response:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            description: Return orderId 
+                            schema:
+                                type: string
+                                minLength: 40
+                                maxLength: 40
+
+                "404":
+                    description: "Not Found"
+
+    /order/confirm:
+        post:
+            summary: Confirm Order 
+            description: Confirm Order Delivery
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - orderId
+                                - sessionId
+                            properties:
+                                orderId:
+                                    type: string
+                                    minLength: 40
+                                    maxLength: 40
+                                sessionId:
+                                    type: string
+                                    minLength: 40
+                                    maxLength: 40
+                required: true
+            response:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            description: Return OTP 
+                            schema:
+                                type: number
+                                minLength: 6
+                                maxLength: 6
+
+                "404":
+                    description: "Not Found"
 
     /product/{id}:
         get:
@@ -355,14 +460,6 @@ paths:
             '401':
                 description: Unauthorized
 
-    
-
-
-
-
-
-
-#
 # ## Generic template
 #     /path:
 #         post:
