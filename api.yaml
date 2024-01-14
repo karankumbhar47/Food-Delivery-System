@@ -66,7 +66,7 @@ paths:
         post:
             summary: Login to user account
             description: Get username and password and authenticate the user.
-                Returns SessionID for further requests
+                Returns sessionId for further requests
             requestBody:
                 content:
                     application/json:
@@ -95,7 +95,7 @@ paths:
                 description: "Forbidden"           
     /profile:
         get:
-            summary: 
+            summary:
             description: Get information about the another user from username
                 if the current user is allowed to do so. Anyone can see
                 information about all the Vendors, Delivery Persons and the
@@ -144,10 +144,9 @@ paths:
                                     type: string
             "401":
                 description: "Unauthorized"
-    
     /profile/update:
         post:
-            summary: 
+            summary:
             description: Update userinfo of the user.
             requestBody:
                 content:
@@ -231,7 +230,7 @@ paths:
                                             - property
                                             - constrainType
                                             - value
-                                        properties: 
+                                        properties:
                                             property:
                                                 type: string
                                                 description: What property to
@@ -262,7 +261,7 @@ paths:
                                 type: array
                                 item:
                                    type: object
-                                    properties:
+                                   properties:
                                         itemId:
                                             type: string
                                             minLength: 40
@@ -375,11 +374,11 @@ paths:
             description: Retrieve details for a specific item by providing its ID
             parameters:
             - name: id
-                in: path
-                description: ID of the item to retrieve details for
-                required: true
-                schema:
-                type: string
+              in: path
+              description: ID of the item to retrieve details for
+              required: true
+              schema:
+              type: string
             responses:
             '200':
                 description: OK
@@ -390,37 +389,37 @@ paths:
                     type: object
                     properties:
                         itemId:
-                        type: string
-                        description: ID of the item
-                        itemName:
-                        type: string
-                        description: Name of the item
-                        thumbnailPicture:
-                        type: string
-                        description: 64bit encoded thumbnail picture
-                        price:
-                        type: number
-                        description: Price of the item
-                        vendorName:
-                        type: string
-                        description: Name of the vendor
-                        vendorLocation:
-                        type: string
-                        description: Location of the vendor
-                        starRating:
-                        type: number
-                        description: Star rating of the item
-                        isAvailable:
-                        type: boolean
-                        description: Indicates if the item is available
-                        maxQuantity:
-                        type: integer
-                        description: Maximum quantity available
-                        imageUrls:
-                        type: array
-                        items:
                             type: string
-                        description: URLs of additional images
+                            description: ID of the item
+                        itemName:
+                            type: string
+                            description: Name of the item
+                        thumbnailPicture:
+                            type: string
+                            description: 64bit encoded thumbnail picture
+                        price:
+                            type: number
+                            description: Price of the item
+                        vendorName:
+                            type: string
+                            description: Name of the vendor
+                        vendorLocation:
+                            type: string
+                            description: Location of the vendor
+                        starRating:
+                            type: number
+                            description: Star rating of the item
+                        isAvailable:
+                            type: boolean
+                            description: Indicates if the item is available
+                        maxQuantity:
+                            type: integer
+                            description: Maximum quantity available
+                        imageUrls:
+                            type: array
+                            description: URLs of additional images
+                            items:
+                                type: string
             '404':
                 description: File Not Found
             
@@ -434,17 +433,17 @@ paths:
             description: Check the availability of a specific item by providing its ID and quantity count
             parameters:
             - name: id
-                in: path
-                description: ID of the item to check availability for
-                required: true
-                schema:
-                type: string
+              in: path
+              description: ID of the item to check availability for
+              required: true
+              schema:
+              type: string
             - name: count
-                in: query
-                description: Quantity count to check availability for
-                required: true
-                schema:
-                type: integer
+              in: query
+              description: Quantity count to check availability for
+              required: true
+              schema:
+              type: integer
             responses:
             '200':
                 description: OK
@@ -460,11 +459,76 @@ paths:
             '401':
                 description: Unauthorized
 
+    /file:
+        get:
+            summary: Get file by file ID
+            description: Retrieve a file, typically an image, based on the provided file ID.
+            parameters:
+            - name: fileId
+              in: header 
+              description: ID of the file to retrieve
+              required: true
+              schema:
+                  type: string
+                  minLength: 40
+                  maxLength: 40
+            - name: sessionId
+              in : header
+              required: false
+              schema:
+                  type: string
+                  minLength: 40
+                  maxLength: 40
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        image/*:
+                            schema:
+                                type: string
+                                contentMediaType: image/*
+                                contentEncoding: base64
+                                example: [binary file]
+                "401":
+                    description: "Unauthorized"
+                "404":
+                    description: "File Not Found"
+        put:
+            summary: Upload a file
+            description: Upload an image to server for referencing elsewhere.
+            parameters:
+                - name: sessionId
+                  in : header
+                  required: true 
+                  schema:
+                    type: string
+                    minLength: 40
+                    maxLength: 40
+            requestBody:
+                required: true
+                content:
+                    image/*:
+                        schema:
+                            type: string # Assuming a base64-encoded image string
+                            format: binary
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            description: Return the unique file id of length 40
+                            schema:
+                                type: string
+                                maxLength: 40;
+                                minLength: 40;
+                "401":
+                    description: Unauthorized (if user not valid to upload file)
+#
 # ## Generic template
 #     /path:
 #         post:
-#             summary: 
-#             description: 
+#             summary:
+#             description:
 #             requestBody:
 #                 content:
 #                     application/json:
