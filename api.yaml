@@ -92,7 +92,7 @@ paths:
                             minLength: 40
                             maxLength: 40
             "403":
-                description: "Forbidden"
+                description: "Forbidden"           
     /profile:
         get:
             summary: 
@@ -144,7 +144,6 @@ paths:
                                     type: string
             "401":
                 description: "Unauthorized"
-    
     
     /profile/update:
         post:
@@ -264,6 +263,104 @@ paths:
                             properties:
             "401":
                 description: "Unauthorized"
+
+    /product/{id}:
+        get:
+            summary: Get Product Details
+            description: Retrieve details for a specific item by providing its ID
+            parameters:
+            - name: id
+                in: path
+                description: ID of the item to retrieve details for
+                required: true
+                schema:
+                type: string
+            responses:
+            '200':
+                description: OK
+                content:
+                application/json:
+                    description: Return values
+                    schema:
+                    type: object
+                    properties:
+                        itemId:
+                        type: string
+                        description: ID of the item
+                        itemName:
+                        type: string
+                        description: Name of the item
+                        thumbnailPicture:
+                        type: string
+                        description: 64bit encoded thumbnail picture
+                        price:
+                        type: number
+                        description: Price of the item
+                        vendorName:
+                        type: string
+                        description: Name of the vendor
+                        vendorLocation:
+                        type: string
+                        description: Location of the vendor
+                        starRating:
+                        type: number
+                        description: Star rating of the item
+                        isAvailable:
+                        type: boolean
+                        description: Indicates if the item is available
+                        maxQuantity:
+                        type: integer
+                        description: Maximum quantity available
+                        imageUrls:
+                        type: array
+                        items:
+                            type: string
+                        description: URLs of additional images
+            '404':
+                description: File Not Found
+            
+            '401':
+                description: Unauthorized
+            
+
+    /product/{id}/available:
+        get:
+            summary: Check Availability
+            description: Check the availability of a specific item by providing its ID and quantity count
+            parameters:
+            - name: id
+                in: path
+                description: ID of the item to check availability for
+                required: true
+                schema:
+                type: string
+            - name: count
+                in: query
+                description: Quantity count to check availability for
+                required: true
+                schema:
+                type: integer
+            responses:
+            '200':
+                description: OK
+                content:
+                application/json:
+                    description: Availability status
+                    schema:
+                    type: object
+                    properties:
+                        isAvailable:
+                        type: boolean
+                        description: Indicates if the specified quantity is available
+            '401':
+                description: Unauthorized
+
+    
+
+
+
+
+
 
 #
 # ## Generic template
