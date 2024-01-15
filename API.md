@@ -1,3 +1,8 @@
+> This is just a highlevel discription of the API for quick designing. It is
+> not ment to be used as reference
+
+## User management APIs
+
 ### Register (/register)[POST] (done)
   - Request Header:
   - Request Body:
@@ -128,4 +133,87 @@
 ### Send Review (501)
 ### Get contact info (501)
 
+## Vendor APIs
+
+### Add Item (/venndor/product/add) [POST]
+- Request:
+    - Item name (required)
+    - Thumbnail picture (string in base64, optional)
+    - Price (integer) (required)
+    - max quantity (optional)
+    - image urls (array of strings, optional)
+- Response:
+  - "200 OK"
+    - item-id
+  - "Forbidden"
+
+### Edit Item (/vendor/product/id/edit) [POST]
+- Request:
+    - item-id (required)
+    - Item name (optional)
+    - Thumbnail picture (string in base64, optional)
+    - Price (integer) (optional)
+    - max quantity (optional)
+- Response:
+  - "200 OK"
+    - nothing or update item (your call)
+  - "Forbidden"
+
+### Add Item Image (/vendor/product/id/addImages) POST
+- Request:
+    - item-id (required)
+    - image-id
+- Response:
+  - "200 OK"
+    - updated list of image ids
+  - "Forbidden"
+### Change Item availability (/vendor/product/id/changeAvailable) POST
+- Request:
+    - item-id (required)
+    - session-id
+    - new status (bool)
+- Response:
+  - "200 OK"
+  - "Forbidden"
+### Change Vendor availability (/vendor/changeAvailable) POST
+- Request:
+    - session-id
+    - new status (bool)
+- Response:
+  - "200 OK"
+  - "Forbidden"
+
+### View requested orders (/vendor/orders/requested)
+- Request:
+    - session-id
+- Response
+    - "OK"
+        - array of order info
+  - "Forbidden"
+
+### Accept order (/vendor/orders/confirm)
+  - (Response 501 Not Implemented)(orders will be auto accepted in mvp)
+
+### View accepted orders (/vendor/orders/accepted)
+- Request:
+    - session-id
+- Response
+    - "OK"
+        - array of order info
+  - "Forbidden"
+
+### Get order details (/order)
+- Request
+    - session-id
+- Response
+    - "OK"
+        - order-id
+        - consumer
+        - vendor
+        - vendor location
+        - drop location
+        - order price
+  - "Forbidden"
+
+## References
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
