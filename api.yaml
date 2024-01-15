@@ -92,7 +92,7 @@ paths:
                             minLength: 40
                             maxLength: 40
             "403":
-                description: "Forbidden"           
+                description: "Forbidden"
     /profile:
         get:
             summary:
@@ -260,8 +260,8 @@ paths:
                             schema:
                                 type: array
                                 item:
-                                   type: object
-                                   properties:
+                                    type: object
+                                    properties:
                                         itemId:
                                             type: string
                                             minLength: 40
@@ -283,8 +283,8 @@ paths:
 
     /order/place:
         post:
-            summary: Place the order 
-            description: Place the order from the cart, with item id as key and quantity as value. 
+            summary: Place the order
+            description: Place the order from the cart, with item id as key and quantity as value.
             requestBody:
                 content:
                     application/json:
@@ -301,18 +301,18 @@ paths:
                                     maxLength: 40
                                 itemCart:
                                     type: array
-                                    items: 
-                                        type: object 
-                                        required: 
-                                            - itemId 
-                                            - quantity 
+                                    items:
+                                        type: object
+                                        required:
+                                            - itemId
+                                            - quantity
                                         properties:
                                             itemId:
                                                 type: string
                                                 minLength: 40
                                                 maxLength: 40
                                             quantity:
-                                                type: number 
+                                                type: number
                                                 description: Quantity of the specific item.
                                 location:
                                     type: string
@@ -323,7 +323,7 @@ paths:
                     description: "OK"
                     content:
                         application/json:
-                            description: Return orderId 
+                            description: Return orderId
                             schema:
                                 type: string
                                 minLength: 40
@@ -334,7 +334,7 @@ paths:
 
     /order/confirm:
         post:
-            summary: Confirm Order 
+            summary: Confirm Order
             description: Confirm Order Delivery
             requestBody:
                 content:
@@ -359,7 +359,7 @@ paths:
                     description: "OK"
                     content:
                         application/json:
-                            description: Return OTP 
+                            description: Return OTP
                             schema:
                                 type: number
                                 minLength: 6
@@ -373,14 +373,14 @@ paths:
             summary: Get Product Details
             description: Retrieve details for a specific item by providing its ID
             parameters:
-            - name: id
-              in: path
-              description: ID of the item to retrieve details for
-              required: true
-              schema:
-              type: string
+                - name: id
+                  in: path
+                  description: ID of the item to retrieve details for
+                  required: true
+                  schema:
+                  type: string
             responses:
-            '200':
+            "200":
                 description: OK
                 content:
                 application/json:
@@ -420,32 +420,31 @@ paths:
                             description: URLs of additional images
                             items:
                                 type: string
-            '404':
+            "404":
                 description: File Not Found
-            
-            '401':
+
+            "401":
                 description: Unauthorized
-            
 
     /product/{id}/available:
         get:
             summary: Check Availability
             description: Check the availability of a specific item by providing its ID and quantity count
             parameters:
-            - name: id
-              in: path
-              description: ID of the item to check availability for
-              required: true
-              schema:
-              type: string
-            - name: count
-              in: query
-              description: Quantity count to check availability for
-              required: true
-              schema:
-              type: integer
+                - name: id
+                  in: path
+                  description: ID of the item to check availability for
+                  required: true
+                  schema:
+                  type: string
+                - name: count
+                  in: query
+                  description: Quantity count to check availability for
+                  required: true
+                  schema:
+                  type: integer
             responses:
-            '200':
+            "200":
                 description: OK
                 content:
                 application/json:
@@ -456,7 +455,7 @@ paths:
                         isAvailable:
                         type: boolean
                         description: Indicates if the specified quantity is available
-            '401':
+            "401":
                 description: Unauthorized
 
     /file:
@@ -464,21 +463,21 @@ paths:
             summary: Get file by file ID
             description: Retrieve a file, typically an image, based on the provided file ID.
             parameters:
-            - name: fileId
-              in: header 
-              description: ID of the file to retrieve
-              required: true
-              schema:
-                  type: string
-                  minLength: 40
-                  maxLength: 40
-            - name: sessionId
-              in : header
-              required: false
-              schema:
-                  type: string
-                  minLength: 40
-                  maxLength: 40
+                - name: fileId
+                  in: header
+                  description: ID of the file to retrieve
+                  required: true
+                  schema:
+                      type: string
+                      minLength: 40
+                      maxLength: 40
+                - name: sessionId
+                  in: header
+                  required: false
+                  schema:
+                      type: string
+                      minLength: 40
+                      maxLength: 40
             responses:
                 "200":
                     description: OK
@@ -498,12 +497,12 @@ paths:
             description: Upload an image to server for referencing elsewhere.
             parameters:
                 - name: sessionId
-                  in : header
-                  required: true 
+                  in: header
+                  required: true
                   schema:
-                    type: string
-                    minLength: 40
-                    maxLength: 40
+                      type: string
+                      minLength: 40
+                      maxLength: 40
             requestBody:
                 required: true
                 content:
@@ -523,6 +522,169 @@ paths:
                                 minLength: 40;
                 "401":
                     description: Unauthorized (if user not valid to upload file)
+
+    /delivery/viewWaitingOrders:
+        get:
+            summary: View Waiting Orders
+            parameters:
+                -name: sessionId
+                in: header
+                description: Session ID of the delivery person
+                required: true
+                schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        orderId:
+                                            type: string
+                                        customerName:
+                                            type: string
+                                        deliveryAddress:
+                                            type: string
+                                        pickupLocation:
+                                            type: string
+                                        orderDetails:
+                                            type: array
+                                            items:
+                                                type: object
+                                                properties:
+                                                    itemId:
+                                                        type: string
+                                                    itemName:
+                                                        type: string
+                                                    quantity:
+                                                        type: integer
+                                                    price:
+                                                        type: number
+
+    /delivery/acceptOrder:
+        post:
+            summary: Accept Order
+            parameters:
+                -name: sessionId
+                in: header
+                description: Session ID of the delivery person
+                required: true
+                schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                orderId:
+                                    type: string
+            responses:
+                "200":
+                    description: OK
+                "401":
+                    description: Unauthorized
+
+    /delivery/getAcceptedOrders:
+        get:
+            summary: Get List of Accepted Orders
+            parameters:
+                -name: sessionId
+                in: header
+                description: Session ID of the delivery person
+                required: true
+                schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        orderId:
+                                            type: string
+                                        customerName:
+                                            type: string
+                                        deliveryAddress:
+                                            type: string
+                                        pickupLocation:
+                                            type: string
+                                        orderDetails:
+                                            type: array
+                                            items:
+                                                type: object
+                                                properties:
+                                                    itemId:
+                                                        type: string
+                                                    itemName:
+                                                        type: string
+                                                    quantity:
+                                                        type: integer
+                                                    price:
+                                                        type: number
+
+    
+    /delivery/pickupOrder:
+        post:
+            summary: Pickup Order
+            parameters:
+                - name: sessionId
+                  in: header
+                  description: Session ID of the delivery person
+                  required: true
+                  schema:
+                      type: string
+                - name: orderId
+                  in: query
+                  description: ID of the order to be picked up
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: OK
+                '401':
+                    description: Unauthorized
+
+    /delivery/dropOrder:
+        post:
+            summary: Drop Order
+            parameters:
+                - name: sessionId
+                  in: header
+                  description: Session ID of the delivery person
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                orderId:
+                                    type: string
+                                otp:
+                                    type: integer
+                                    minLength: 6
+                                    maxLength: 6
+            responses:
+                '200':
+                    description: OK
+                '401':
+                    description: Unauthorized
+
+
+
+
 #
 # ## Generic template
 #     /path:
