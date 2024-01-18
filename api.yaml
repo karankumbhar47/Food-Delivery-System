@@ -39,28 +39,26 @@ paths:
                                 dob:
                                     type: string
                 required: true
-            response:
-            "200":
-                description: "OK"
-                content:
-                    application/json:
-                        description: Return session id
-                        schema:
-                            type: string
-                            minLength: 40
-                            maxLength: 40
-            "409":
-                description: "Conflict"
-                content:
-                    application/json:
-                        description: Return Conflict type
-                        schema:
-                            type: string
-                            enum:
-                                - Username
-                                - Phone
-                                - Email
-                                - Password
+            responses:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            schema:
+                                type: string
+                                minLength: 40
+                                maxLength: 40
+                "409":
+                    description: "Conflict"
+                    content:
+                        application/json:
+                            schema:
+                                type: string
+                                enum:
+                                    - Username
+                                    - Phone
+                                    - Email
+                                    - Password
 
     /login:
         post:
@@ -81,18 +79,18 @@ paths:
                                 password:
                                     type: string
                 required: true
-            response:
-            "200":
-                description: "OK"
-                content:
-                    application/json:
-                        description: Return session id
-                        schema:
-                            type: string
-                            minLength: 40
-                            maxLength: 40
-            "403":
-                description: "Forbidden"
+            responses:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            schema:
+                                type: string
+                                minLength: 40
+                                maxLength: 40
+                "403":
+                    description: "Forbidden"
+
     /profile:
         get:
             summary:
@@ -117,33 +115,33 @@ paths:
                                     maxLength: 40
 
                 required: true
-            response:
-            "200":
-                description: "OK"
-                content:
-                    application/json:
-                        description: Return allowed fields of the user info
-                        schema:
-                            type: object
-                            properties:
-                                username:
-                                    type: string
-                                name:
-                                    type: string
-                                phone:
-                                    type: number
-                                email:
-                                    type: string
-                                gender:
-                                    type: string
-                                    enum:
-                                        - Male
-                                        - Female
-                                        - Others
-                                dob:
-                                    type: string
-            "401":
-                description: "Unauthorized"
+            responses:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    username:
+                                        type: string
+                                    name:
+                                        type: string
+                                    phone:
+                                        type: number
+                                    email:
+                                        type: string
+                                    gender:
+                                        type: string
+                                        enum:
+                                            - Male
+                                            - Female
+                                            - Others
+                                    dob:
+                                        type: string
+                "401":
+                    description: "Unauthorized"
+
     /profile/update:
         post:
             summary:
@@ -175,33 +173,32 @@ paths:
                                 dob:
                                     type: string
                 required: true
-            response:
-            "200":
-                description: "OK"
-                content:
-                    application/json:
-                        description: Return the updated values
-                        schema:
-                            type: object
-                            properties:
-                                username:
-                                    type: string
-                                name:
-                                    type: string
-                                phone:
-                                    type: number
-                                email:
-                                    type: string
-                                gender:
-                                    type: string
-                                    enum:
-                                        - Male
-                                        - Female
-                                        - Others
-                                dob:
-                                    type: string
-            "401":
-                description: "Unauthorized"
+            responses:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    username:
+                                        type: string
+                                    name:
+                                        type: string
+                                    phone:
+                                        type: number
+                                    email:
+                                        type: string
+                                    gender:
+                                        type: string
+                                        enum:
+                                            - Male
+                                            - Female
+                                            - Others
+                                    dob:
+                                        type: string
+                "401":
+                    description: "Unauthorized"
 
     /query:
         get:
@@ -251,12 +248,11 @@ paths:
                                             value:
                                                 type: string
                 required: true
-            response:
+            responses:
                 "200":
                     description: "OK"
                     content:
                         application/json:
-                            description: Return values
                             schema:
                                 type: array
                                 item:
@@ -318,12 +314,11 @@ paths:
                                     type: string
                                     description: Delivery location.
                 required: true
-            response:
+            responses:
                 "200":
                     description: "OK"
                     content:
                         application/json:
-                            description: Return orderId
                             schema:
                                 type: string
                                 minLength: 40
@@ -354,12 +349,11 @@ paths:
                                     minLength: 40
                                     maxLength: 40
                 required: true
-            response:
+            responses:
                 "200":
                     description: "OK"
                     content:
                         application/json:
-                            description: Return OTP
                             schema:
                                 type: number
                                 minLength: 6
@@ -378,53 +372,51 @@ paths:
                   description: ID of the item to retrieve details for
                   required: true
                   schema:
-                  type: string
+                      type: string
             responses:
-            "200":
-                description: OK
-                content:
-                application/json:
-                    description: Return values
-                    schema:
-                    type: object
-                    properties:
-                        itemId:
-                            type: string
-                            description: ID of the item
-                        itemName:
-                            type: string
-                            description: Name of the item
-                        thumbnailPicture:
-                            type: string
-                            description: 64bit encoded thumbnail picture
-                        price:
-                            type: number
-                            description: Price of the item
-                        vendorName:
-                            type: string
-                            description: Name of the vendor
-                        vendorLocation:
-                            type: string
-                            description: Location of the vendor
-                        starRating:
-                            type: number
-                            description: Star rating of the item
-                        isAvailable:
-                            type: boolean
-                            description: Indicates if the item is available
-                        maxQuantity:
-                            type: integer
-                            description: Maximum quantity available
-                        imageUrls:
-                            type: array
-                            description: URLs of additional images
-                            items:
-                                type: string
-            "404":
-                description: File Not Found
-
-            "401":
-                description: Unauthorized
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    itemId:
+                                        type: string
+                                        description: ID of the item
+                                    itemName:
+                                        type: string
+                                        description: Name of the item
+                                    thumbnailPicture:
+                                        type: string
+                                        description: 64bit encoded thumbnail picture
+                                    price:
+                                        type: number
+                                        description: Price of the item
+                                    vendorName:
+                                        type: string
+                                        description: Name of the vendor
+                                    vendorLocation:
+                                        type: string
+                                        description: Location of the vendor
+                                    starRating:
+                                        type: number
+                                        description: Star rating of the item
+                                    isAvailable:
+                                        type: boolean
+                                        description: Indicates if the item is available
+                                    maxQuantity:
+                                        type: integer
+                                        description: Maximum quantity available
+                                    imageUrls:
+                                        type: array
+                                        description: URLs of additional images
+                                        items:
+                                            type: string
+                "404":
+                    description: File Not Found
+                "401":
+                    description: Unauthorized
 
     /product/{id}/available:
         get:
@@ -436,27 +428,26 @@ paths:
                   description: ID of the item to check availability for
                   required: true
                   schema:
-                  type: string
+                      type: string
                 - name: count
                   in: query
                   description: Quantity count to check availability for
                   required: true
                   schema:
-                  type: integer
+                      type: integer
             responses:
-            "200":
-                description: OK
-                content:
-                application/json:
-                    description: Availability status
-                    schema:
-                    type: object
-                    properties:
-                        isAvailable:
-                        type: boolean
-                        description: Indicates if the specified quantity is available
-            "401":
-                description: Unauthorized
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    isAvailable:
+                                        type: boolean
+                                        description: Indicates if the specified quantity is available
+                "401":
+                    description: Unauthorized
 
     /file:
         get:
@@ -515,7 +506,6 @@ paths:
                     description: OK
                     content:
                         application/json:
-                            description: Return the unique file id of length 40
                             schema:
                                 type: string
                                 maxLength: 40;
@@ -527,12 +517,12 @@ paths:
         get:
             summary: View Waiting Orders
             parameters:
-                -name: sessionId
-                in: header
-                description: Session ID of the delivery person
-                required: true
-                schema:
-                    type: string
+                - name: sessionId
+                  in: header
+                  description: Session ID of the delivery person
+                  required: true
+                  schema:
+                      type: string
             responses:
                 "200":
                     description: OK
@@ -569,12 +559,12 @@ paths:
         post:
             summary: Accept Order
             parameters:
-                -name: sessionId
-                in: header
-                description: Session ID of the delivery person
-                required: true
-                schema:
-                    type: string
+                - name: sessionId
+                  in: header
+                  description: Session ID of the delivery person
+                  required: true
+                  schema:
+                      type: string
             requestBody:
                 content:
                     application/json:
@@ -593,12 +583,12 @@ paths:
         get:
             summary: Get List of Accepted Orders
             parameters:
-                -name: sessionId
-                in: header
-                description: Session ID of the delivery person
-                required: true
-                schema:
-                    type: string
+                - name: sessionId
+                  in: header
+                  description: Session ID of the delivery person
+                  required: true
+                  schema:
+                      type: string
             responses:
                 "200":
                     description: OK
@@ -722,12 +712,11 @@ paths:
                                         minLength: 40
                                         maxLength: 40
                 required: true
-            response:
+            responses:
                 "200":
                     description: "OK"
                     content:
                         application/json:
-                            description: Item ID of newly created item
                             schema:
                                 type: string
                                 minLength: 40
@@ -770,46 +759,46 @@ paths:
                                 maxQuantity:
                                     type: number
                 required: true
-            response:
+            responses:
                 "200":
                     description: "OK"
                     content:
                         application/json:
-                            description: Updated item info
-                            type: object
-                            properties:
-                                itemId:
-                                    type: string
-                                    description: ID of the item
-                                itemName:
-                                    type: string
-                                    description: Name of the item
-                                thumbnailPicture:
-                                    type: string
-                                    description: 64bit encoded thumbnail picture
-                                price:
-                                    type: number
-                                    description: Price of the item
-                                vendorName:
-                                    type: string
-                                    description: Name of the vendor
-                                vendorLocation:
-                                    type: string
-                                    description: Location of the vendor
-                                starRating:
-                                    type: number
-                                    description: Star rating of the item
-                                isAvailable:
-                                    type: boolean
-                                    description: Indicates if the item is available
-                                maxQuantity:
-                                    type: integer
-                                    description: Maximum quantity available
-                                imageUrls:
-                                    type: array
-                                    description: URLs of additional images
-                                    items:
+                            schema:
+                                type: object
+                                properties:
+                                    itemId:
                                         type: string
+                                        description: ID of the item
+                                    itemName:
+                                        type: string
+                                        description: Name of the item
+                                    thumbnailPicture:
+                                        type: string
+                                        description: 64bit encoded thumbnail picture
+                                    price:
+                                        type: number
+                                        description: Price of the item
+                                    vendorName:
+                                        type: string
+                                        description: Name of the vendor
+                                    vendorLocation:
+                                        type: string
+                                        description: Location of the vendor
+                                    starRating:
+                                        type: number
+                                        description: Star rating of the item
+                                    isAvailable:
+                                        type: boolean
+                                        description: Indicates if the item is available
+                                    maxQuantity:
+                                        type: integer
+                                        description: Maximum quantity available
+                                    imageUrls:
+                                        type: array
+                                        description: URLs of additional images
+                                        items:
+                                            type: string
                 "403":
                     description: "Forbidden"
 
@@ -845,12 +834,11 @@ paths:
                                         maxLength: 40
                                     minItems: 1
                 required: true
-            response:
+            responses:
                 "200":
                     description: "OK"
                     content:
                         application/json:
-                            description: New list of images
                             schema:
                                 type: array
                                 items:
@@ -889,7 +877,7 @@ paths:
                                     description: Weather the item is available or not
                                     type: boolean
                 required: true
-            response:
+            responses:
                 "200":
                     description: "OK"
                 "403":
@@ -924,7 +912,7 @@ paths:
                                     description: Weather the item is available or not
                                     type: boolean
                 required: true
-            response:
+            responses:
                 "200":
                     description: "OK"
                 "403":
@@ -943,12 +931,14 @@ paths:
                   minLength: 40
                   maxLength: 40
             requestBody:
-            response:
+                content:
+                    application/json: {}
+                required: false
+            responses:
                 "200":
                     description: "OK"
                     content:
                         application/json:
-                            description: Return session id
                             schema:
                                 type: array
                                 items:
@@ -998,12 +988,14 @@ paths:
                   minLength: 40
                   maxLength: 40
             requestBody:
-            response:
+                content:
+                    application/json: {}
+                required: false
+            responses:
                 "200":
                     description: "OK"
                     content:
                         application/json:
-                            description: Return session id
                             schema:
                                 type: array
                                 items:
@@ -1063,12 +1055,11 @@ paths:
                                 orderId:
                                     type: string
                 required: true
-            response:
+            responses:
                 "200":
                     description: "OK"
                     content:
                         application/json:
-                            description: Return values
                             schema:
                                 type: object
                                 properties:
@@ -1125,7 +1116,7 @@ paths:
 #                             properties:
 #                                 # other props
 #                 required: true
-#             response:
+#             responses:
 #                 "200":
 #                     description: "OK"
 #                     content:
