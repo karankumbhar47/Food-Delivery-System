@@ -163,7 +163,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+        android:id="@+id/search_bar_cardView"
         android:layout_width="0dp"
         android:layout_height="55dp"
         android:layout_marginTop="9dp"
@@ -218,7 +218,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/custom_button_3"
-        app:layout_constraintBottom_toTopOf="@+id/cardView2"
+        app:layout_constraintBottom_toTopOf="@+id/search_bar_cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9">

@@ -1,12 +1,25 @@
 package com.example.swiggy_lite;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.WindowManager;
+import android.widget.ImageView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,11 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 SharedPreferences preferences = getSharedPreferences(AppConstants.PREF_LOGIN,MODE_PRIVATE);
-                boolean login_flag = preferences.getBoolean(AppConstants.KEY_LOGIN_FLAG,true);
+                boolean login_flag = preferences.getBoolean(AppConstants.KEY_LOGIN_FLAG,false);
 
                 if(!login_flag) {
                     Intent i = new Intent(MainActivity.this, UserLogin.class);
@@ -36,6 +51,5 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }, 2000);
-
     }
 }

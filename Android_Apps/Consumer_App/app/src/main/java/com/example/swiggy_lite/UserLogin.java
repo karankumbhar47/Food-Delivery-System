@@ -2,6 +2,7 @@ package com.example.swiggy_lite;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,8 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class UserLogin extends AppCompatActivity {
@@ -21,13 +24,18 @@ public class UserLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_user_login);
-        login_button = findViewById(R.id.login_button);
-        register_button = findViewById(R.id.regiser_button);
-        user_name_textView = findViewById(R.id.userName_textView);
-        password_textView = findViewById(R.id.password_textView);
-        show_password = findViewById(R.id.show_password_checkBox);
+        CardView login_button = findViewById(R.id.login_button_CardView);
+        TextView register_button = findViewById(R.id.goToRegister_textView);
+        EditText user_name_textView = findViewById(R.id.user_name_editText);
+        EditText password_textView = findViewById(R.id.password_editText);
+        //show_password = findViewById(R.id.show_password_checkBox);
         password_textView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
+        ImageView appLogo = findViewById(R.id.app_logo_imageView);
+        appLogo.setOnClickListener(v -> {
+            Intent i = new Intent(UserLogin.this, MainPage.class);
+            startActivity(i);
+        });
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,13 +73,13 @@ public class UserLogin extends AppCompatActivity {
             }
         });
 
-        show_password.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        /*show_password.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 password_textView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             } else {
                 password_textView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
-        });
+        });*/
     }
 
     public void loginUser(String user_name, String password){

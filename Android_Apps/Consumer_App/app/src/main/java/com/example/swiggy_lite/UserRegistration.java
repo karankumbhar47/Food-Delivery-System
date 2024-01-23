@@ -1,6 +1,7 @@
 package com.example.swiggy_lite;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,25 +9,27 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class UserRegistration extends AppCompatActivity {
-    TextView create_button, back_button;
-    TextView full_name_textView, mobile_number_textView, email_id_textView, password_textView, confirm_password_textView;
+    CardView create_button;
+    EditText full_name_editText, mobile_number_editText, email_id_editText, password_editText, confirm_password_editText;
+    TextView back_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_registration);
 
-        create_button = findViewById(R.id.create_button);
-        full_name_textView = findViewById(R.id.full_name_textView);
-        mobile_number_textView = findViewById(R.id.mobile_numer_textView);
-        email_id_textView = findViewById(R.id.email_id_textView);
-        password_textView = findViewById(R.id.password_textView);
-        confirm_password_textView = findViewById(R.id.confirm_password_textView);
-        back_button = findViewById(R.id.back_button_textView);
+        create_button = findViewById(R.id.register_button_CardView);
+        full_name_editText = findViewById(R.id.user_name_editText);
+        mobile_number_editText = findViewById(R.id.phone_number_editText);
+        email_id_editText = findViewById(R.id.email_editText);
+        password_editText = findViewById(R.id.password_editText);
+        //confirm_password_editText = findViewById(R.id.confirm_password_editText);
+        back_button = findViewById(R.id.backTologin_textView);
 
 
         create_button.setOnClickListener(new View.OnClickListener() {
@@ -53,37 +56,37 @@ public class UserRegistration extends AppCompatActivity {
 
     public boolean validateUser(){
         String  full_name, mobile_number, email_id, password, confirm_password;
-        full_name = full_name_textView.getText().toString().trim();
-        mobile_number = mobile_number_textView.getText().toString().trim();
-        email_id = email_id_textView.getText().toString().trim();
-        password = password_textView.getText().toString().trim();
-        confirm_password = password_textView.getText().toString().trim();
+        full_name = full_name_editText.getText().toString().trim();
+        mobile_number = mobile_number_editText.getText().toString().trim();
+        email_id = email_id_editText.getText().toString().trim();
+        password = password_editText.getText().toString().trim();
+        confirm_password = password_editText.getText().toString().trim();
         int c = 1;
         boolean isComplete = true;
         switch (c){
             case 1:
                 if(full_name.length()==0){
-                    full_name_textView.setError("Enter Your Name");
+                    full_name_editText.setError("Enter Your Name");
                     isComplete = false;
                 }
             case 5:
                 if(mobile_number.length()!=10){
-                    mobile_number_textView.setError("Enter 10 digit mobile number");
+                    mobile_number_editText.setError("Enter 10 digit mobile number");
                     isComplete = false;
                 }
             case 2:
                 if(email_id.length()==0 || !email_id.contains("@")){
-                    email_id_textView.setError("Enter valid email id");
+                    email_id_editText.setError("Enter valid email id");
                     isComplete = false;
                 }
             case 3:
                 if(password.length()<6){
-                    password_textView.setError("Enter password of at least length 6");
+                    password_editText.setError("Enter password of at least length 6");
                     isComplete = false;
                 }
             case 4:
                 if(!confirm_password.equals(password)){
-                    confirm_password_textView.setError("Password not matched");
+                    confirm_password_editText.setError("Password not matched");
                     isComplete = false;
                 }
                 if(isComplete){
