@@ -1,10 +1,10 @@
 package com.example.swiggy_lite.models;
 
-public class foodModel {
+public class FoodModel {
     String name, rating, render_location, category, img_path;
     int item_id, price;
 
-    public foodModel(int item_id, String name, String rating, int price, String render_location){
+    public FoodModel(int item_id, String name, String rating, int price, String render_location){
         this.item_id = item_id;
         this.name = name;
         this.rating = rating;

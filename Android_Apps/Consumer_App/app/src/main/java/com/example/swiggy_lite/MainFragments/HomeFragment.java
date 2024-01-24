@@ -1,11 +1,7 @@
 package com.example.swiggy_lite.MainFragments;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -21,21 +17,20 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.PopupWindow;
-import android.widget.Toolbar;
 
+import com.example.swiggy_lite.DummyData;
 import com.example.swiggy_lite.Home_Fragments.MainFilterFragment;
 import com.example.swiggy_lite.Home_Fragments.category_search;
 import com.example.swiggy_lite.R;
+import com.example.swiggy_lite.SearchActivity;
 import com.example.swiggy_lite.adapters.CategoryAdapter;
 import com.example.swiggy_lite.adapters.ItemDetailsAdapter;
 import com.example.swiggy_lite.ItemDetailsActivity;
-import com.example.swiggy_lite.models.foodModel;
+import com.example.swiggy_lite.models.FoodModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment {
@@ -44,8 +39,7 @@ public class HomeFragment extends Fragment {
 
     RecyclerView category_recyclerView, recommendation_recyclerView;
     RecyclerView.Adapter categoryAdapter, recommendationAdapter;
-    ArrayList<foodModel> foodItemList;
-    ArrayList<String> categoryLists;
+    ArrayList<FoodModel> foodItemList;
     private PopupWindow popupWindow;
     CheckBox sort_button;
 
@@ -54,17 +48,9 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        ArrayList<String> categoryLists = new ArrayList<>(Arrays.asList(
-                "category_biryani", "category_burger", "category_cakes", "category_chinese",
-                "category_chole_bature", "category_coffee", "category_dosa", "category_gulab_jamun",
-                "category_ice_creams", "category_idli.jpg", "category_kebabs", "category_khichdi",
-                "category_noodles.jpg", "category_north_indian", "category_paratha", "category_pasta",
-                "category_pastry", "category_pizza", "category_rolls", "category_vada"
-        ));
-
         category_recyclerView = view.findViewById(R.id.category_recyclerView);
         category_recyclerView.setLayoutManager(new GridLayoutManager(this.requireContext(), 1, RecyclerView.HORIZONTAL, false));
-        categoryAdapter = new CategoryAdapter(categoryLists, this.requireContext());
+        categoryAdapter = new CategoryAdapter(DummyData.categoryList, this.requireContext());
         CategoryAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -73,32 +59,19 @@ public class HomeFragment extends Fragment {
         });
         category_recyclerView.setAdapter(categoryAdapter);
 
-        ArrayList<foodModel> foodItemList = new ArrayList<>();
-        foodItemList.add(new foodModel(1, "Spaghetti Bolognese", "4.5", 12, "Kitchen"));
-        foodItemList.add(new foodModel(2, "Chicken Alfredo", "4.8", 15, "Kitchen"));
-        foodItemList.add(new foodModel(3, "Margherita Pizza", "4.2", 10, "Oven"));
-        foodItemList.add(new foodModel(4, "Caesar Salad", "4.0", 8, "Salad Bar"));
-        foodItemList.add(new foodModel(5, "Chocolate Cake", "4.6", 18, "Dessert Station"));
-        foodItemList.add(new foodModel(6, "Green Tea Ice Cream", "4.3", 6, "Freezer"));
-        foodItemList.add(new foodModel(7, "Grilled Salmon", "4.7", 20, "Grill"));
-        foodItemList.add(new foodModel(8, "Vegetable Stir Fry", "4.4", 14, "Stovetop"));
-        foodItemList.add(new foodModel(9, "Berry Smoothie", "4.1", 7, "Blender"));
-        foodItemList.add(new foodModel(10, "Classic Burger", "4.9", 16, "Grill"));
-        foodItemList.add(new foodModel(11, "French Fries", "4.0", 5, "Fryer"));
-        foodItemList.add(new foodModel(12, "Cheese Platter", "4.6", 22, "Cold Storage"));
-        foodItemList.add(new foodModel(13, "Sushi Roll", "4.8", 25, "Sushi Bar"));
-        foodItemList.add(new foodModel(14, "Pasta Primavera", "4.2", 13, "Stovetop"));
-        foodItemList.add(new foodModel(15, "Chicken Noodle Soup", "4.5", 9, "Stovetop"));
-        foodItemList.add(new foodModel(16, "Blueberry Pancakes", "4.3", 11, "Griddle"));
-        foodItemList.add(new foodModel(17, "Vegetarian Burrito", "4.7", 17, "Assembly Line"));
-        foodItemList.add(new foodModel(18, "Mango Sorbet", "4.4", 8, "Freezer"));
 
         SearchView food_item_searchView = view.findViewById(R.id.food_item_searchView);
-        food_item_searchView.setOnClickListener(v ->{});
+        food_item_searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("isSearchBarActivated", true);
+                startActivity(intent);
+            }
+        });
 
         recommendation_recyclerView = view.findViewById(R.id.recommendation_recyclerView);
         recommendation_recyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(),RecyclerView.VERTICAL,false));
-        recommendationAdapter = new ItemDetailsAdapter(foodItemList, this.requireContext());
+        recommendationAdapter = new ItemDetailsAdapter(DummyData.foodItemList, this.requireContext());
         ItemDetailsAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
