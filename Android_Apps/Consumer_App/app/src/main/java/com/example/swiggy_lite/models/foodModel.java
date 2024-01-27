@@ -1,7 +1,7 @@
 package com.example.swiggy_lite.models;
 
 public class foodModel {
-    String name, rating, render_location, category;
+    String name, rating, render_location, category, img_path;
     int item_id, price;
 
     public foodModel(int item_id, String name, String rating, int price, String render_location){
@@ -12,6 +12,21 @@ public class foodModel {
         this.render_location = render_location;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getImg_path() {
+        return img_path;
+    }
+
+    public void setImg_path(String img_path) {
+        this.img_path = img_path;
+    }
     public String getName() {
         return name;
     }

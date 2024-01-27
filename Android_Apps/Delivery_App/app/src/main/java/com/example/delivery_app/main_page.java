@@ -15,6 +15,8 @@ import android.view.View;
 
 import com.example.delivery_app.ui.main.SectionsPagerAdapter;
 import com.example.delivery_app.databinding.ActivityMainPageBinding;
+import com.google.android.material.tabs.TabLayoutMediator;
+
 import androidx.viewpager2.widget.ViewPager2;
 
 import androidx.fragment.app.Fragment;
@@ -111,9 +113,9 @@ public class main_page extends AppCompatActivity {
         Fragment completedOrdersFragment = new OrdersFragment("Completed Orders");
 
         // Set up onClick listeners for the tabs
-        tabs.getTabAt(0).setOnClickListener(view -> showFragment(newOrdersFragment));
-        tabs.getTabAt(1).setOnClickListener(view -> showFragment(ongoingOrdersFragment));
-        tabs.getTabAt(2).setOnClickListener(view -> showFragment(completedOrdersFragment));
+        tabs.getTabAt(0).select(view -> showFragment(newOrdersFragment));
+        tabs.getTabAt(1).select(view -> showFragment(ongoingOrdersFragment));
+        tabs.getTabAt(2).select(view -> showFragment(completedOrdersFragment));
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +132,7 @@ public class main_page extends AppCompatActivity {
         }
     }
 
-    class OrdersFragment extends Fragment {
+    static class OrdersFragment extends Fragment {
 
         private String category;
 

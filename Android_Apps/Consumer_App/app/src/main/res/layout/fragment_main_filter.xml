@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:nestedScrollingEnabled="true"
+    tools:context=".Home_Fragments.MainFilterFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="true">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView6"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textView34"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginStart="20dp"
+                android:text="Filter"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/cancel_imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginEnd="20dp"
+                app:srcCompat="@drawable/cancel_icon" />
+        </androidx.cardview.widget.CardView>
+
+        <FrameLayout
+            android:id="@+id/filter_navigation"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/cardView7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView6">
+
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:orientation="vertical">-->
+
+            <!--                <androidx.cardview.widget.CardView-->
+            <!--                    android:id="@+id/sort_cardView"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content">-->
+
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/textView26"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="10dp"-->
+            <!--                        android:layout_marginTop="10dp"-->
+            <!--                        android:layout_marginBottom="10dp"-->
+            <!--                        android:padding="5dp"-->
+            <!--                        android:paddingStart="10dp"-->
+            <!--                        android:text="Sort"-->
+            <!--                        android:textSize="20sp"-->
+            <!--                        android:textStyle="bold" />-->
+            <!--                </androidx.cardview.widget.CardView>-->
+
+            <!--                <androidx.cardview.widget.CardView-->
+            <!--                    android:id="@+id/delivery_time_cardView"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content">-->
+
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/textView27"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="10dp"-->
+            <!--                        android:layout_marginTop="10dp"-->
+            <!--                        android:layout_marginBottom="10dp"-->
+            <!--                        android:padding="5dp"-->
+            <!--                        android:paddingStart="10dp"-->
+            <!--                        android:text="Delivery Time"-->
+            <!--                        android:textSize="20sp"-->
+            <!--                        android:textStyle="bold" />-->
+            <!--                </androidx.cardview.widget.CardView>-->
+
+            <!--                <androidx.cardview.widget.CardView-->
+            <!--                    android:id="@+id/coisines_cardView"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content">-->
+
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/textView28"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="10dp"-->
+            <!--                        android:layout_marginTop="10dp"-->
+            <!--                        android:layout_marginBottom="10dp"-->
+            <!--                        android:padding="5dp"-->
+            <!--                        android:paddingStart="10dp"-->
+            <!--                        android:text="Cuisines"-->
+            <!--                        android:textSize="20sp"-->
+            <!--                        android:textStyle="bold" />-->
+            <!--                </androidx.cardview.widget.CardView>-->
+
+            <!--                <androidx.cardview.widget.CardView-->
+            <!--                    android:id="@+id/explore_cardView"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content">-->
+
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/textView29"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="10dp"-->
+            <!--                        android:layout_marginTop="10dp"-->
+            <!--                        android:layout_marginBottom="10dp"-->
+            <!--                        android:padding="5dp"-->
+            <!--                        android:paddingStart="10dp"-->
+            <!--                        android:text="Explore"-->
+            <!--                        android:textSize="20sp"-->
+            <!--                        android:textStyle="bold" />-->
+            <!--                </androidx.cardview.widget.CardView>-->
+
+            <!--                <androidx.cardview.widget.CardView-->
+            <!--                    android:id="@+id/rating_cardView"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content">-->
+
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/textView30"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="10dp"-->
+            <!--                        android:layout_marginTop="10dp"-->
+            <!--                        android:layout_marginBottom="10dp"-->
+            <!--                        android:padding="5dp"-->
+            <!--                        android:paddingStart="10dp"-->
+            <!--                        android:text="Rating"-->
+            <!--                        android:textSize="20sp"-->
+            <!--                        android:textStyle="bold" />-->
+            <!--                </androidx.cardview.widget.CardView>-->
+
+            <!--                <androidx.cardview.widget.CardView-->
+            <!--                    android:id="@+id/veg_nonVeg_cardView"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content">-->
+
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/textView31"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="10dp"-->
+            <!--                        android:layout_marginTop="10dp"-->
+            <!--                        android:layout_marginBottom="10dp"-->
+            <!--                        android:padding="5dp"-->
+            <!--                        android:paddingStart="10dp"-->
+            <!--                        android:text="Veg/ Non Veg"-->
+            <!--                        android:textSize="20sp"-->
+            <!--                        android:textStyle="bold" />-->
+            <!--                </androidx.cardview.widget.CardView>-->
+
+            <!--                <androidx.cardview.widget.CardView-->
+            <!--                    android:id="@+id/offers_cardView"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content">-->
+
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/textView32"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="10dp"-->
+            <!--                        android:layout_marginTop="10dp"-->
+            <!--                        android:layout_marginBottom="10dp"-->
+            <!--                        android:padding="5dp"-->
+            <!--                        android:paddingStart="10dp"-->
+            <!--                        android:text="Offers"-->
+            <!--                        android:textSize="20sp"-->
+            <!--                        android:textStyle="bold" />-->
+            <!--                </androidx.cardview.widget.CardView>-->
+
+            <!--                <androidx.cardview.widget.CardView-->
+            <!--                    android:id="@+id/cost_two_cardView"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content">-->
+
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/textView33"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="10dp"-->
+            <!--                        android:layout_marginTop="10dp"-->
+            <!--                        android:layout_marginBottom="10dp"-->
+            <!--                        android:padding="5dp"-->
+            <!--                        android:paddingStart="10dp"-->
+            <!--                        android:text="Cost for two"-->
+            <!--                        android:textSize="20sp"-->
+            <!--                        android:textStyle="bold" />-->
+            <!--                </androidx.cardview.widget.CardView>-->
+            <!--            </LinearLayout>-->
+
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/filter_naviagationView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:itemIconSize="30dp"
+                app:menu="@menu/filter_menu" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/sub_filter_frame"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:nestedScrollingEnabled="true"
+            app:layout_constraintBottom_toTopOf="@+id/cardView7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/filter_navigation"
+            app:layout_constraintTop_toBottomOf="@+id/cardView6">
+
+            <LinearLayout
+                android:id="@+id/cuisine_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="true"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="3dp">
+
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/cuisine_search_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:iconifiedByDefault="false"
+                        app:queryHint="Search here...">
+
+                    </androidx.appcompat.widget.SearchView>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/cuisine_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:nestedScrollingEnabled="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/veg_nonVeg_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/veg_nonVeg_filterTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="FILTER BY" />
+
+                <RadioGroup
+                    android:id="@+id/veg_nonVeg_radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RadioButton
+                        android:id="@+id/pureVeg_radioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Pure Veg" />
+
+                    <RadioButton
+                        android:id="@+id/nonVeg_radioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Non Veg" />
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sort_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/sort_filter_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="SORT BY"
+                    android:visibility="visible" />
+
+                <RadioGroup
+                    android:id="@+id/sort_radio_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RadioButton
+                        android:id="@+id/relevance_radioButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Relevance (Default)" />
+
+                    <RadioButton
+                        android:id="@+id/delivery_time_radioButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Delivery Time" />
+
+                    <RadioButton
+                        android:id="@+id/rating_radioButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rating" />
+
+                    <RadioButton
+                        android:id="@+id/cost_sort_radioButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cost : Low to High" />
+
+                    <RadioButton
+                        android:id="@+id/cost_reverseSort_radioButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cost : High to Low" />
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rating_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/rating_filter_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="FILTER BY" />
+
+                <CheckBox
+                    android:id="@+id/rating_4.5_checkBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Rating 4.5+" />
+
+                <CheckBox
+                    android:id="@+id/rating_4.0_checkBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Rating 4.0+" />
+
+                <CheckBox
+                    android:id="@+id/rating_3.5_checkBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Rating 3.5+" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/offers_linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/offer_filter_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="RESTAURANTS WITH" />
+
+                <RadioButton
+                    android:id="@+id/offers_radioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Offers" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/explore_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/explore_filter_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="EXPLORE" />
+
+                <CheckBox
+                    android:id="@+id/new_flatForm_checkBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="New on flatform" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/delivery_time_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/delivery_filter_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="SORT BY" />
+
+                <CheckBox
+                    android:id="@+id/fast_deliver_checkBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Fast Delivery" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cost_two_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/cost_two_filter_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="FILTER BY" />
+
+                <CheckBox
+                    android:id="@+id/cost_300_600_checkBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Rs. 300 -  Rs. 600" />
+
+                <CheckBox
+                    android:id="@+id/cost_600_checkBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Greater than Rs. 600" />
+
+                <CheckBox
+                    android:id="@+id/cost_300_checkBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Less than Rs. 300" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filter_navigation">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/clear_filter_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="0.8"
+                    android:background="@drawable/rounded_corner_background"
+                    android:backgroundTint="@color/icon_grey"
+                    android:padding="5dp"
+                    android:text="Clear Filter"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/apply_filter_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_background"
+                    android:backgroundTint="@color/icon_grey"
+                    android:padding="5dp"
+                    android:text="Apply"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

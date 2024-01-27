@@ -1,0 +1,36 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_sort"
+        android:enabled="true"
+        android:title="Sort"/>
+
+    <item
+        android:id="@+id/menu_delivery_time"
+        android:title="Delivery Time"/>
+
+    <item
+        android:id="@+id/menu_cuisines"
+        android:title="Cuisines"/>
+
+    <item
+        android:id="@+id/menu_explore"
+        android:title="Explore"/>
+
+    <item
+        android:id="@+id/menu_rating"
+        android:title="Rating"/>
+
+    <item
+        android:id="@+id/menu_veg_nonveg"
+        android:title="Veg/Non Veg"/>
+
+    <item
+        android:id="@+id/menu_offers"
+        android:title="Offers"/>
+
+    <item
+        android:id="@+id/menu_cost_for_two"
+        android:title="Cost for Two"/>
+
+</menu>

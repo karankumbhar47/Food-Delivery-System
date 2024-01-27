@@ -43,10 +43,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.viewHo
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.viewHolder holder, int position) {
         String singleItem = list.get(position);
-        holder.name.setText(singleItem);
+        //holder.name.setText(singleItem);
         holder.picImage.setOnClickListener(v -> listener.onItemClick(holder.getAdapterPosition()));
         int drawableId = holder.itemView.getResources()
-                .getIdentifier("burger","drawable",holder.itemView.getContext().getPackageName());
+                .getIdentifier(singleItem,"drawable",holder.itemView.getContext().getPackageName());
 
         Glide.with(context)
                 .load(drawableId)
@@ -66,7 +66,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.viewHo
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.category_name_textView);
+            //name = itemView.findViewById(R.id.category_name_textView);
             picImage = itemView.findViewById(R.id.category_imageView);
         }
     }
