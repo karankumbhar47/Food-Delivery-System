@@ -1,0 +1,1147 @@
+openapi: 3.0.0
+info:
+  description: |
+    This API allows to communicate with FDS (Food Delivery System) server.
+  title: FDS
+  version: 0.0.1
+servers:
+- url: /
+paths:
+  /delivery/acceptOrder:
+    post:
+      operationId: delivery_accept_order
+      parameters:
+      - description: Session ID of the delivery person
+        explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/deliveryAcceptOrder_request'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+      summary: Accept Order
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /delivery/dropOrder:
+    post:
+      operationId: delivery_drop
+      parameters:
+      - description: Session ID of the delivery person
+        explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/deliveryDrop_request'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+      summary: Drop Order
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /delivery/getAcceptedOrders:
+    get:
+      operationId: delivery_view_accepted_orders
+      parameters:
+      - description: Session ID of the delivery person
+        explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/order'
+                type: array
+          description: OK
+      summary: Get List of Accepted Orders
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /delivery/pickupOrder:
+    post:
+      operationId: delivery_pick
+      parameters:
+      - description: Session ID of the delivery person
+        explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      - description: ID of the order to be picked up
+        explode: true
+        in: query
+        name: orderId
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+      summary: Pickup Order
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /delivery/viewWaitingOrders:
+    get:
+      operationId: delivery_view_waiting_orders
+      parameters:
+      - description: Session ID of the delivery person
+        explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/order'
+                type: array
+          description: OK
+      summary: View Waiting Orders
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /file:
+    get:
+      description: "Retrieve a file, typically an image, based on the provided file\
+        \ ID."
+      operationId: get_file
+      parameters:
+      - description: ID of the file to retrieve
+        explode: false
+        in: header
+        name: fileId
+        required: true
+        schema:
+          $ref: '#/components/schemas/fileId'
+        style: simple
+      - explode: false
+        in: header
+        name: sessionId
+        required: false
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      responses:
+        "200":
+          content:
+            image/*:
+              schema:
+                example: "[\"binary file\"]"
+                type: string
+          description: OK
+        "401":
+          description: Unauthorized
+        "404":
+          description: File Not Found
+      summary: Get file by file ID
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+    put:
+      description: Upload an image to server for referencing elsewhere.
+      operationId: put_file
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          image/*:
+            schema:
+              format: binary
+              type: string
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fileId'
+          description: OK
+        "401":
+          description: Unauthorized (if user not valid to upload file)
+      summary: Upload a file
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /login:
+    post:
+      description: Get username and password and authenticate the user. Returns sessionId
+        for further requests
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionId'
+          description: OK
+        "403":
+          description: Forbidden
+      summary: Login to user account
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /order:
+    get:
+      operationId: get_orders
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/orderId'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/vendorGetRequestedOrders_200_response_inner'
+          description: OK
+        "401":
+          description: Unauthorized
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /order/confirm:
+    post:
+      description: Confirm Order Delivery
+      operationId: confirm_order
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/orderId'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: number
+          description: OK
+        "404":
+          description: Not Found
+      summary: Confirm Order
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /order/place:
+    post:
+      description: "Place the order from the cart, with item id as key and quantity\
+        \ as value."
+      operationId: place_order
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/placeOrder_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/orderId'
+          description: OK
+        "404":
+          description: Not Found
+      summary: Place the order
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /product/{id}:
+    get:
+      description: Retrieve details for a specific item by providing its ID
+      operationId: get_product
+      parameters:
+      - description: ID of the item to retrieve details for
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/foodItemFull'
+          description: OK
+        "404":
+          description: File Not Found
+        "401":
+          description: Unauthorized
+      summary: Get Product Details
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /product/{id}/available:
+    get:
+      description: Check the availability of a specific item by providing its ID and
+        quantity count
+      operationId: check_product_available
+      parameters:
+      - description: ID of the item to check availability for
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Quantity count to check availability for
+        explode: true
+        in: query
+        name: count
+        required: true
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                description: Indicates if the specified quantity is available
+                type: boolean
+          description: OK
+        "401":
+          description: Unauthorized
+      summary: Check Availability
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /profile:
+    get:
+      description: "Get information about the another user from username if the current\
+        \ user is allowed to do so. Anyone can see information about all the Vendors,\
+        \ Delivery Persons and the user himself."
+      operationId: get_profile
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sessionId'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profile'
+          description: OK
+        "401":
+          description: Unauthorized
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /profile/update:
+    post:
+      description: Update userinfo of the user.
+      operationId: update_profile
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/profile'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profile'
+          description: OK
+        "401":
+          description: Unauthorized
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /query:
+    get:
+      description: Search for items based on search query and filters (Authentication
+        is not necessary)
+      operationId: query
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/query_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/foodItem'
+                type: array
+          description: OK
+        "401":
+          description: Unauthorized
+      summary: Search for items
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /register:
+    post:
+      description: "Create a new user account with unique username, strong password\
+        \ for authentication and other user info."
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userDetails'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionId'
+          description: OK
+        "409":
+          content:
+            application/json:
+              schema:
+                enum:
+                - Username
+                - Phone
+                - Email
+                - Password
+                type: string
+          description: Conflict
+      summary: Register a new consumer?
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /vendor/changeAvailable:
+    post:
+      operationId: vendor_change_availabile
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendorChangeProductAvailabile_request'
+        required: true
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: Forbidden
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /vendor/order/accepted:
+    get:
+      operationId: vendor_get_accepted_orders
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/vendorGetRequestedOrders_200_response_inner'
+                type: array
+          description: OK
+        "403":
+          description: Forbidden
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /vendor/order/requested:
+    get:
+      operationId: vendor_get_requested_orders
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/vendorGetRequestedOrders_200_response_inner'
+                type: array
+          description: OK
+        "403":
+          description: Forbidden
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /vendor/product/add:
+    post:
+      operationId: vendor_add_product
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendorAddProduct_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/itemId'
+          description: OK
+        "403":
+          description: Forbidden
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /vendor/product/addImages:
+    post:
+      operationId: vendor_add_product_images
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendorAddProductImages_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/fileId'
+                type: array
+          description: OK
+        "403":
+          description: Forbidden
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /vendor/product/changeAvailable:
+    post:
+      operationId: vendor_change_product_availabile
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendorChangeProductAvailabile_request'
+        required: true
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: Forbidden
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /vendor/product/edit:
+    post:
+      operationId: vendor_edit_product
+      parameters:
+      - explode: false
+        in: header
+        name: sessionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendorEditProduct_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/foodItemFull'
+          description: OK
+        "403":
+          description: Forbidden
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+components:
+  schemas:
+    sessionId:
+      maxLength: 40
+      minLength: 40
+      type: string
+    itemId:
+      maxLength: 40
+      minLength: 40
+      title: itemId
+      type: string
+    orderId:
+      maxLength: 40
+      minLength: 40
+      title: orderId
+      type: string
+    fileId:
+      maxLength: 40
+      minLength: 40
+      title: fileId
+      type: string
+    profile:
+      example:
+        gender: Male
+        phone: 0.8008281904610115
+        dob: dob
+        name: name
+        email: email
+        username: username
+      properties:
+        username:
+          title: username
+          type: string
+        name:
+          title: name
+          type: string
+        phone:
+          title: phone
+          type: number
+        email:
+          title: email
+          type: string
+        gender:
+          enum:
+          - Male
+          - Female
+          - Others
+          title: gender
+          type: string
+        dob:
+          title: dob
+          type: string
+      title: profile
+      type: object
+    filter:
+      properties:
+        property:
+          description: What property to apply filter on.
+          enum:
+          - price
+          - veg
+          - rating
+          - vendor
+          - category
+          title: property
+          type: string
+        constrainType:
+          enum:
+          - greaterThan
+          - lessThan
+          - equals
+          - notEquals
+          title: constrainType
+          type: string
+        value:
+          title: value
+          type: string
+      required:
+      - constrainType
+      - property
+      - value
+      title: filter
+      type: object
+    foodItem:
+      example:
+        itemId: itemId
+        thumbnail: thumbnail
+        ratedBy: 1.4658129805029452
+        vendor: vendor
+        price: 0.8008281904610115
+        name: name
+        rating: 6.027456183070403
+      properties:
+        itemId:
+          maxLength: 40
+          minLength: 40
+          title: itemId
+          type: string
+        name:
+          title: name
+          type: string
+        thumbnail:
+          title: thumbnail
+          type: string
+        vendor:
+          title: vendor
+          type: string
+        price:
+          title: price
+          type: number
+        rating:
+          title: rating
+          type: number
+        ratedBy:
+          title: ratedBy
+          type: number
+      required:
+      - itemId
+      - name
+      - price
+      - vendor
+      title: foodItem
+      type: object
+    foodItemFull:
+      example:
+        itemId: itemId
+        isAvailable: true
+        itemName: itemName
+        thumbnailPicture: thumbnailPicture
+        maxQuantity: 1
+        price: 0.8008281904610115
+        imageUrls:
+        - imageUrls
+        - imageUrls
+        vendorName: vendorName
+        starRating: 6.027456183070403
+        vendorLocation: vendorLocation
+      properties:
+        itemId:
+          description: ID of the item
+          title: itemId
+          type: string
+        itemName:
+          description: Name of the item
+          title: itemName
+          type: string
+        thumbnailPicture:
+          description: 64bit encoded thumbnail picture
+          title: thumbnailPicture
+          type: string
+        price:
+          description: Price of the item
+          title: price
+          type: number
+        vendorName:
+          description: Name of the vendor
+          title: vendorName
+          type: string
+        vendorLocation:
+          description: Location of the vendor
+          title: vendorLocation
+          type: string
+        starRating:
+          description: Star rating of the item
+          title: starRating
+          type: number
+        isAvailable:
+          description: Indicates if the item is available
+          title: isAvailable
+          type: boolean
+        maxQuantity:
+          description: Maximum quantity available
+          title: maxQuantity
+          type: integer
+        imageUrls:
+          description: URLs of additional images
+          items:
+            type: string
+          title: imageUrls
+          type: array
+      title: foodItemFull
+      type: object
+    orderItem:
+      example:
+        itemId: itemId
+        itemName: itemName
+        quantity: 0
+        price: 6.027456183070403
+      properties:
+        itemId:
+          title: itemId
+          type: string
+        itemName:
+          title: itemName
+          type: string
+        quantity:
+          title: quantity
+          type: integer
+        price:
+          title: price
+          type: number
+      title: orderItem
+      type: object
+    order:
+      example:
+        orderDetails:
+        - itemId: itemId
+          itemName: itemName
+          quantity: 0
+          price: 6.027456183070403
+        - itemId: itemId
+          itemName: itemName
+          quantity: 0
+          price: 6.027456183070403
+        orderId: orderId
+        deliveryAddress: deliveryAddress
+        pickupLocation: pickupLocation
+        customerName: customerName
+      properties:
+        orderId:
+          title: orderId
+          type: string
+        customerName:
+          title: customerName
+          type: string
+        deliveryAddress:
+          title: deliveryAddress
+          type: string
+        pickupLocation:
+          title: pickupLocation
+          type: string
+        orderDetails:
+          items:
+            $ref: '#/components/schemas/orderItem'
+          title: orderDetails
+          type: array
+      title: order
+      type: object
+    userDetails:
+      properties:
+        username:
+          title: username
+          type: string
+        password:
+          title: password
+          type: string
+        name:
+          title: name
+          type: string
+        phone:
+          title: phone
+          type: number
+        email:
+          title: email
+          type: string
+        gender:
+          enum:
+          - Male
+          - Female
+          - Others
+          title: gender
+          type: string
+        dob:
+          title: dob
+          type: string
+      required:
+      - password
+      - phone
+      - username
+      title: userDetails
+      type: object
+    login_request:
+      properties:
+        username:
+          title: username
+          type: string
+        password:
+          title: password
+          type: string
+      required:
+      - password
+      - username
+      title: login_request
+      type: object
+    query_request:
+      properties:
+        query:
+          description: Can be empty
+          title: query
+          type: string
+        filters:
+          items:
+            $ref: '#/components/schemas/filter'
+          title: filters
+          type: array
+      title: query_request
+      type: object
+    placeOrder_request_itemCart_inner:
+      properties:
+        itemId:
+          maxLength: 40
+          minLength: 40
+          title: itemId
+          type: string
+        quantity:
+          description: Quantity of the specific item.
+          title: quantity
+          type: number
+      required:
+      - itemId
+      - quantity
+      title: placeOrder_request_itemCart_inner
+      type: object
+    placeOrder_request:
+      properties:
+        itemCart:
+          items:
+            $ref: '#/components/schemas/placeOrder_request_itemCart_inner'
+          title: itemCart
+          type: array
+        location:
+          description: Delivery location.
+          title: location
+          type: string
+      required:
+      - itemCart
+      - location
+      title: placeOrder_request
+      type: object
+    deliveryAcceptOrder_request:
+      properties:
+        orderId:
+          maxLength: 40
+          minLength: 40
+          title: orderId
+          type: string
+      title: deliveryAcceptOrder_request
+      type: object
+    deliveryDrop_request:
+      properties:
+        orderId:
+          title: orderId
+          type: string
+        otp:
+          title: otp
+          type: integer
+      title: deliveryDrop_request
+      type: object
+    vendorAddProduct_request:
+      properties:
+        name:
+          title: name
+          type: string
+        thumbnail:
+          title: thumbnail
+          type: string
+        price:
+          title: price
+          type: number
+        maxQuantity:
+          title: maxQuantity
+          type: number
+        imageUrls:
+          items:
+            maxLength: 40
+            minLength: 40
+            type: string
+          title: imageUrls
+          type: array
+      required:
+      - name
+      - price
+      title: vendorAddProduct_request
+      type: object
+    vendorEditProduct_request:
+      properties:
+        itemId:
+          maxLength: 40
+          minLength: 40
+          title: itemId
+          type: string
+        name:
+          title: name
+          type: string
+        thumbnail:
+          title: thumbnail
+          type: string
+        price:
+          title: price
+          type: number
+        maxQuantity:
+          title: maxQuantity
+          type: number
+      required:
+      - itemId
+      title: vendorEditProduct_request
+      type: object
+    vendorAddProductImages_request:
+      properties:
+        itemId:
+          maxLength: 40
+          minLength: 40
+          title: itemId
+          type: string
+        imageUrls:
+          items:
+            $ref: '#/components/schemas/fileId'
+          minItems: 1
+          title: imageUrls
+          type: array
+      required:
+      - itemId
+      title: vendorAddProductImages_request
+      type: object
+    vendorChangeProductAvailabile_request:
+      properties:
+        itemId:
+          maxLength: 40
+          minLength: 40
+          title: itemId
+          type: string
+        status:
+          description: Weather the item is available or not
+          title: status
+          type: boolean
+      required:
+      - itemId
+      - status
+      title: vendorChangeProductAvailabile_request
+      type: object
+    vendorGetRequestedOrders_200_response_inner_orderItems_inner:
+      example:
+        itemId: itemId
+        quantity: 0.8008281904610115
+      properties:
+        itemId:
+          maxLength: 40
+          minLength: 40
+          title: itemId
+          type: string
+        quantity:
+          description: Quantity of the specific item.
+          title: quantity
+          type: number
+      required:
+      - itemId
+      - quantity
+      title: vendorGetRequestedOrders_200_response_inner_orderItems_inner
+      type: object
+    vendorGetRequestedOrders_200_response_inner:
+      example:
+        orderId: orderId
+        price: 6.027456183070403
+        vendorID: vendorID
+        location: location
+        pickupLocation: pickupLocation
+        userId: userId
+        orderItems:
+        - itemId: itemId
+          quantity: 0.8008281904610115
+        - itemId: itemId
+          quantity: 0.8008281904610115
+      properties:
+        orderId:
+          title: orderId
+          type: string
+        userId:
+          title: userId
+          type: string
+        vendorID:
+          title: vendorID
+          type: string
+        pickupLocation:
+          title: pickupLocation
+          type: string
+        orderItems:
+          items:
+            $ref: '#/components/schemas/vendorGetRequestedOrders_200_response_inner_orderItems_inner'
+          title: orderItems
+          type: array
+        location:
+          description: Delivery location.
+          title: location
+          type: string
+        price:
+          title: price
+          type: number
+      title: vendorGetRequestedOrders_200_response_inner
+      type: object
