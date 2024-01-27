@@ -13,32 +13,20 @@
         android:theme="@style/Theme.SwiggyLite"
         tools:targetApi="31">
         <activity
-            android:name=".SearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PlaceOrderActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ItemDetailsActivity"
-            android:exported="false" />
-        <activity
             android:name=".UserRegistration"
             android:exported="false" />
         <activity
             android:name=".MainPage"
             android:exported="false" />
         <activity
-            android:name=".item_detail_page"
-            android:exported="false" />
-        <activity
-            android:name=".single_item_detail"
+            android:name=".SearchActivity"
             android:exported="false" />
         <activity
             android:name=".RecyclerViewActivity"
             android:exported="false" />
         <activity
             android:name=".UserLogin"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

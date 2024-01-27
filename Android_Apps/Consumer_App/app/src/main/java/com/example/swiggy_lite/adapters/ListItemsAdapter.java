@@ -42,8 +42,8 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.view
         void onItemClick(int position);
     }
 
-    private static CategoryAdapter.OnItemClickListener listener;
-    public static void setOnItemClickListener(CategoryAdapter.OnItemClickListener clickListener){
+    private static ListItemsAdapter.OnItemClickListener listener;
+    public static void setOnItemClickListener(ListItemsAdapter.OnItemClickListener clickListener){
         listener = clickListener;
     }
 
@@ -70,6 +70,10 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.view
         } else {
             holder.name.setText(name);
         }
+
+        holder.name.setOnClickListener(v -> listener.onItemClick(holder.getAdapterPosition()));
+        holder.itemType.setOnClickListener(v -> listener.onItemClick(holder.getAdapterPosition()));
+        holder.picImage.setOnClickListener(v -> listener.onItemClick(holder.getAdapterPosition()));
 
 
 

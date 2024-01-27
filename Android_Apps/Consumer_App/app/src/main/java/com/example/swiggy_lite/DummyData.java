@@ -1,9 +1,13 @@
 package com.example.swiggy_lite;
 
 import com.example.swiggy_lite.models.FoodModel;
+import com.example.swiggy_lite.models.OrderModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 public class DummyData {
     public static final ArrayList<String> categoryList =  new ArrayList<>(Arrays.asList(
@@ -13,6 +17,18 @@ public class DummyData {
             "category_noodles", "category_north_indian", "category_paratha", "category_pasta",
             "category_pastry", "category_pizza", "category_rolls", "category_vada"
     ));
+
+    public static  final ArrayList<String> campusAddresses = new ArrayList<>();
+    static {
+        campusAddresses.add("University Avenue, Admin Building, Room 101");
+        campusAddresses.add("Knowledge Lane, Central Library, Reference Section");
+        campusAddresses.add("Campus Circle, Student Center, Cafeteria");
+        campusAddresses.add("Innovation Street, Engineering Complex, Room E-205");
+        campusAddresses.add("Discovery Drive, Science Lab Building, Lab-301");
+        campusAddresses.add("Creativity Court, Arts Building, Room A-102");
+        campusAddresses.add("Fitness Avenue, Sports Complex, Gymnasium");
+        campusAddresses.add("Wellness Way, Health Center, Medical Office");
+    }
 
     public static final ArrayList<FoodModel> foodItemList;
 
@@ -36,4 +52,44 @@ public class DummyData {
         foodItemList.add(new FoodModel(16, "Blueberry Pancakes", "4.3", 11, "Griddle"));
         foodItemList.add(new FoodModel(17, "Vegetarian Burrito", "4.7", 17, "Assembly Line"));
         foodItemList.add(new FoodModel(18, "Mango Sorbet", "4.4", 8, "Freezer"));
-    }}
+    }
+
+    public static ArrayList<FoodModel> selected = null;
+    public static final ArrayList<OrderModel> orderList;
+
+    static {
+        orderList = new ArrayList<>();
+        orderList.add(new OrderModel(getRandomFoodItems(), formatDate("2024-01-01"), "12:00 PM", "123 Street, City", 5));
+        orderList.add(new OrderModel(getRandomFoodItems(), formatDate("2024-01-02"), "01:30 PM", "456 Avenue, Town", 2));
+        orderList.add(new OrderModel(getRandomFoodItems(), formatDate("2024-01-03"), "07:45 PM", "789 Road, Village", 0));
+        orderList.add(new OrderModel(getRandomFoodItems(), formatDate("2024-01-04"), "03:15 PM", "321 Lane, County", 3));
+        orderList.add(new OrderModel(getRandomFoodItems(), formatDate("2024-01-05"), "09:30 AM", "654 Boulevard, Country", 1));
+    }
+
+    private static ArrayList<FoodModel> getRandomFoodItems() {
+        ArrayList<FoodModel> selectedItems = new ArrayList<>();
+        int numberOfItems = Math.min((int) (Math.random() * 8) + 1,3);
+
+        for (int i = 0; i < numberOfItems; i++) {
+            selectedItems.add(foodItemList.get((int) (Math.random() * foodItemList.size())));
+        }
+
+        return selectedItems;
+    }
+
+    private static String formatDate(String inputDate) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Date date = inputFormat.parse(inputDate);
+
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd MMM. yyyy", Locale.US);
+            return outputFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return inputDate; // Return original date in case of any error
+        }
+    }
+
+    public static ArrayList<FoodModel> historyDetails = null;
+    public static int position = 0;
+}

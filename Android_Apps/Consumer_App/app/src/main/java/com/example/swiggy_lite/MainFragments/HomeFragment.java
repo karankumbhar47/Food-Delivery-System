@@ -23,10 +23,11 @@ import com.example.swiggy_lite.DummyData;
 import com.example.swiggy_lite.Home_Fragments.MainFilterFragment;
 import com.example.swiggy_lite.Home_Fragments.category_search;
 import com.example.swiggy_lite.R;
+import com.example.swiggy_lite.RestaurantInfo;
 import com.example.swiggy_lite.SearchActivity;
 import com.example.swiggy_lite.adapters.CategoryAdapter;
 import com.example.swiggy_lite.adapters.ItemDetailsAdapter;
-import com.example.swiggy_lite.ItemDetailsActivity;
+import com.example.swiggy_lite.Common_Fragment.ItemDetailsFragment;
 import com.example.swiggy_lite.models.FoodModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -59,7 +60,6 @@ public class HomeFragment extends Fragment {
         });
         category_recyclerView.setAdapter(categoryAdapter);
 
-
         SearchView food_item_searchView = view.findViewById(R.id.food_item_searchView);
         food_item_searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
@@ -75,8 +75,7 @@ public class HomeFragment extends Fragment {
         ItemDetailsAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent = new Intent(requireContext(), ItemDetailsActivity.class);
-                startActivity(intent);
+                load(new RestaurantInfo(DummyData.foodItemList));
             }
         });
         recommendation_recyclerView.setAdapter(recommendationAdapter);
@@ -157,16 +156,13 @@ public class HomeFragment extends Fragment {
         LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.sort_dialog, null);
 
-        // create the popup window
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = true; // if the popup window should dismiss when clicking outside
+        boolean focusable = true;
         popupWindow = new PopupWindow(popupView, width, height, focusable);
 
-        // show the popup window below the button
         popupWindow.showAsDropDown(anchorView, 0, 0);
 
-        // dismiss the popup window when clicked
         popupView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

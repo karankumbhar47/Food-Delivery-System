@@ -1,8 +1,11 @@
 package com.example.swiggy_lite.models;
 
-public class FoodModel {
-    String name, rating, render_location, category, img_path;
-    int item_id, price;
+import java.io.Serializable;
+
+public class FoodModel implements Serializable {
+    String name, rating, render_location, category, img_path, cuisine;
+    boolean isPureVeg;
+    int item_id, price,quantity;
 
     public FoodModel(int item_id, String name, String rating, int price, String render_location){
         this.item_id = item_id;
@@ -10,6 +13,8 @@ public class FoodModel {
         this.rating = rating;
         this.price = price;
         this.render_location = render_location;
+        this.isPureVeg = Math.random() > 0.5f;
+        this.quantity = 1;
     }
 
     public String getCategory() {
@@ -65,5 +70,29 @@ public class FoodModel {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getCuisine() {
+        return cuisine;
+    }
+
+    public void setCuisine(String cuisine) {
+        this.cuisine = cuisine;
+    }
+
+    public boolean isPureVeg() {
+        return isPureVeg;
+    }
+
+    public void setPureVeg(boolean pureVeg) {
+        isPureVeg = pureVeg;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

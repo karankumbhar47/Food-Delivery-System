@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Cart_Fragment.SelectAddressFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/header_card"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/back_button_imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="15dp"
+                app:srcCompat="@drawable/back_arrow_icon" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="60dp"
+                android:fontFamily="cursive"
+                android:gravity="center"
+                android:text="Swiggy lite"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/orange"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_marginTop="16dp"
+            android:elevation="5dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header_card">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/khanar_hostel_radioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="Khanar Boys Hostel " />
+
+                        <EditText
+                            android:id="@+id/khanar_room_picker_editText"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="clip_horizontal"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="0.5"
+                            android:autoText="false"
+                            android:backgroundTint="@android:color/transparent"
+                            android:gravity="center_horizontal"
+                            android:hint="Room Number(A101)"
+                            android:padding="2dp"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+
+                        <RadioButton
+                            android:id="@+id/shivnath_hostel_radioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.5"
+                            android:text="Shivnath Hostel" />
+
+                        <EditText
+                            android:id="@+id/shivnath_room_picker_editText"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="clip_horizontal"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="0.5"
+                            android:autoText="false"
+                            android:background="@android:color/transparent"
+                            android:gravity="center"
+                            android:hint="Room Number(A101)"
+                            android:padding="2dp"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+
+                        <RadioButton
+                            android:id="@+id/girls_hostel_radioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.5"
+                            android:text="Indravati Girls Hostel" />
+
+                        <EditText
+                            android:id="@+id/indravati_room_picker_editText"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="clip_horizontal"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="0.5"
+                            android:autoText="false"
+                            android:background="@android:color/transparent"
+                            android:gravity="center"
+                            android:hint="Room Number(A101)"
+                            android:padding="2dp"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+
+                        <RadioButton
+                            android:id="@+id/mess_area_radioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Mess Area" />
+
+                        <RadioButton
+                            android:id="@+id/academic_area_radioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Academic Area" />
+
+                        <Spinner
+                            android:id="@+id/academic_areas_dropdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:layout_marginTop="0dp"
+                            android:visibility="gone" />
+
+                        <RadioButton
+                            android:id="@+id/facuulty_building_radioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Facaulty Buildings" />
+
+                        <RadioButton
+                            android:id="@+id/At_mart_radioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="AT Mart" />
+
+                        <RadioButton
+                            android:id="@+id/director_house_radioButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Director's House" />
+
+                        <!-- Add more RadioButtons for other options -->
+
+                    </RadioGroup>
+
+                    <!-- Edit Text for the first option -->
+
+                    <!-- Spinner (Dropdown) for the second option -->
+
+                    <!-- Add more UI elements for other options -->
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/place_order_cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/login_orange"
+            android:elevation="5dp"
+            app:cardCornerRadius="7dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView5">
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:text="Place Order"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

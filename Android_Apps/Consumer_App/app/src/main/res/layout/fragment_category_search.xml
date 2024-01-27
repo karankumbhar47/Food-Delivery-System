@@ -32,17 +32,30 @@
             android:id="@+id/cardView4"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/frameLayout3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
+
+            <android.widget.SearchView
+                android:id="@+id/food_item_searchView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/light_yellow"
-                android:backgroundTint="#C79F9F"
-                android:textColor="#D4B3B3" />
+                android:iconifiedByDefault="false"
+                android:pointerIcon="wait"
+                android:queryBackground="@android:color/transparent"
+                android:queryHint="Search here"
+                android:searchIcon="@null"
+                app:theme="@style/SearchViewStyle">
+
+            </android.widget.SearchView>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

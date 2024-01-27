@@ -25,6 +25,11 @@ public class ItemDetailsAdapter extends RecyclerView.Adapter<ItemDetailsAdapter.
         this.context = context;
     }
 
+    public void setList(ArrayList<FoodModel> updated_list) {
+        this.list = updated_list;
+        notifyDataSetChanged();
+    }
+
     public interface OnItemClickListener{
         void onItemClick(int position);
     }
@@ -72,8 +77,8 @@ public class ItemDetailsAdapter extends RecyclerView.Adapter<ItemDetailsAdapter.
             super(itemView);
             item_name = itemView.findViewById(R.id.item_name_textView);
             rating = itemView.findViewById(R.id.ratings_textView);
-            item_list = itemView.findViewById(R.id.food_list_textView);
-            item_pic = itemView.findViewById(R.id.item_food_imageView);
+            item_list = itemView.findViewById(R.id.food_description_textView);
+            item_pic = itemView.findViewById(R.id.food_item_imageView);
             location = itemView.findViewById(R.id.shop_location_textView);
             item_price = itemView.findViewById(R.id.item_price);
         }

@@ -26,7 +26,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/place_order_button"
+                    android:id="@+id/fragment_title_textView"
                     android:layout_width="108dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:elevation="5dp"
             app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -60,6 +61,7 @@
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
+                    android:background="@android:color/transparent"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -82,6 +84,7 @@
                     android:layout_height="match_parent"
                     android:iconifiedByDefault="false"
                     android:pointerIcon="wait"
+                    android:queryBackground="@android:color/transparent"
                     android:queryHint="Search here"
                     android:searchIcon="@null"
                     android:voiceIcon="@drawable/microphone_icon"
@@ -90,8 +93,8 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:theme="@style/SearchViewStyle"
-                    app:layout_constraintVertical_bias="0.5">
+                    app:layout_constraintVertical_bias="0.5"
+                    app:theme="@style/SearchViewStyle">
 
                 </android.widget.SearchView>
             </androidx.constraintlayout.widget.ConstraintLayout>
