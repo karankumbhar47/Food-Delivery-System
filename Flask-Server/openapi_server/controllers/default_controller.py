@@ -20,6 +20,8 @@ from openapi_server.models.vendor_edit_product_request import VendorEditProductR
 from openapi_server.models.vendor_get_requested_orders200_response_inner import VendorGetRequestedOrders200ResponseInner  # noqa: E501
 from openapi_server import util
 
+import openapi_server.utils.basic as basicUtils
+
 
 def check_product_available(id, count):  # noqa: E501
     """Check Availability
@@ -248,7 +250,7 @@ def query(session_id, query_request):  # noqa: E501
     return 'do some magic!'
 
 
-def register(user_details):  # noqa: E501
+def register():  # noqa: E501
     """Register a new consumer?
 
     Create a new user account with unique username, strong password for authentication and other user info. # noqa: E501
@@ -260,7 +262,16 @@ def register(user_details):  # noqa: E501
     """
     if connexion.request.is_json:
         user_details = UserDetails.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        if (basicUtils.username_exists(user_details.username)):
+            return ("Username", 409)
+        if (not basicUtils.phone_is_valid(user_details.phone)):
+            return ("Phone", 409)
+        if (not basicUtils.email_is_valid(user_details.email)):
+            return ("Email", 409)
+        if (basicUtils.password_is_weak(user_details.password)):
+            return ("Password", 409)
+        return basicUtils.generate_uid(40)
+    return ('', 400)
 
 
 def update_profile(session_id, profile):  # noqa: E501
