@@ -20,6 +20,7 @@ from openapi_server.models.vendor_edit_product_request import VendorEditProductR
 from openapi_server.models.vendor_get_requested_orders200_response_inner import VendorGetRequestedOrders200ResponseInner  # noqa: E501
 from openapi_server import util
 
+import openapi_server.database as database
 import openapi_server.utils.basic as basicUtils
 
 
@@ -261,16 +262,38 @@ def register():  # noqa: E501
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
     if connexion.request.is_json:
+        database.init()
         user_details = UserDetails.from_dict(connexion.request.get_json())  # noqa: E501
-        if (basicUtils.username_exists(user_details.username)):
+        if (database.check_exists(user_details.username, "username", "Consumer")):  # noqa: E501
             return ("Username", 409)
-        if (not basicUtils.phone_is_valid(user_details.phone)):
+        if (not basicUtils.phone_is_valid(user_details.phone) or
+            database.check_exists(
+                user_details.phone,
+                "phone_number",
+                "Consumer")):
             return ("Phone", 409)
-        if (not basicUtils.email_is_valid(user_details.email)):
+        if (user_details.email is None):
+            user_details.email = ""
+        elif (not basicUtils.email_is_valid(user_details.email) or
+              database.check_exists(user_details.email, "email_id", "Consumer")):
             return ("Email", 409)
         if (basicUtils.password_is_weak(user_details.password)):
             return ("Password", 409)
-        return basicUtils.generate_uid(40)
+        hash_password = basicUtils.hash_password(user_details.password)
+        while True:
+            uid = basicUtils.generate_uid(40)
+            if not database.check_exists(uid, "user_id", "Consumer"):
+                break
+        database.sqlCursor.execute(f'''
+            INSERT INTO Consumer (user_id, username, name, phone_number,
+                                  email_id, gender, dob, password)
+            VALUES ('{uid}', '{user_details.username}', '{user_details.name}',
+                    '{user_details.phone}', '{user_details.email}',
+                    '{user_details.gender}', '{user_details.dob}',
+                    '{hash_password}');
+        ''')
+        database.sqlConnection.commit()
+        return uid
     return ('', 400)
 
 

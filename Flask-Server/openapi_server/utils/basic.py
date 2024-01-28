@@ -1,14 +1,12 @@
 import secrets
 import re
+import bcrypt
+import base64
 
 
 def generate_uid(length: int = 40):
     characters = "abcdefg"
     return ''.join(secrets.choice(characters) for _ in range(length))
-
-
-def username_exists(username: str) -> bool:
-    return False
 
 
 def phone_is_valid(phone: int) -> bool:
@@ -21,6 +19,7 @@ def phone_is_valid(phone: int) -> bool:
 def email_is_valid(email: str) -> bool:
     pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
     return bool(re.fullmatch(pattern, email)) 
+
 
 def password_is_weak(password: str) -> bool:
     flag = 0 
@@ -37,14 +36,19 @@ def password_is_weak(password: str) -> bool:
         elif not re.search("[0-9]", password):
             flag = -1
             break
-        elif not re.search("[_@$]" , password):
+        elif not re.search(r'''[!@#$%^&*()_+[\]\{}|;':",./<>?`~]''', password):
             flag = -1
             break
         else:
             flag = 0
             break
-            
+
     if flag == -1 :
         return True
     return False
 
+
+def hash_password(password: str) -> str:
+    hash_pwd = bcrypt.hashpw(password.encode('utf-8'),
+                             bcrypt.gensalt())
+    return base64.b64encode(hash_pwd).decode('utf-8')
