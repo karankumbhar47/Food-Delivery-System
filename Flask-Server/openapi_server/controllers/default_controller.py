@@ -284,6 +284,10 @@ def register():  # noqa: E501
             uid = basicUtils.generate_uid(40)
             if not database.check_exists(uid, "user_id", "Consumer"):
                 break
+        while True:
+            sid = basicUtils.generate_uid(40)
+            if not database.check_exists(sid, "session_id", "Session"):
+                break
         database.sqlCursor.execute(f'''
             INSERT INTO Consumer (user_id, username, name, phone_number,
                                   email_id, gender, dob, password)
@@ -292,8 +296,12 @@ def register():  # noqa: E501
                     '{user_details.gender}', '{user_details.dob}',
                     '{hash_password}');
         ''')
+        database.sqlCursor.execute(f'''
+            INSERT INTO Session (session_id, user_id, valid)
+            VALUES ('{sid}', '{uid}', 1)
+                                   ''')
         database.sqlConnection.commit()
-        return uid
+        return sid
     return ('', 400)
 
 

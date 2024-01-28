@@ -29,6 +29,14 @@ def init():
             dob             DATE
         )
     ''')
+    # Add login time and logout time to session table
+    sqlCursor.execute('''
+        CREATE TABLE IF NOT EXISTS Session (
+            session_id CHAR(40) PRIMARY KEY,
+            user_id    CHAR(40) REFERENCES Consumer(user_id),
+            valid      INTEGER
+        )
+    ''')
     sqlConnection.commit()
 
 
