@@ -52,3 +52,7 @@ def hash_password(password: str) -> str:
     hash_pwd = bcrypt.hashpw(password.encode('utf-8'),
                              bcrypt.gensalt())
     return base64.b64encode(hash_pwd).decode('utf-8')
+
+
+def verify_password(pwd: str, pwd_hash: str) -> bool:
+    return bcrypt.checkpw(pwd.encode('utf-8'), base64.b64decode(pwd_hash))

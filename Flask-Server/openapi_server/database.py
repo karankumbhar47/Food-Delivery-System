@@ -45,6 +45,14 @@ def init():
             FOREIGN KEY(vendor) REFERENCES Vendor(user_id)
         )
     ''')
+    # Add login time and logout time to session table
+    sqlCursor.execute('''
+        CREATE TABLE IF NOT EXISTS Session (
+            session_id CHAR(40) PRIMARY KEY,
+            user_id    CHAR(40) REFERENCES Consumer(user_id),
+            valid      INTEGER
+        )
+    ''')
     sqlConnection.commit()
 
 
@@ -55,3 +63,20 @@ def check_exists(value: str, field: str, table: str):
     if sqlCursor.fetchone()[0] == 0:
         return False
     return True
+
+
+def open():
+    global sqlConnection
+    global sqlCursor
+    sqlDatabaseFile = os.getenv("FOOD_DELIVERY_DB")
+    if sqlDatabaseFile is None:
+        sqlDatabaseFile = "/tmp/fds.db"
+    sqlConnection = sqlite3.connect(sqlDatabaseFile)
+    sqlCursor = sqlConnection.cursor()
+
+
+def close():
+    global sqlConnection
+    global sqlCursor
+    sqlCursor.close()
+    sqlConnection.close()

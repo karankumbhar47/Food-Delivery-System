@@ -211,7 +211,7 @@ def get_profile(session_id, body):  # noqa: E501
     return 'do some magic!'
 
 
-def login(login_request):  # noqa: E501
+def login():  # noqa: E501
     """Login to user account
 
     Get username and password and authenticate the user. Returns sessionId for further requests # noqa: E501
@@ -223,7 +223,32 @@ def login(login_request):  # noqa: E501
     """
     if connexion.request.is_json:
         login_request = LoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        database.open()
+        # Check if the user is valid
+        if not database.check_exists(login_request.username,
+                                     "username", "Consumer"):
+            database.close()
+            return ("Forbidden", 403)
+        # Get password hash
+        database.sqlCursor.execute(f'SELECT password FROM Consumer WHERE username = "{login_request.username}"')  # noqa: E501
+        pwd_hash = database.sqlCursor.fetchone()[0]
+        # Verify password
+        if not basicUtils.verify_password(login_request.password, pwd_hash):
+            database.close()
+            return ("Forbidden", 403)
+        # Add new session id
+        while True:
+            sid = basicUtils.generate_uid(40)
+            if not database.check_exists(sid, "session_id", "Session"):
+                break
+        database.sqlCursor.execute(f'''
+            INSERT INTO Session (session_id, user_id, valid)
+            VALUES ('{sid}', '{login_request.username}', 1)
+                                   ''')
+        database.sqlConnection.commit()
+        database.close()
+        return sid
+    return ('Bad Request', 400)
 
 
 def place_order(session_id, place_order_request):  # noqa: E501
@@ -286,27 +311,35 @@ def register():  # noqa: E501
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
     if connexion.request.is_json:
-        database.init()
+        database.open()
         user_details = UserDetails.from_dict(connexion.request.get_json())  # noqa: E501
         if (database.check_exists(user_details.username, "username", "Consumer")):  # noqa: E501
+            database.close()
             return ("Username", 409)
         if (not basicUtils.phone_is_valid(user_details.phone) or
             database.check_exists(
                 user_details.phone,
                 "phone_number",
                 "Consumer")):
+            database.close()
             return ("Phone", 409)
         if (user_details.email is None):
             user_details.email = ""
         elif (not basicUtils.email_is_valid(user_details.email) or
               database.check_exists(user_details.email, "email_id", "Consumer")):
+            database.close()
             return ("Email", 409)
         if (basicUtils.password_is_weak(user_details.password)):
+            database.close()
             return ("Password", 409)
         hash_password = basicUtils.hash_password(user_details.password)
         while True:
             uid = basicUtils.generate_uid(40)
             if not database.check_exists(uid, "user_id", "Consumer"):
+                break
+        while True:
+            sid = basicUtils.generate_uid(40)
+            if not database.check_exists(sid, "session_id", "Session"):
                 break
         database.sqlCursor.execute(f'''
             INSERT INTO Consumer (user_id, username, name, phone_number,
@@ -316,8 +349,13 @@ def register():  # noqa: E501
                     '{user_details.gender}', '{user_details.dob}',
                     '{hash_password}');
         ''')
+        database.sqlCursor.execute(f'''
+            INSERT INTO Session (session_id, user_id, valid)
+            VALUES ('{sid}', '{uid}', 1)
+                                   ''')
         database.sqlConnection.commit()
-        return uid
+        database.close()
+        return sid
     return ('', 400)
 
 
