@@ -24,7 +24,7 @@ import openapi_server.database as database
 import openapi_server.utils.basic as basicUtils
 
 
-def check_product_available(id, count):  # noqa: E501
+def check_product_available(id_, count):  # noqa: E501
     """Check Availability
 
     Check the availability of a specific item by providing its ID and quantity count # noqa: E501
@@ -36,8 +36,19 @@ def check_product_available(id, count):  # noqa: E501
 
     :rtype: Union[bool, Tuple[bool, int], Tuple[bool, int, Dict[str, str]]
     """
-    return 'do some magic!'
-
+    database.init()
+    try : 
+        database.sqlCursor.execute("SELECT is_available, max_quantity FROM Catalog WHERE item_id = ?", (id_,))
+        result = database.sqlCursor.fetchone()
+        if  result:
+            if result[0] and result[1] >= count:
+                return True
+            return False
+        else:
+            print(f'{id_} doesnot exists')
+            return ("Unauthorized", 401)
+    except:
+        return 500
 
 def confirm_order(session_id, body):  # noqa: E501
     """Confirm Order
@@ -51,6 +62,7 @@ def confirm_order(session_id, body):  # noqa: E501
 
     :rtype: Union[float, Tuple[float, int], Tuple[float, int, Dict[str, str]]
     """
+
     return 'do some magic!'
 
 
@@ -159,7 +171,7 @@ def get_orders(session_id, body):  # noqa: E501
     return 'do some magic!'
 
 
-def get_product(id):  # noqa: E501
+def get_product(id_):  # noqa: E501
     """Get Product Details
 
     Retrieve details for a specific item by providing its ID # noqa: E501
@@ -169,7 +181,19 @@ def get_product(id):  # noqa: E501
 
     :rtype: Union[FoodItemFull, Tuple[FoodItemFull, int], Tuple[FoodItemFull, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    database.init()
+    query = '''
+        SELECT Catalog.item_id, Catalog.item_name, Catalog.thumbnail_picture, Catalog.price,
+            Vendor.username, Vendor.location, Catalog.current_rating, Catalog.is_available,
+            Catalog.max_quantity
+            FROM Catalog
+            INNER JOIN Vendor ON Catalog.vendor = Vendor.user_id
+            WHERE Catalog.item_id = ?'''
+    database.sqlCursor.execute(f'{query}', (id_,))
+    result = database.sqlCursor.fetchone()
+    if result:
+        return  FoodItemFull(*result)
+    return ("Product Not Found", 404)
 
 
 def get_profile(session_id, body):  # noqa: E501

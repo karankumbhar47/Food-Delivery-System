@@ -29,6 +29,22 @@ def init():
             dob             DATE
         )
     ''')
+    sqlCursor.execute('''
+        CREATE TABLE IF NOT EXISTS Catalog (
+            item_id             CHAR(40) PRIMARY KEY,
+            item_name           VARCHAR(100),
+            thumbnail_picture   BLOB,
+            is_addon            INT,
+            tags                VARCHAR(1024),
+            price               DECIMAL(10,2),
+            vendor              INT,
+            max_quantity        INT,
+            is_available        INT,
+            current_rating      DECIMAL(1,1),
+            generic_name        VARCHAR(100),
+            FOREIGN KEY(vendor) REFERENCES Vendor(user_id)
+        )
+    ''')
     sqlConnection.commit()
 
 
