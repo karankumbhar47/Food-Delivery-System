@@ -47,3 +47,20 @@ def check_exists(value: str, field: str, table: str):
     if sqlCursor.fetchone()[0] == 0:
         return False
     return True
+
+
+def open():
+    global sqlConnection
+    global sqlCursor
+    sqlDatabaseFile = os.getenv("FOOD_DELIVERY_DB")
+    if sqlDatabaseFile is None:
+        sqlDatabaseFile = "/tmp/fds.db"
+    sqlConnection = sqlite3.connect(sqlDatabaseFile)
+    sqlCursor = sqlConnection.cursor()
+
+
+def close():
+    global sqlConnection
+    global sqlCursor
+    sqlCursor.close()
+    sqlConnection.close()
