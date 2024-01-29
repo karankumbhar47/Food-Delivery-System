@@ -3,6 +3,7 @@
 import connexion
 
 from openapi_server import encoder
+from openapi_server import database
 
 
 def main():
@@ -11,6 +12,7 @@ def main():
     app.add_api('openapi.yaml',
                 arguments={'title': 'FDS'},
                 pythonic_params=True)
+    database.init()
 
     app.run(port=8080)
 

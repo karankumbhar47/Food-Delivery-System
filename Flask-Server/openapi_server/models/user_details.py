@@ -157,7 +157,7 @@ class UserDetails(Model):
         if phone is None:
             raise ValueError("Invalid value for `phone`, must not be `None`")  # noqa: E501
 
-        self._phone = phone
+        self._phone = str(int(phone))
 
     @property
     def email(self) -> str:
