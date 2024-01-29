@@ -182,15 +182,18 @@ def get_product(id_):  # noqa: E501
     :rtype: Union[FoodItemFull, Tuple[FoodItemFull, int], Tuple[FoodItemFull, int, Dict[str, str]]
     """
     database.init()
+
     query = '''
         SELECT Catalog.item_id, Catalog.item_name, Catalog.thumbnail_picture, Catalog.price,
-            Vendor.username, Vendor.location, Catalog.current_rating, Catalog.is_available,
+            Vendor.user_name, Vendor.location, Catalog.current_rating, Catalog.is_available,
             Catalog.max_quantity
             FROM Catalog
             INNER JOIN Vendor ON Catalog.vendor = Vendor.user_id
             WHERE Catalog.item_id = ?'''
+
     database.sqlCursor.execute(f'{query}', (id_,))
     result = database.sqlCursor.fetchone()
+
     if result:
         return  FoodItemFull(*result)
     return ("Product Not Found", 404)
@@ -266,7 +269,6 @@ def place_order(session_id, place_order_request):  # noqa: E501
     if connexion.request.is_json:
         place_order_request = PlaceOrderRequest.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
-
 
 def put_file(session_id, body):  # noqa: E501
     """Upload a file
@@ -376,7 +378,7 @@ def update_profile(session_id, profile):  # noqa: E501
     return 'do some magic!'
 
 
-def vendor_add_product(session_id, vendor_add_product_request):  # noqa: E501
+def vendor_add_product():  # noqa: E501
     """vendor_add_product
 
      # noqa: E501
@@ -388,9 +390,36 @@ def vendor_add_product(session_id, vendor_add_product_request):  # noqa: E501
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
+    session_id = connexion.request.headers.get("sessionId")
+    if session_id:
+        #check if session id is valid
+        print(session_id)
+    else:
+        return  ("Session Id missing in headers", 400)
     if connexion.request.is_json:
-        vendor_add_product_request = VendorAddProductRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        database.init()
+        database.sqlCursor.execute('SELECT COUNT(*) FROM "main"."Session" WHERE session_id = ?',
+                                    (session_id,))
+        count = database.sqlCursor.fetchone()[0]
+        if count == 1:
+            database.open()
+            vendor_add_product_request = VendorAddProductRequest.from_dict(connexion.request.get_json())  # noqa: E501
+            while True:  
+                item_id = basicUtils.generate_uid(40)
+                if not database.check_exists(item_id, "item_id", "Catalog"):
+                    break
+            query = f'''INSERT INTO Catalog (item_id, item_name, thumbnail_picture,
+                                             price, max_quantity) 
+                        VALUES ('{item_id}', '{vendor_add_product_request.name}',
+                                '{vendor_add_product_request.thumbnail}', '{vendor_add_product_request.price}',
+                                '{vendor_add_product_request.max_quantity}');'''
+            database.sqlCursor.execute(f'{query}')
+            database.sqlConnection.commit()
+            database.close()
+            return  (item_id, 200)
+        return 'session id does not exists'
+
+    return  ('Forbidden', 403)
 
 
 def vendor_add_product_images(session_id, vendor_add_product_images_request):  # noqa: E501

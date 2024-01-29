@@ -53,12 +53,25 @@ def init():
             valid      INTEGER
         )
     ''')
+    sqlCursor.execute('''
+        CREATE TABLE IF NOT EXISTS Vendor (
+            user_id             CHAR(40) PRIMARY KEY,
+            user_name           VARCHAR(100),
+            profile_picture     BLOB,
+            is_available        INT,
+            password            VARCHAR(255),
+            location            VARCHAR(255),
+            active_houirs       VARCHAR(255),
+            current_status      VARCHAR(10),
+            pure_veg            INT
+        )
+    ''')
     sqlConnection.commit()
 
 
 def check_exists(value: str, field: str, table: str):
-    global sqlConnection
     global sqlCursor
+   
     sqlCursor.execute(f"SELECT COUNT(*) FROM {table} where {field} = '{value}'")
     if sqlCursor.fetchone()[0] == 0:
         return False
