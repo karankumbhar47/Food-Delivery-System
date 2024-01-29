@@ -22,6 +22,7 @@ from openapi_server import util
 
 import openapi_server.database as database
 import openapi_server.utils.basic as basicUtils
+import openapi_server.file_storage as store
 
 
 def check_product_available(id_, count):  # noqa: E501
@@ -141,7 +142,7 @@ def delivery_view_waiting_orders(session_id):  # noqa: E501
     return 'do some magic!'
 
 
-def get_file(file_id, session_id=None):  # noqa: E501
+def get_file():  # noqa: E501
     """Get file by file ID
 
     Retrieve a file, typically an image, based on the provided file ID. # noqa: E501
@@ -153,7 +154,12 @@ def get_file(file_id, session_id=None):  # noqa: E501
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    file_id = connexion.request.headers.get("fileId")
+    data = store.get_file(file_id)
+    if data:
+        return data
+    else:
+        return ("", 404)
 
 
 def get_orders(session_id, body):  # noqa: E501
@@ -270,7 +276,8 @@ def place_order(session_id, place_order_request):  # noqa: E501
         place_order_request = PlaceOrderRequest.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
-def put_file(session_id, body):  # noqa: E501
+
+def put_file():  # noqa: E501
     """Upload a file
 
     Upload an image to server for referencing elsewhere. # noqa: E501
@@ -282,7 +289,13 @@ def put_file(session_id, body):  # noqa: E501
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    data = connexion.request.get_data()
+
+    # Check if session id is valid
+    if data:
+        return store.store_file(data)
+    else:
+        return "Forbidden", 400
 
 
 def query(session_id, query_request):  # noqa: E501

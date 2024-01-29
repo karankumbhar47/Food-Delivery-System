@@ -4,6 +4,7 @@ import connexion
 
 from openapi_server import encoder
 from openapi_server import database
+from openapi_server import file_storage
 
 
 def main():
@@ -13,7 +14,7 @@ def main():
                 arguments={'title': 'FDS'},
                 pythonic_params=True)
     database.init()
-
+    file_storage.init()
     app.run(port=8080)
 
 
