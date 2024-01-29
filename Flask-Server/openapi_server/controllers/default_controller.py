@@ -328,7 +328,8 @@ def register():  # noqa: E501
     if connexion.request.is_json:
         database.open()
         user_details = UserDetails.from_dict(connexion.request.get_json())  # noqa: E501
-        if (database.check_exists(user_details.username, "username", "Consumer")):  # noqa: E501
+        if (database.check_exists(user_details.username, "username", "Consumer") or  # noqa: E501
+            basicUtils.username_is_valid(user_details.username)):
             database.close()
             return ("Username", 409)
         if (not basicUtils.phone_is_valid(user_details.phone) or

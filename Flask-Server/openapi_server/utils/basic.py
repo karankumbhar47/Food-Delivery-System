@@ -9,6 +9,12 @@ def generate_uid(length: int = 40):
     return ''.join(secrets.choice(characters) for _ in range(length))
 
 
+def username_is_valid(username: str) -> bool:
+    if len(username) < 4 or ' ' in username:
+        return False
+    return True
+
+
 def phone_is_valid(phone: int) -> bool:
     str_phone = str(phone)
     if len(str_phone) == 10 and str_phone[0] != 0 : 
