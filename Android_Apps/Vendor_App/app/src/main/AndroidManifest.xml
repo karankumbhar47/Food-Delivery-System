@@ -13,7 +13,31 @@
         android:theme="@style/Theme.Vendor_App"
         tools:targetApi="31">
         <activity
-            android:name=".Demo"
+            android:name=".Profile"
+            android:exported="false" />
+        <activity
+            android:name=".Settings"
+            android:exported="false" />
+        <activity
+            android:name=".CancelledOrder"
+            android:exported="false" />
+        <activity
+            android:name=".CompletedOrder"
+            android:exported="false" />
+        <activity
+            android:name=".OngoingOrder"
+            android:exported="false" />
+        <activity
+            android:name=".Menu"
+            android:exported="false" />
+        <activity
+            android:name=".NewOrder"
+            android:exported="false" />
+        <activity
+            android:name=".AddNewItem"
+            android:exported="false" />
+        <activity
+            android:name=".AddNewCategory"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

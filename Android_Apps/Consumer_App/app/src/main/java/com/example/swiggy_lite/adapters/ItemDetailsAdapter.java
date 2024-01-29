@@ -12,17 +12,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.swiggy_lite.R;
-import com.example.swiggy_lite.models.foodModel;
+import com.example.swiggy_lite.models.FoodModel;
 
 import java.util.ArrayList;
 
 public class ItemDetailsAdapter extends RecyclerView.Adapter<ItemDetailsAdapter.viewHolder> {
-    ArrayList<foodModel> list;
+    ArrayList<FoodModel> list;
     Context context;
 
-    public ItemDetailsAdapter(ArrayList<foodModel> items, Context context) {
+    public ItemDetailsAdapter(ArrayList<FoodModel> items, Context context) {
         this.list = items;
         this.context = context;
+    }
+
+    public void setList(ArrayList<FoodModel> updated_list) {
+        this.list = updated_list;
+        notifyDataSetChanged();
     }
 
     public interface OnItemClickListener{
@@ -43,12 +48,12 @@ public class ItemDetailsAdapter extends RecyclerView.Adapter<ItemDetailsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ItemDetailsAdapter.viewHolder holder, int position) {
-        foodModel singleItem = list.get(position);
+        FoodModel singleItem = list.get(position);
         holder.item_name.setText(singleItem.getName());
         holder.rating.setText(singleItem.getRating());
         holder.location.setText(singleItem.getRender_location());
         int drawableId = holder.itemView.getResources()
-                .getIdentifier("burger","drawable",holder.itemView.getContext().getPackageName());
+                .getIdentifier("restaurant_"+(position+1),"drawable",holder.itemView.getContext().getPackageName());
 
         Glide.with(context)
                 .load(drawableId)
@@ -72,8 +77,8 @@ public class ItemDetailsAdapter extends RecyclerView.Adapter<ItemDetailsAdapter.
             super(itemView);
             item_name = itemView.findViewById(R.id.item_name_textView);
             rating = itemView.findViewById(R.id.ratings_textView);
-            item_list = itemView.findViewById(R.id.food_list_textView);
-            item_pic = itemView.findViewById(R.id.item_imageView);
+            item_list = itemView.findViewById(R.id.food_description_textView);
+            item_pic = itemView.findViewById(R.id.food_item_imageView);
             location = itemView.findViewById(R.id.shop_location_textView);
             item_price = itemView.findViewById(R.id.item_price);
         }

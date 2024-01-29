@@ -1,7 +1,17 @@
 <resources>
-    <string name="app_name">Swiggy-Lite</string>
+    <string name="app_name">Unwrap `n` \n Savor</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_title">Search here ...</string>
+
+    <string name="logo_description">App Logo</string>
+    <string name="mission_statement">Our mission is to deliver delicious meals to your doorstep with speed and quality.</string>
+    <string name="features">Key Features:</string>
+    <string name="our_team">Our Team</string>
+    <string name="team_member_1">Karan Kumbhar ( Frontend + Backend )</string>
+    <string name="team_member_2">Vedant Udan ( Frontend + Backend )</string>
+    <string name="team_member_3">Shubham Daule ( Backend + Testing )</string>
+    <string name="team_member_4">Sandesh Ahire (Frontend + Backend + Testing )</string>
+
 </resources>
