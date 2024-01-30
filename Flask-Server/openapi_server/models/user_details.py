@@ -22,7 +22,7 @@ class UserDetails(Model):
         :param name: The name of this UserDetails.  # noqa: E501
         :type name: str
         :param phone: The phone of this UserDetails.  # noqa: E501
-        :type phone: float
+        :type phone: str
         :param email: The email of this UserDetails.  # noqa: E501
         :type email: str
         :param gender: The gender of this UserDetails.  # noqa: E501
@@ -34,7 +34,7 @@ class UserDetails(Model):
             'username': str,
             'password': str,
             'name': str,
-            'phone': float,
+            'phone': str,
             'email': str,
             'gender': str,
             'dob': str
@@ -137,27 +137,27 @@ class UserDetails(Model):
         self._name = name
 
     @property
-    def phone(self) -> float:
+    def phone(self) -> str:
         """Gets the phone of this UserDetails.
 
 
         :return: The phone of this UserDetails.
-        :rtype: float
+        :rtype: str
         """
         return self._phone
 
     @phone.setter
-    def phone(self, phone: float):
+    def phone(self, phone: str):
         """Sets the phone of this UserDetails.
 
 
         :param phone: The phone of this UserDetails.
-        :type phone: float
+        :type phone: str
         """
         if phone is None:
             raise ValueError("Invalid value for `phone`, must not be `None`")  # noqa: E501
 
-        self._phone = str(int(phone))
+        self._phone = phone
 
     @property
     def email(self) -> str:
