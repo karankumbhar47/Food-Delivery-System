@@ -29,7 +29,7 @@ class TestDefaultController(BaseTestCase):
 
         Accept Order
         """
-        delivery_accept_order_post_request = openapi_server.DeliveryAcceptOrderPostRequest()
+        delivery_accept_order_post_request = DeliveryAcceptOrderPostRequest()
         headers = { 
             'Content-Type': 'application/json',
             'session_id': 'session_id_example',
@@ -48,7 +48,7 @@ class TestDefaultController(BaseTestCase):
 
         Drop Order
         """
-        delivery_drop_order_post_request = openapi_server.DeliveryDropOrderPostRequest()
+        delivery_drop_order_post_request = DeliveryDropOrderPostRequest()
         headers = { 
             'Content-Type': 'application/json',
             'session_id': 'session_id_example',
@@ -154,7 +154,7 @@ class TestDefaultController(BaseTestCase):
 
         Login to user account
         """
-        login_post_request = openapi_server.LoginPostRequest()
+        login_post_request = LoginPostRequest()
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -213,7 +213,7 @@ class TestDefaultController(BaseTestCase):
 
         Place the order
         """
-        order_place_post_request = openapi_server.OrderPlacePostRequest()
+        order_place_post_request = OrderPlacePostRequest()
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -285,7 +285,7 @@ class TestDefaultController(BaseTestCase):
 
         
         """
-        profile = openapi_server.Profile()
+        profile = Profile()
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -305,7 +305,7 @@ class TestDefaultController(BaseTestCase):
 
         Search for items
         """
-        query_get_request = openapi_server.QueryGetRequest()
+        query_get_request = QueryGetRequest()
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -325,7 +325,7 @@ class TestDefaultController(BaseTestCase):
 
         Register a new consumer?
         """
-        user_details = openapi_server.UserDetails()
+        user_details = UserDetails("user1", "1234@Abd", "Test D User", "9876543310", "", "Male")
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -344,7 +344,7 @@ class TestDefaultController(BaseTestCase):
 
         
         """
-        vendor_product_change_available_post_request = openapi_server.VendorProductChangeAvailablePostRequest()
+        vendor_product_change_available_post_request = VendorProductChangeAvailablePostRequest()
         headers = { 
             'Content-Type': 'application/json',
             'session_id': 'session_id_example',
@@ -395,7 +395,7 @@ class TestDefaultController(BaseTestCase):
 
         
         """
-        vendor_product_add_images_post_request = openapi_server.VendorProductAddImagesPostRequest()
+        vendor_product_add_images_post_request = VendorProductAddImagesPostRequest()
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -415,7 +415,7 @@ class TestDefaultController(BaseTestCase):
 
         
         """
-        vendor_product_add_post_request = openapi_server.VendorProductAddPostRequest()
+        vendor_product_add_post_request = VendorProductAddPostRequest()
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -435,7 +435,7 @@ class TestDefaultController(BaseTestCase):
 
         
         """
-        vendor_product_change_available_post_request = openapi_server.VendorProductChangeAvailablePostRequest()
+        vendor_product_change_available_post_request = VendorProductChangeAvailablePostRequest()
         headers = { 
             'Content-Type': 'application/json',
             'session_id': 'session_id_example',
@@ -454,7 +454,7 @@ class TestDefaultController(BaseTestCase):
 
         
         """
-        vendor_product_edit_post_request = openapi_server.VendorProductEditPostRequest()
+        vendor_product_edit_post_request = VendorProductEditPostRequest()
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
