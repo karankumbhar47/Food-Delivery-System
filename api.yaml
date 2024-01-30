@@ -3,7 +3,7 @@ info:
     title: FDS
     description: |
         This API allows to communicate with FDS (Food Delivery System) server.
-    version: 0.0.1
+    version: 0.0.2
 paths:
     # Registration and Authentication paths
     /register:
@@ -466,6 +466,66 @@ paths:
 
 
     # Vendor API
+    /vendor/register:
+        post:
+            summary: Register a new vendor
+            description: Create a new vendor account with unique username, strong password for authentication and other vendor info.
+            operationId: registerVendor
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/vendorDetails'
+                required: true
+            responses:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/sessionId'
+                "409":
+                    description: "Conflict"
+                    content:
+                        application/json:
+                            schema:
+                                type: string
+                                enum:
+                                    - Username
+                                    - Phone
+                                    - Email
+                                    - Password
+
+    /vendor/login:
+        post:
+            summary: Login to vendor account
+            description: Get username and password and authenticate the vendor.
+                Returns sessionId for further requests
+            operationId: loginVendor
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - username
+                                - password
+                            properties:
+                                username:
+                                    type: string
+                                password:
+                                    type: string
+                required: true
+            responses:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/sessionId'
+                "403":
+                    description: "Forbidden"
+
     /vendor/product/add:
         post:
             summary:
@@ -848,7 +908,7 @@ components:
                 name:
                     type: string
                 phone:
-                    type: number
+                    type: string
                 email:
                     type: string
                 gender:
@@ -983,20 +1043,53 @@ components:
             properties:
                 username:
                     type: string
+                    example: "testUser1"
                 password:
                     type: string
+                    example: "1234@Abcd"
                 name:
                     type: string
+                    example: "Test D. User"
                 phone:
-                    type: number
+                    type: string
+                    example: "9876543210"
                 email:
                     type: string
+                    example: "email@example.com"
                 gender:
                     type: string
                     enum:
                         - Male
                         - Female
                         - Others
+                    example: "Male"
                 dob:
                     type: string
+                    example: "01-01-2000"
 
+        vendorDetails:
+            type: object
+            required:
+                - username
+                - password
+                - phone
+                - location
+            properties:
+                username:
+                    type: string
+                    example: "testVendor1"
+                password:
+                    type: string
+                    example: "1234@Ved"
+                name:
+                    type: string
+                    example: "UltraTech Cafe"
+                phone:
+                    type: string
+                    example: "9878543210"
+                email:
+                    type: string
+                    example: "vendor001@example.com"
+                location:
+                    type: string
+                    example: "Mess Block"
