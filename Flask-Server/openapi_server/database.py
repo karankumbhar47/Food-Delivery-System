@@ -57,13 +57,14 @@ def init():
     sqlCursor.execute('''
         CREATE TABLE IF NOT EXISTS Vendor (
             user_id             CHAR(40) PRIMARY KEY,
-            username            VARCHAR(100),
+            username            VARCHAR(100) NOT NULL,
+            name                VARCHAR(255) NOT NULL,
             profile_picture     CHAR(40),
             is_available        INT,
-            password            VARCHAR(255),
-            phone_number        VARCHAR(20),
+            password            VARCHAR(255) NOT NULL,
+            phone_number        VARCHAR(20) NOT NULL,
             email_id            VARCHAR(255),
-            location            VARCHAR(255),
+            location            VARCHAR(255) NOT NULL,
             active_hours        VARCHAR(255),
             current_status      VARCHAR(10),
             pure_veg            INT
