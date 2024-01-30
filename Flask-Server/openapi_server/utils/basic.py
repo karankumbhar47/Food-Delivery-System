@@ -1,3 +1,4 @@
+import string
 import secrets
 import re
 import bcrypt
@@ -5,7 +6,7 @@ import base64
 
 
 def generate_uid(length: int = 40):
-    characters = "abcdefg"
+    characters = string.ascii_letters + string.digits
     return ''.join(secrets.choice(characters) for _ in range(length))
 
 
