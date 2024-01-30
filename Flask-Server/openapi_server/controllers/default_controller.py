@@ -365,7 +365,10 @@ def query():  # noqa: E501
             result = database.sqlCursor.fetchall()
             print("result", result)
             if result:
-                return  FoodItem(*result)
+                ItemList = []
+                for i in range(len(result)):
+                   ItemList.append(FoodItem(*result[i])) 
+                return ItemList  
             return ("Product Not Found", 404)
 
 def register():  # noqa: E501
