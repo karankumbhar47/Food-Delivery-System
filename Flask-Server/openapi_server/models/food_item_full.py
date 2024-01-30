@@ -12,7 +12,7 @@ class FoodItemFull(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, item_id=None, item_name=None, thumbnail_picture=None, price=None, vendor_name=None, vendor_location=None, star_rating=None, is_available=None, max_quantity=None, image_urls=None):  # noqa: E501
+    def __init__(self, item_id=None, item_name=None, thumbnail_picture=None, price=None, vendor_name=None, vendor_location=None, star_rating=None, is_available=None, max_quantity=None, image_urls=None, tags=None):  # noqa: E501
         """FoodItemFull - a model defined in OpenAPI
 
         :param item_id: The item_id of this FoodItemFull.  # noqa: E501
@@ -35,6 +35,8 @@ class FoodItemFull(Model):
         :type max_quantity: int
         :param image_urls: The image_urls of this FoodItemFull.  # noqa: E501
         :type image_urls: List[str]
+        :param tags: The tags of this FoodItemFull.  # noqa: E501
+        :type tags: List[str]
         """
         self.openapi_types = {
             'item_id': str,
@@ -46,7 +48,8 @@ class FoodItemFull(Model):
             'star_rating': float,
             'is_available': bool,
             'max_quantity': int,
-            'image_urls': List[str]
+            'image_urls': List[str],
+            'tags': List[str]
         }
 
         self.attribute_map = {
@@ -59,7 +62,8 @@ class FoodItemFull(Model):
             'star_rating': 'starRating',
             'is_available': 'isAvailable',
             'max_quantity': 'maxQuantity',
-            'image_urls': 'imageUrls'
+            'image_urls': 'imageUrls',
+            'tags': 'tags'
         }
 
         self._item_id = item_id
@@ -72,6 +76,7 @@ class FoodItemFull(Model):
         self._is_available = is_available
         self._max_quantity = max_quantity
         self._image_urls = image_urls
+        self._tags = tags
 
     @classmethod
     def from_dict(cls, dikt) -> 'FoodItemFull':
@@ -313,3 +318,26 @@ class FoodItemFull(Model):
         """
 
         self._image_urls = image_urls
+
+    @property
+    def tags(self) -> List[str]:
+        """Gets the tags of this FoodItemFull.
+
+        tags related to food item  # noqa: E501
+
+        :return: The tags of this FoodItemFull.
+        :rtype: List[str]
+        """
+        return self._tags
+
+    @tags.setter
+    def tags(self, tags: List[str]):
+        """Sets the tags of this FoodItemFull.
+
+        tags related to food item  # noqa: E501
+
+        :param tags: The tags of this FoodItemFull.
+        :type tags: List[str]
+        """
+
+        self._tags = tags

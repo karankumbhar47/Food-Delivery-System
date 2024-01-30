@@ -12,7 +12,7 @@ class FoodItem(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, item_id=None, name=None, thumbnail=None, vendor=None, price=None, rating=None, rated_by=None):  # noqa: E501
+    def __init__(self, item_id=None, name=None, thumbnail=None, vendor=None, price=None, rating=None, rated_by=None, tags=None):  # noqa: E501
         """FoodItem - a model defined in OpenAPI
 
         :param item_id: The item_id of this FoodItem.  # noqa: E501
@@ -29,6 +29,8 @@ class FoodItem(Model):
         :type rating: float
         :param rated_by: The rated_by of this FoodItem.  # noqa: E501
         :type rated_by: float
+        :param tags: The tags of this FoodItem.  # noqa: E501
+        :type tags: List[str]
         """
         self.openapi_types = {
             'item_id': str,
@@ -37,7 +39,8 @@ class FoodItem(Model):
             'vendor': str,
             'price': float,
             'rating': float,
-            'rated_by': float
+            'rated_by': float,
+            'tags': List[str]
         }
 
         self.attribute_map = {
@@ -47,7 +50,8 @@ class FoodItem(Model):
             'vendor': 'vendor',
             'price': 'price',
             'rating': 'rating',
-            'rated_by': 'ratedBy'
+            'rated_by': 'ratedBy',
+            'tags': 'tags'
         }
 
         self._item_id = item_id
@@ -57,6 +61,7 @@ class FoodItem(Model):
         self._price = price
         self._rating = rating
         self._rated_by = rated_by
+        self._tags = tags
 
     @classmethod
     def from_dict(cls, dikt) -> 'FoodItem':
@@ -227,3 +232,26 @@ class FoodItem(Model):
         """
 
         self._rated_by = rated_by
+
+    @property
+    def tags(self) -> List[str]:
+        """Gets the tags of this FoodItem.
+
+        tags related to food item  # noqa: E501
+
+        :return: The tags of this FoodItem.
+        :rtype: List[str]
+        """
+        return self._tags
+
+    @tags.setter
+    def tags(self, tags: List[str]):
+        """Sets the tags of this FoodItem.
+
+        tags related to food item  # noqa: E501
+
+        :param tags: The tags of this FoodItem.
+        :type tags: List[str]
+        """
+
+        self._tags = tags

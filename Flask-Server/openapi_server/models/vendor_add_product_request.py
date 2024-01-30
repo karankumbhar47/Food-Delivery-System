@@ -12,7 +12,7 @@ class VendorAddProductRequest(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, thumbnail=None, price=None, max_quantity=None, image_urls=None):  # noqa: E501
+    def __init__(self, name=None, thumbnail=None, price=None, max_quantity=None, image_urls=None, tags=None):  # noqa: E501
         """VendorAddProductRequest - a model defined in OpenAPI
 
         :param name: The name of this VendorAddProductRequest.  # noqa: E501
@@ -25,13 +25,16 @@ class VendorAddProductRequest(Model):
         :type max_quantity: float
         :param image_urls: The image_urls of this VendorAddProductRequest.  # noqa: E501
         :type image_urls: List[str]
+        :param tags: The tags of this VendorAddProductRequest.  # noqa: E501
+        :type tags: List[str]
         """
         self.openapi_types = {
             'name': str,
             'thumbnail': str,
             'price': float,
             'max_quantity': float,
-            'image_urls': List[str]
+            'image_urls': List[str],
+            'tags': List[str]
         }
 
         self.attribute_map = {
@@ -39,7 +42,8 @@ class VendorAddProductRequest(Model):
             'thumbnail': 'thumbnail',
             'price': 'price',
             'max_quantity': 'maxQuantity',
-            'image_urls': 'imageUrls'
+            'image_urls': 'imageUrls',
+            'tags': 'tags'
         }
 
         self._name = name
@@ -47,6 +51,7 @@ class VendorAddProductRequest(Model):
         self._price = price
         self._max_quantity = max_quantity
         self._image_urls = image_urls
+        self._tags = tags
 
     @classmethod
     def from_dict(cls, dikt) -> 'VendorAddProductRequest':
@@ -167,3 +172,26 @@ class VendorAddProductRequest(Model):
         """
 
         self._image_urls = image_urls
+
+    @property
+    def tags(self) -> List[str]:
+        """Gets the tags of this VendorAddProductRequest.
+
+        tags related to food item  # noqa: E501
+
+        :return: The tags of this VendorAddProductRequest.
+        :rtype: List[str]
+        """
+        return self._tags
+
+    @tags.setter
+    def tags(self, tags: List[str]):
+        """Sets the tags of this VendorAddProductRequest.
+
+        tags related to food item  # noqa: E501
+
+        :param tags: The tags of this VendorAddProductRequest.
+        :type tags: List[str]
+        """
+
+        self._tags = tags
