@@ -1,3 +1,5 @@
+from typing import Optional, Tuple
+
 import os
 import sqlite3
 
@@ -34,7 +36,6 @@ def init():
             item_id             CHAR(40) PRIMARY KEY,
             item_name           VARCHAR(100),
             thumbnail_picture   BLOB,
-            is_addon            INT,
             tags                VARCHAR(1024),
             price               DECIMAL(10,2),
             vendor              INT,
@@ -71,11 +72,29 @@ def init():
 
 def check_exists(value: str, field: str, table: str):
     global sqlCursor
-   
     sqlCursor.execute(f"SELECT COUNT(*) FROM {table} where {field} = '{value}'")
     if sqlCursor.fetchone()[0] == 0:
         return False
     return True
+
+
+def verify_session_id(session_id: str) -> Optional[Tuple[str, str]]:
+    sqlCursor.execute('SELECT user_id, valid FROM "Session" WHERE session_id = ?',
+                      (session_id))
+    data = sqlCursor.fetchone()
+    print(data)
+    if data is not None:
+        user_id = data[0]
+        valid = data[1]
+        if not valid:
+            return None
+        if check_exists(user_id, "user_id", "Consumer"):
+            return user_id, "Consumer"
+        if check_exists(user_id, "user_id", "Vendor"):
+            return user_id, "Vendor"
+        # Add similar check for delivery person
+        return user_id, "Other"
+    return None
 
 
 def open():

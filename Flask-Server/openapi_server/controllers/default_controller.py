@@ -290,12 +290,15 @@ def put_file():  # noqa: E501
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
     data = connexion.request.get_data()
-
-    # Check if session id is valid
-    if data:
+    session_id = connexion.request.headers.get("session_id")
+    verify_status = database. verify_session_id(session_id)
+    if verify_status is None:
+        return "Unauthorized", 401
+    _, userType = verify_status
+    if data and userType == "Vendor":
         return store.store_file(data)
     else:
-        return "Forbidden", 400
+        return "Unauthorized", 401
 
 
 def query(session_id, query_request):  # noqa: E501
@@ -329,7 +332,7 @@ def register():  # noqa: E501
         database.open()
         user_details = UserDetails.from_dict(connexion.request.get_json())  # noqa: E501
         if (database.check_exists(user_details.username, "username", "Consumer") or  # noqa: E501
-            basicUtils.username_is_valid(user_details.username)):
+            not basicUtils.username_is_valid(user_details.username)):
             database.close()
             return ("Username", 409)
         if (not basicUtils.phone_is_valid(user_details.phone) or
@@ -406,34 +409,39 @@ def vendor_add_product():  # noqa: E501
     """
     session_id = connexion.request.headers.get("sessionId")
     if session_id:
-        #check if session id is valid
         print(session_id)
     else:
-        return  ("Session Id missing in headers", 400)
-    if connexion.request.is_json:
-        database.init()
-        database.sqlCursor.execute('SELECT COUNT(*) FROM "main"."Session" WHERE session_id = ?',
-                                    (session_id,))
-        count = database.sqlCursor.fetchone()[0]
-        if count == 1:
-            database.open()
-            vendor_add_product_request = VendorAddProductRequest.from_dict(connexion.request.get_json())  # noqa: E501
-            while True:  
-                item_id = basicUtils.generate_uid(40)
-                if not database.check_exists(item_id, "item_id", "Catalog"):
-                    break
-            query = f'''INSERT INTO Catalog (item_id, item_name, thumbnail_picture,
-                                             price, max_quantity) 
-                        VALUES ('{item_id}', '{vendor_add_product_request.name}',
-                                '{vendor_add_product_request.thumbnail}', '{vendor_add_product_request.price}',
-                                '{vendor_add_product_request.max_quantity}');'''
-            database.sqlCursor.execute(f'{query}')
-            database.sqlConnection.commit()
-            database.close()
-            return  (item_id, 200)
-        return 'session id does not exists'
+        return ("Session Id missing in headers", 400)
 
-    return  ('Forbidden', 403)
+    if connexion.request.is_json:
+        database.open()
+        verify_status = database.verify_session_id(session_id)
+        if verify_status is not None:
+            user_id, user_type = verify_status
+            if user_type == "Vendor":
+                request = VendorAddProductRequest.from_dict(connexion.request.get_json())  # noqa: E501
+
+                while True:
+                    item_id = basicUtils.generate_uid(40)
+                    if not database.check_exists(item_id, "item_id", "Catalog"):
+                        break
+
+                query = f'''INSERT INTO Catalog (item_id, item_name,
+                                                 thumbnail_picture, price,
+                                                 max_quantity, vendor)
+                            VALUES ('{item_id}', '{request.name}',
+                                    '{request.thumbnail}', '{request.price}',
+                                    '{request.max_quantity}', '{user_id}');'''
+                database.sqlCursor.execute(f'{query}')
+                database.sqlConnection.commit()
+                database.close()
+                return (item_id, 200)
+            else:
+                database.close()
+                return ('User is not a vendor', 403)
+        database.close()
+        return ('Invalid session Id', 403)
+    return ('Bad Request', 403)
 
 
 def vendor_add_product_images(session_id, vendor_add_product_images_request):  # noqa: E501
