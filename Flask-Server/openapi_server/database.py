@@ -70,6 +70,30 @@ def init():
             pure_veg            INT
         )
     ''')
+    sqlCursor.execute('''
+        CREATE TABLE IF NOT EXISTS DeliveryPerson (
+            user_id             CHAR(40) PRIMARY KEY,
+            user_name           VARCHAR(100),
+            profile_picture     BLOB,
+            name                VARCHAR(100),
+            is_available        INT,
+            password            VARCHAR(255),
+            vehicle_details     VARCHAR(255),
+            picked_up_items     TEXT
+        )
+    ''')
+    sqlCursor.execute('''
+        CREATE TABLE IF NOT EXISTS FoodOrder (
+            order_id            CHAR(40) PRIMARY KEY, 
+            items               TEXT,
+            total_price         DECIMAL(10, 2),
+            delivery_location   VARCHAR(255),
+            consumer_id         INT REFERENCES Consumer(user_id),
+            vendor_id           INT REFERENCES Vendor(user_id), 
+            delivery_person_id  INT REFERENCES DeliveryPerson(user_id), 
+            status              VARCHAR(50)
+        )
+    ''')
     sqlConnection.commit()
 
 
