@@ -203,7 +203,7 @@ def get_product(id_):  # noqa: E501
     result = database.sqlCursor.fetchone()
 
     if result:
-        return  FoodItemFull(*result)
+        return FoodItemFull(*result)
     return ("Product Not Found", 404)
 
 
@@ -239,14 +239,14 @@ def login():  # noqa: E501
         if not database.check_exists(login_request.username,
                                      "username", "Consumer"):
             database.close()
-            return ("Forbidden", 403)
+            return ("Username", 403)
         # Get password hash
         database.sqlCursor.execute(f'SELECT password FROM Consumer WHERE username = "{login_request.username}"')  # noqa: E501
         pwd_hash = database.sqlCursor.fetchone()[0]
         # Verify password
         if not basicUtils.verify_password(login_request.password, pwd_hash):
             database.close()
-            return ("Forbidden", 403)
+            return ("Password", 403)
         # Add new session id
         while True:
             sid = basicUtils.generate_uid(40)
@@ -300,7 +300,7 @@ def put_file():  # noqa: E501
     if data and userType == "Vendor":
         return store.store_file(data)
     else:
-        return "Unauthorized", 401
+        return "Only Vendor can upload files", 401
 
 
 def query(session_id, query_request):  # noqa: E501
