@@ -225,12 +225,13 @@ paths:
         schema:
           $ref: '#/components/schemas/sessionId'
         style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/orderId'
+      - explode: false
+        in: header
+        name: orderId
         required: true
+        schema:
+          $ref: '#/components/schemas/orderId'
+        style: simple
       responses:
         "200":
           content:
@@ -374,12 +375,6 @@ paths:
         schema:
           $ref: '#/components/schemas/sessionId'
         style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/sessionId'
-        required: true
       responses:
         "200":
           content:
@@ -431,12 +426,22 @@ paths:
         schema:
           $ref: '#/components/schemas/sessionId'
         style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/query_request'
-        required: true
+      - explode: false
+        in: header
+        name: query
+        required: false
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: header
+        name: filters
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/filter'
+          type: array
+        style: simple
       responses:
         "200":
           content:
@@ -1032,19 +1037,6 @@ components:
       - password
       - username
       title: login_request
-      type: object
-    query_request:
-      properties:
-        query:
-          description: Can be empty
-          title: query
-          type: string
-        filters:
-          items:
-            $ref: '#/components/schemas/filter'
-          title: filters
-          type: array
-      title: query_request
       type: object
     placeOrder_request_itemCart_inner:
       properties:

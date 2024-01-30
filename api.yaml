@@ -80,12 +80,6 @@ paths:
                   required: true
                   schema:
                       $ref: '#/components/schemas/sessionId'
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/sessionId'
-                required: true
             responses:
                 "200":
                     description: "OK"
@@ -135,20 +129,18 @@ paths:
                   required: true
                   schema:
                       $ref: '#/components/schemas/sessionId'
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                query:
-                                    description: Can be empty
-                                    type: string
-                                filters:
-                                    type: array
-                                    items:
-                                        $ref: '#/components/schemas/filter'
-                required: true
+                - name: query
+                  in: header
+                  required: false
+                  schema:
+                      type: string
+                - name: filters
+                  in: header
+                  required: false
+                  schema:
+                      type: array
+                      items:
+                          $ref: '#/components/schemas/filter'
             responses:
                 "200":
                     description: "OK"
@@ -833,12 +825,11 @@ paths:
               required: true
               schema:
                   $ref: '#/components/schemas/sessionId'
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/orderId'
-                required: true
+            - name: orderId
+              in : header
+              required: true
+              schema:
+                  $ref: '#/components/schemas/orderId'
             responses:
                 "200":
                     description: "OK"
