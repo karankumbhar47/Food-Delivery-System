@@ -16,9 +16,10 @@ def username_is_valid(username: str) -> bool:
     return True
 
 
-def phone_is_valid(phone: int) -> bool:
-    str_phone = str(phone)
-    if len(str_phone) == 10 and str_phone[0] != 0 : 
+def phone_is_valid(phone: str) -> bool:
+    # Code needs to be updated to handle international representation
+    # The type of phone is changed to str
+    if len(phone) >= 10:
         return True
     return False
 
