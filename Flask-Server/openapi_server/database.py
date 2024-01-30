@@ -82,10 +82,8 @@ def check_exists(value: str, field: str, table: str):
 
 
 def verify_session_id(session_id: str) -> Optional[Tuple[str, str]]:
-    sqlCursor.execute('SELECT user_id, valid FROM "Session" WHERE session_id = ?',
-                      (session_id))
+    sqlCursor.execute(f"SELECT user_id, valid FROM 'Session' WHERE session_id = '{session_id}'")
     data = sqlCursor.fetchone()
-    print(data)
     if data is not None:
         user_id = data[0]
         valid = data[1]
