@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Unwrap `n` \n Savor</string>
+    <string name="app_name">Unwrap `n` \nSavor</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -13,5 +13,6 @@
     <string name="team_member_2">Vedant Udan ( Frontend + Backend )</string>
     <string name="team_member_3">Shubham Daule ( Backend + Testing )</string>
     <string name="team_member_4">Sandesh Ahire (Frontend + Backend + Testing )</string>
+    <string name="select_gender">Select Gender</string>
 
 </resources>
