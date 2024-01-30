@@ -13,6 +13,7 @@ from openapi_server.models.place_order_request import PlaceOrderRequest  # noqa:
 from openapi_server.models.profile import Profile  # noqa: E501
 from openapi_server.models.query_request import QueryRequest  # noqa: E501
 from openapi_server.models.user_details import UserDetails  # noqa: E501
+from openapi_server.models.vendor_details import VendorDetails  # noqa: E501
 from openapi_server.models.vendor_add_product_images_request import VendorAddProductImagesRequest  # noqa: E501
 from openapi_server.models.vendor_add_product_request import VendorAddProductRequest  # noqa: E501
 from openapi_server.models.vendor_change_product_availabile_request import VendorChangeProductAvailabileRequest  # noqa: E501
@@ -50,6 +51,7 @@ def check_product_available(id_, count):  # noqa: E501
             return ("Unauthorized", 401)
     except:
         return 500
+
 
 def confirm_order(session_id, body):  # noqa: E501
     """Confirm Order
@@ -535,4 +537,66 @@ def vendor_get_requested_orders(session_id):  # noqa: E501
 
     :rtype: Union[List[VendorGetRequestedOrders200ResponseInner], Tuple[List[VendorGetRequestedOrders200ResponseInner], int], Tuple[List[VendorGetRequestedOrders200ResponseInner], int, Dict[str, str]]
     """
+    return 'do some magic!'
+
+
+def register_vendor():
+    if connexion.request.is_json:
+        database.open()
+        vendor_details = VendorDetails.from_dict(connexion.request.get_json())
+
+        if (database.check_exists(vendor_details.username, "username", "Vendor") or  # noqa: E501
+            not basicUtils.username_is_valid(vendor_details.username)):
+            database.close()
+            return ("Username", 409)
+
+        if (not basicUtils.phone_is_valid(vendor_details.phone) or
+            database.check_exists(
+                vendor_details.phone,
+                "phone_number",
+                "Vendor")):
+            database.close()
+            return ("Phone", 409)
+
+        if (vendor_details.email is None):
+            vendor_details.email = ""
+        elif (not basicUtils.email_is_valid(vendor_details.email) or
+              database.check_exists(vendor_details.email, "email_id", "Vendor")):
+            database.close()
+            return ("Email", 409)
+
+        if (basicUtils.password_is_weak(vendor_details.password)):
+            database.close()
+            return ("Password", 409)
+
+        hash_password = basicUtils.hash_password(vendor_details.password)
+        while True:
+            uid = basicUtils.generate_uid(40)
+            if not database.check_exists(uid, "user_id", "Vendor"):
+                break
+
+        while True:
+            sid = basicUtils.generate_uid(40)
+            if not database.check_exists(sid, "session_id", "Session"):
+                break
+
+        database.sqlCursor.execute(f'''
+            INSERT INTO Vendor (user_id, username, name, phone_number,
+                                email_id, location, password)
+            VALUES ('{uid}', '{vendor_details.username}', '{vendor_details.name}',
+                    '{vendor_details.phone}', '{vendor_details.email}',
+                    '{vendor_details.location}', '{hash_password}');
+        ''')
+        database.sqlCursor.execute(f'''
+            INSERT INTO Session (session_id, user_id, valid)
+            VALUES ('{sid}', '{uid}', 1)
+        ''')
+
+        database.sqlConnection.commit()
+        database.close()
+        return sid
+    return ('', 400)
+
+
+def login_vendor():
     return 'do some magic!'
