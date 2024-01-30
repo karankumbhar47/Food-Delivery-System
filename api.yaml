@@ -3,7 +3,7 @@ info:
     title: FDS
     description: |
         This API allows to communicate with FDS (Food Delivery System) server.
-    version: 0.0.2
+    version: 0.0.3
 paths:
     # Registration and Authentication paths
     /register:
@@ -134,13 +134,13 @@ paths:
                   required: false
                   schema:
                       type: string
-                - name: filters
-                  in: header
-                  required: false
-                  schema:
-                      type: array
-                      items:
-                          $ref: '#/components/schemas/filter'
+#                - name: filters
+#                  in: header
+#                  required: false
+#                  schema:
+#                      type: array
+#                      items:
+#                          $ref: '#/components/schemas/filter'
             responses:
                 "200":
                     description: "OK"
@@ -554,6 +554,11 @@ paths:
                                         type: string
                                         minLength: 40
                                         maxLength: 40
+                                tags:
+                                    type: array
+                                    description: tags related to food item
+                                    items:
+                                        type: string
                 required: true
             responses:
                 "200":
@@ -960,6 +965,12 @@ components:
                     type: number
                 ratedBy:
                     type: number
+                tags:
+                    type: array
+                    description: tags related to food item
+                    items:
+                        type: string
+
 
         foodItemFull:
             type: object
@@ -994,6 +1005,11 @@ components:
                 imageUrls:
                     type: array
                     description: URLs of additional images
+                    items:
+                        type: string
+                tags:
+                    type: array
+                    description: tags related to food item
                     items:
                         type: string
 
@@ -1084,3 +1100,6 @@ components:
                 location:
                     type: string
                     example: "Mess Block"
+
+servers:
+    - url: http://13.233.99.87:8080
