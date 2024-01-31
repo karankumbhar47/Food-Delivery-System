@@ -241,8 +241,10 @@ def login():  # noqa: E501
             database.close()
             return ("Username", 403)
         # Get password hash
-        database.sqlCursor.execute(f'SELECT password FROM Consumer WHERE username = "{login_request.username}"')  # noqa: E501
-        pwd_hash = database.sqlCursor.fetchone()[0]
+        database.sqlCursor.execute(f'SELECT password,user_id FROM Consumer WHERE username = "{login_request.username}"')  # noqa: E501
+        response = database.sqlCursor.fetchone()
+        pwd_hash = response[0]
+        user_id = response[1]
         # Verify password
         if not basicUtils.verify_password(login_request.password, pwd_hash):
             database.close()
@@ -254,7 +256,7 @@ def login():  # noqa: E501
                 break
         database.sqlCursor.execute(f'''
             INSERT INTO Session (session_id, user_id, valid)
-            VALUES ('{sid}', '{login_request.username}', 1)
+            VALUES ('{sid}', '{user_id}', 1)
                                    ''')
         database.sqlConnection.commit()
         database.close()
@@ -363,7 +365,6 @@ def query():  # noqa: E501
 
             database.sqlCursor.execute(f'{query}')
             result = database.sqlCursor.fetchall()
-            print("result", result)
             if result:
                 ItemList = []
                 for i in range(len(result)):
@@ -395,7 +396,7 @@ def register():  # noqa: E501
                 "Consumer")):
             database.close()
             return ("Phone", 409)
-        if (user_details.email is None):
+        if (user_details.email is None or user_details.email == ""):
             user_details.email = ""
         elif (user_details.email != "" and (not basicUtils.email_is_valid(user_details.email) or
               database.check_exists(user_details.email, "email_id", "Consumer"))):
@@ -609,7 +610,7 @@ def register_vendor():
             database.close()
             return ("Phone", 409)
 
-        if (vendor_details.email is None):
+        if (vendor_details.email is None or vendor_details.email == ""):
             vendor_details.email = ""
         elif (not basicUtils.email_is_valid(vendor_details.email) or
               database.check_exists(vendor_details.email, "email_id", "Vendor")):
@@ -660,8 +661,10 @@ def login_vendor():
             database.close()
             return ("Username", 403)
         # Get password hash
-        database.sqlCursor.execute(f'SELECT password FROM Vendor WHERE username = "{login_request.username}"')  # noqa: E501
-        pwd_hash = database.sqlCursor.fetchone()[0]
+        database.sqlCursor.execute(f'SELECT password,user_id FROM Vendor WHERE username = "{login_request.username}"')  # noqa: E501
+        response = database.sqlCursor.fetchone()
+        pwd_hash = response[0]
+        user_id = response[1]
         # Verify password
         if not basicUtils.verify_password(login_request.password, pwd_hash):
             database.close()
@@ -673,7 +676,7 @@ def login_vendor():
                 break
         database.sqlCursor.execute(f'''
             INSERT INTO Session (session_id, user_id, valid)
-            VALUES ('{sid}', '{login_request.username}', 1)
+            VALUES ('{sid}', '{user_id}', 1)
                                    ''')
         database.sqlConnection.commit()
         database.close()
