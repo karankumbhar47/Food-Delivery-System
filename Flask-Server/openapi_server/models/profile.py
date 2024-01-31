@@ -20,7 +20,7 @@ class Profile(Model):
         :param name: The name of this Profile.  # noqa: E501
         :type name: str
         :param phone: The phone of this Profile.  # noqa: E501
-        :type phone: float
+        :type phone: str
         :param email: The email of this Profile.  # noqa: E501
         :type email: str
         :param gender: The gender of this Profile.  # noqa: E501
@@ -31,7 +31,7 @@ class Profile(Model):
         self.openapi_types = {
             'username': str,
             'name': str,
-            'phone': float,
+            'phone': str,
             'email': str,
             'gender': str,
             'dob': str
@@ -107,22 +107,22 @@ class Profile(Model):
         self._name = name
 
     @property
-    def phone(self) -> float:
+    def phone(self) -> str:
         """Gets the phone of this Profile.
 
 
         :return: The phone of this Profile.
-        :rtype: float
+        :rtype: str
         """
         return self._phone
 
     @phone.setter
-    def phone(self, phone: float):
+    def phone(self, phone: str):
         """Sets the phone of this Profile.
 
 
         :param phone: The phone of this Profile.
-        :type phone: float
+        :type phone: str
         """
 
         self._phone = phone

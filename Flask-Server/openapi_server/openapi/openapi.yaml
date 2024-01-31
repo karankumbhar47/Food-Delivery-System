@@ -3,7 +3,7 @@ info:
   description: |
     This API allows to communicate with FDS (Food Delivery System) server.
   title: FDS
-  version: 0.0.1
+  version: 0.0.2
 servers:
 - url: /
 paths:
@@ -225,12 +225,13 @@ paths:
         schema:
           $ref: '#/components/schemas/sessionId'
         style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/orderId'
+      - explode: false
+        in: header
+        name: orderId
         required: true
+        schema:
+          $ref: '#/components/schemas/orderId'
+        style: simple
       responses:
         "200":
           content:
@@ -374,12 +375,6 @@ paths:
         schema:
           $ref: '#/components/schemas/sessionId'
         style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/sessionId'
-        required: true
       responses:
         "200":
           content:
@@ -431,12 +426,22 @@ paths:
         schema:
           $ref: '#/components/schemas/sessionId'
         style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/query_request'
-        required: true
+      - explode: false
+        in: header
+        name: query
+        required: false
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: header
+        name: filters
+        required: false
+        schema:
+          items:
+            $ref: '#/components/schemas/filter'
+          type: array
+        style: simple
       responses:
         "200":
           content:
@@ -503,6 +508,28 @@ paths:
           description: OK
         "403":
           description: Forbidden
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /vendor/login:
+    post:
+      description: Get username and password and authenticate the vendor. Returns
+        sessionId for further requests
+      operationId: login_vendor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionId'
+          description: OK
+        "403":
+          description: Forbidden
+      summary: Login to vendor account
       x-openapi-router-controller: openapi_server.controllers.default_controller
   /vendor/order/accepted:
     get:
@@ -656,6 +683,37 @@ paths:
         "403":
           description: Forbidden
       x-openapi-router-controller: openapi_server.controllers.default_controller
+  /vendor/register:
+    post:
+      description: "Create a new vendor account with unique username, strong password\
+        \ for authentication and other vendor info."
+      operationId: register_vendor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/vendorDetails'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionId'
+          description: OK
+        "409":
+          content:
+            application/json:
+              schema:
+                enum:
+                - Username
+                - Phone
+                - Email
+                - Password
+                type: string
+          description: Conflict
+      summary: Register a new vendor
+      x-openapi-router-controller: openapi_server.controllers.default_controller
 components:
   schemas:
     sessionId:
@@ -680,7 +738,7 @@ components:
     profile:
       example:
         gender: Male
-        phone: 0.8008281904610115
+        phone: phone
         dob: dob
         name: name
         email: email
@@ -694,7 +752,7 @@ components:
           type: string
         phone:
           title: phone
-          type: number
+          type: string
         email:
           title: email
           type: string
@@ -897,18 +955,23 @@ components:
     userDetails:
       properties:
         username:
+          example: testUser1
           title: username
           type: string
         password:
+          example: 1234@Abcd
           title: password
           type: string
         name:
+          example: Test D. User
           title: name
           type: string
         phone:
+          example: "9876543210"
           title: phone
-          type: number
+          type: string
         email:
+          example: email@example.com
           title: email
           type: string
         gender:
@@ -916,9 +979,11 @@ components:
           - Male
           - Female
           - Others
+          example: Male
           title: gender
           type: string
         dob:
+          example: 01-01-2000
           title: dob
           type: string
       required:
@@ -926,6 +991,39 @@ components:
       - phone
       - username
       title: userDetails
+      type: object
+    vendorDetails:
+      properties:
+        username:
+          example: testVendor1
+          title: username
+          type: string
+        password:
+          example: 1234@Ved
+          title: password
+          type: string
+        name:
+          example: UltraTech Cafe
+          title: name
+          type: string
+        phone:
+          example: "9878543210"
+          title: phone
+          type: string
+        email:
+          example: vendor001@example.com
+          title: email
+          type: string
+        location:
+          example: Mess Block
+          title: location
+          type: string
+      required:
+      - location
+      - password
+      - phone
+      - username
+      title: vendorDetails
       type: object
     login_request:
       properties:
@@ -939,19 +1037,6 @@ components:
       - password
       - username
       title: login_request
-      type: object
-    query_request:
-      properties:
-        query:
-          description: Can be empty
-          title: query
-          type: string
-        filters:
-          items:
-            $ref: '#/components/schemas/filter'
-          title: filters
-          type: array
-      title: query_request
       type: object
     placeOrder_request_itemCart_inner:
       properties:

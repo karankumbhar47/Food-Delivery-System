@@ -21,5 +21,11 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
-requirement.txt
+requirements.txt
 README.md
+openapi_server/controllers/default_controller.py
+openapi_server/utils/
+openapi_server/database.py
+openapi_server/file_storage.py
+openapi_server/__main__.py
+

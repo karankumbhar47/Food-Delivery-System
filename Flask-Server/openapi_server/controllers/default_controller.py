@@ -13,6 +13,7 @@ from openapi_server.models.place_order_request import PlaceOrderRequest  # noqa:
 from openapi_server.models.profile import Profile  # noqa: E501
 from openapi_server.models.query_request import QueryRequest  # noqa: E501
 from openapi_server.models.user_details import UserDetails  # noqa: E501
+from openapi_server.models.vendor_details import VendorDetails  # noqa: E501
 from openapi_server.models.vendor_add_product_images_request import VendorAddProductImagesRequest  # noqa: E501
 from openapi_server.models.vendor_add_product_request import VendorAddProductRequest  # noqa: E501
 from openapi_server.models.vendor_change_product_availabile_request import VendorChangeProductAvailabileRequest  # noqa: E501
@@ -22,6 +23,7 @@ from openapi_server import util
 
 import openapi_server.database as database
 import openapi_server.utils.basic as basicUtils
+import openapi_server.file_storage as store
 
 
 def check_product_available(id_, count):  # noqa: E501
@@ -49,6 +51,7 @@ def check_product_available(id_, count):  # noqa: E501
             return ("Unauthorized", 401)
     except:
         return 500
+
 
 def confirm_order(session_id, body):  # noqa: E501
     """Confirm Order
@@ -141,7 +144,7 @@ def delivery_view_waiting_orders(session_id):  # noqa: E501
     return 'do some magic!'
 
 
-def get_file(file_id, session_id=None):  # noqa: E501
+def get_file():  # noqa: E501
     """Get file by file ID
 
     Retrieve a file, typically an image, based on the provided file ID. # noqa: E501
@@ -153,7 +156,12 @@ def get_file(file_id, session_id=None):  # noqa: E501
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    file_id = connexion.request.headers.get("fileId")
+    data = store.get_file(file_id)
+    if data:
+        return data
+    else:
+        return ("", 404)
 
 
 def get_orders(session_id, body):  # noqa: E501
@@ -182,17 +190,20 @@ def get_product(id_):  # noqa: E501
     :rtype: Union[FoodItemFull, Tuple[FoodItemFull, int], Tuple[FoodItemFull, int, Dict[str, str]]
     """
     database.init()
+
     query = '''
         SELECT Catalog.item_id, Catalog.item_name, Catalog.thumbnail_picture, Catalog.price,
-            Vendor.username, Vendor.location, Catalog.current_rating, Catalog.is_available,
+            Vendor.user_name, Vendor.location, Catalog.current_rating, Catalog.is_available,
             Catalog.max_quantity
             FROM Catalog
             INNER JOIN Vendor ON Catalog.vendor = Vendor.user_id
             WHERE Catalog.item_id = ?'''
+
     database.sqlCursor.execute(f'{query}', (id_,))
     result = database.sqlCursor.fetchone()
+
     if result:
-        return  FoodItemFull(*result)
+        return FoodItemFull(*result)
     return ("Product Not Found", 404)
 
 
@@ -228,14 +239,14 @@ def login():  # noqa: E501
         if not database.check_exists(login_request.username,
                                      "username", "Consumer"):
             database.close()
-            return ("Forbidden", 403)
+            return ("Username", 403)
         # Get password hash
         database.sqlCursor.execute(f'SELECT password FROM Consumer WHERE username = "{login_request.username}"')  # noqa: E501
         pwd_hash = database.sqlCursor.fetchone()[0]
         # Verify password
         if not basicUtils.verify_password(login_request.password, pwd_hash):
             database.close()
-            return ("Forbidden", 403)
+            return ("Password", 403)
         # Add new session id
         while True:
             sid = basicUtils.generate_uid(40)
@@ -251,7 +262,7 @@ def login():  # noqa: E501
     return ('Bad Request', 400)
 
 
-def place_order(session_id, place_order_request):  # noqa: E501
+def place_order():  # noqa: E501
     """Place the order
 
     Place the order from the cart, with item id as key and quantity as value. # noqa: E501
@@ -263,12 +274,32 @@ def place_order(session_id, place_order_request):  # noqa: E501
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
+
     if connexion.request.is_json:
+        database.init()
+        session_id = connexion.request.headers.get("sessionId")
+        verify_status = database.verify_session_id(session_id)
+        if verify_status is None:
+            return "Unauthorized", 401
+        _, userType = verify_status
         place_order_request = PlaceOrderRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        if place_order_request and userType.lower() == 'consumer':
+            database.open()
+            while True:
+                order_id = basicUtils.generate_uid(40)
+                if not database.check_exists(order_id, "order_id", "FoodOrder"):
+                    break
+            item_cart = str(place_order_request.item_cart)
+            query =  f'''INSERT INTO FoodOrder (order_id, items, delivery_location, consumer_id )
+                        VALUES ('{order_id}', "{item_cart}", '{place_order_request.location}', '{session_id}' );'''
+            database.sqlCursor.execute(f'{query}')
+            database.sqlConnection.commit()
+            return (order_id, 200)   
+        return ('Unauthorized', 403)
+    return ('Unauthorized', 403)
 
 
-def put_file(session_id, body):  # noqa: E501
+def put_file():  # noqa: E501
     """Upload a file
 
     Upload an image to server for referencing elsewhere. # noqa: E501
@@ -280,10 +311,19 @@ def put_file(session_id, body):  # noqa: E501
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    data = connexion.request.get_data()
+    session_id = connexion.request.headers.get("sessionId")
+    verify_status = database. verify_session_id(session_id)
+    if verify_status is None:
+        return "Unauthorized", 401
+    _, userType = verify_status
+    if data and userType == "Vendor":
+        return store.store_file(data)
+    else:
+        return "Only Vendor can upload files", 401
 
 
-def query(session_id, query_request):  # noqa: E501
+def query():  # noqa: E501
     """Search for items
 
     Search for items based on search query and filters (Authentication is not necessary) # noqa: E501
@@ -295,10 +335,41 @@ def query(session_id, query_request):  # noqa: E501
 
     :rtype: Union[List[FoodItem], Tuple[List[FoodItem], int], Tuple[List[FoodItem], int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        query_request = QueryRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    session_id = connexion.request.headers.get("sessionId")
+    query_request = connexion.request.headers.get("query")
+    if session_id:
+        #check if session id is valid
+        print(session_id)
+    else:
+        return  ("Session Id missing in headers", 401)
 
+    if query_request:
+        database.init()
+        database.sqlCursor.execute('SELECT COUNT(*) FROM Session WHERE session_id = ?', (session_id,))
+        count = database.sqlCursor.fetchone()[0]
+
+        if count == 1:
+            database.open()
+            tags = query_request
+            tags = tags.lower()
+
+            where_conditions = f'''
+                    LOWER(item_name) LIKE '%{tags}%' OR LOWER(tags) LIKE '%{tags}%'
+                '''
+            query =f'''
+                SELECT item_id, item_name, thumbnail_picture, vendor, price, current_rating
+                    FROM Catalog
+                    WHERE {where_conditions}'''
+
+            database.sqlCursor.execute(f'{query}')
+            result = database.sqlCursor.fetchall()
+            print("result", result)
+            if result:
+                ItemList = []
+                for i in range(len(result)):
+                   ItemList.append(FoodItem(*result[i])) 
+                return ItemList  
+            return ("Product Not Found", 404)
 
 def register():  # noqa: E501
     """Register a new consumer?
@@ -313,7 +384,8 @@ def register():  # noqa: E501
     if connexion.request.is_json:
         database.open()
         user_details = UserDetails.from_dict(connexion.request.get_json())  # noqa: E501
-        if (database.check_exists(user_details.username, "username", "Consumer")):  # noqa: E501
+        if (database.check_exists(user_details.username, "username", "Consumer") or  # noqa: E501
+            not basicUtils.username_is_valid(user_details.username)):
             database.close()
             return ("Username", 409)
         if (not basicUtils.phone_is_valid(user_details.phone) or
@@ -325,8 +397,8 @@ def register():  # noqa: E501
             return ("Phone", 409)
         if (user_details.email is None):
             user_details.email = ""
-        elif (not basicUtils.email_is_valid(user_details.email) or
-              database.check_exists(user_details.email, "email_id", "Consumer")):
+        elif (user_details.email != "" and (not basicUtils.email_is_valid(user_details.email) or
+              database.check_exists(user_details.email, "email_id", "Consumer"))):
             database.close()
             return ("Email", 409)
         if (basicUtils.password_is_weak(user_details.password)):
@@ -376,7 +448,7 @@ def update_profile(session_id, profile):  # noqa: E501
     return 'do some magic!'
 
 
-def vendor_add_product(session_id, vendor_add_product_request):  # noqa: E501
+def vendor_add_product():  # noqa: E501
     """vendor_add_product
 
      # noqa: E501
@@ -388,9 +460,41 @@ def vendor_add_product(session_id, vendor_add_product_request):  # noqa: E501
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
+    session_id = connexion.request.headers.get("sessionId")
+    if session_id:
+        print(session_id)
+    else:
+        return ("Session Id missing in headers", 400)
+
     if connexion.request.is_json:
-        vendor_add_product_request = VendorAddProductRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        database.open()
+        verify_status = database.verify_session_id(session_id)
+        if verify_status is not None:
+            user_id, user_type = verify_status
+            if user_type == "Vendor":
+                request = VendorAddProductRequest.from_dict(connexion.request.get_json())  # noqa: E501
+
+                while True:
+                    item_id = basicUtils.generate_uid(40)
+                    if not database.check_exists(item_id, "item_id", "Catalog"):
+                        break
+
+                query = f'''INSERT INTO Catalog (item_id, item_name,
+                                                 thumbnail_picture, price,
+                                                 max_quantity, vendor)
+                            VALUES ('{item_id}', '{request.name}',
+                                    '{request.thumbnail}', '{request.price}',
+                                    '{request.max_quantity}', '{user_id}');'''
+                database.sqlCursor.execute(f'{query}')
+                database.sqlConnection.commit()
+                database.close()
+                return (item_id, 200)
+            else:
+                database.close()
+                return ('User is not a vendor', 403)
+        database.close()
+        return ('Invalid session Id', 403)
+    return ('Bad Request', 403)
 
 
 def vendor_add_product_images(session_id, vendor_add_product_images_request):  # noqa: E501
@@ -485,3 +589,94 @@ def vendor_get_requested_orders(session_id):  # noqa: E501
     :rtype: Union[List[VendorGetRequestedOrders200ResponseInner], Tuple[List[VendorGetRequestedOrders200ResponseInner], int], Tuple[List[VendorGetRequestedOrders200ResponseInner], int, Dict[str, str]]
     """
     return 'do some magic!'
+
+
+def register_vendor():
+    if connexion.request.is_json:
+        database.open()
+        vendor_details = VendorDetails.from_dict(connexion.request.get_json())
+
+        if (database.check_exists(vendor_details.username, "username", "Vendor") or  # noqa: E501
+            not basicUtils.username_is_valid(vendor_details.username)):
+            database.close()
+            return ("Username", 409)
+
+        if (not basicUtils.phone_is_valid(vendor_details.phone) or
+            database.check_exists(
+                vendor_details.phone,
+                "phone_number",
+                "Vendor")):
+            database.close()
+            return ("Phone", 409)
+
+        if (vendor_details.email is None):
+            vendor_details.email = ""
+        elif (not basicUtils.email_is_valid(vendor_details.email) or
+              database.check_exists(vendor_details.email, "email_id", "Vendor")):
+            database.close()
+            return ("Email", 409)
+
+        if (basicUtils.password_is_weak(vendor_details.password)):
+            database.close()
+            return ("Password", 409)
+
+        hash_password = basicUtils.hash_password(vendor_details.password)
+        while True:
+            uid = basicUtils.generate_uid(40)
+            if not database.check_exists(uid, "user_id", "Vendor"):
+                break
+
+        while True:
+            sid = basicUtils.generate_uid(40)
+            if not database.check_exists(sid, "session_id", "Session"):
+                break
+
+        database.sqlCursor.execute(f'''
+            INSERT INTO Vendor (user_id, username, name, phone_number,
+                                email_id, location, password)
+            VALUES ('{uid}', '{vendor_details.username}', '{vendor_details.name}',
+                    '{vendor_details.phone}', '{vendor_details.email}',
+                    '{vendor_details.location}', '{hash_password}');
+        ''')
+        database.sqlCursor.execute(f'''
+            INSERT INTO Session (session_id, user_id, valid)
+            VALUES ('{sid}', '{uid}', 1)
+        ''')
+
+        database.sqlConnection.commit()
+        database.close()
+        return sid
+    return ('', 400)
+
+
+def login_vendor():
+    if connexion.request.is_json:
+        login_request = LoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
+        print(login_request)
+        database.open()
+        # Check if the user is valid
+        if not database.check_exists(login_request.username,
+                                     "username", "Vendor"):
+            database.close()
+            return ("Username", 403)
+        # Get password hash
+        database.sqlCursor.execute(f'SELECT password FROM Vendor WHERE username = "{login_request.username}"')  # noqa: E501
+        pwd_hash = database.sqlCursor.fetchone()[0]
+        # Verify password
+        if not basicUtils.verify_password(login_request.password, pwd_hash):
+            database.close()
+            return ("Password", 403)
+        # Add new session id
+        while True:
+            sid = basicUtils.generate_uid(40)
+            if not database.check_exists(sid, "session_id", "Session"):
+                break
+        database.sqlCursor.execute(f'''
+            INSERT INTO Session (session_id, user_id, valid)
+            VALUES ('{sid}', '{login_request.username}', 1)
+                                   ''')
+        database.sqlConnection.commit()
+        database.close()
+        return sid
+    return ('Bad Request', 400)
+     

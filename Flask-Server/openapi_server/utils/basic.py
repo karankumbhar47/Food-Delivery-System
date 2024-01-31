@@ -1,3 +1,4 @@
+import string
 import secrets
 import re
 import bcrypt
@@ -5,13 +6,20 @@ import base64
 
 
 def generate_uid(length: int = 40):
-    characters = "abcdefg"
+    characters = string.ascii_letters + string.digits
     return ''.join(secrets.choice(characters) for _ in range(length))
 
 
-def phone_is_valid(phone: int) -> bool:
-    str_phone = str(phone)
-    if len(str_phone) == 10 and str_phone[0] != 0 : 
+def username_is_valid(username: str) -> bool:
+    if len(username) < 4 or ' ' in username:
+        return False
+    return True
+
+
+def phone_is_valid(phone: str) -> bool:
+    # Code needs to be updated to handle international representation
+    # The type of phone is changed to str
+    if len(phone) >= 10:
         return True
     return False
 
