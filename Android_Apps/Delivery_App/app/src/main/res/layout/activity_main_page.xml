@@ -41,6 +41,21 @@
         app:layout_constraintTop_toTopOf="@+id/top_bar" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="cursive"
+        android:text="UnWrap 'n' Savour \n         delivery"
+        android:textAlignment="center"
+        android:textColor="#FFAB2F"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/top_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/top_bar" />
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -55,6 +70,50 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@tools:sample/avatars" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/app_logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/app_logo" />
+
+            <TextView
+                android:id="@+id/top_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="cursive"
+                android:text="UnWrap 'n' Savour \n         delivery"
+                android:textAlignment="center"
+                android:textColor="#FFAB2F"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/userImageCard"
+                app:layout_constraintStart_toEndOf="@+id/app_logo"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/userImageCard"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                app:cardCornerRadius="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/userImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@tools:sample/avatars" />
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.tabs.TabLayout
@@ -68,23 +127,26 @@
         app:tabSelectedTextColor="#DD7B30">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/newOrderTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Orders" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/ongoingOrderTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ongoing Orders" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/comlatedOrderTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Completed Orders" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewList"
+        android:id="@+id/listOfOrders"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
