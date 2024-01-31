@@ -8,7 +8,7 @@
     tools:context=".main_page" >
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#381C06"
@@ -38,12 +38,12 @@
                 android:textColor="#FFAB2F"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/cardView"
+                app:layout_constraintEnd_toStartOf="@+id/userImageCard"
                 app:layout_constraintStart_toEndOf="@+id/app_logo"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
+                android:id="@+id/userImageCard"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="20dp"
@@ -53,7 +53,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/userImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@tools:sample/avatars" />
@@ -68,28 +68,31 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2"
+        app:layout_constraintTop_toBottomOf="@+id/topBar"
         app:tabIndicatorColor="#DD7B30"
         app:tabSelectedTextColor="#DD7B30">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/newOrderTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Orders" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/ongoingOrderTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ongoing Orders" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/comlatedOrderTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Completed Orders" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewList"
+        android:id="@+id/listOfOrders"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
