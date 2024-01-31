@@ -10,13 +10,18 @@ sqlCursor = None
 def init():
     global sqlConnection
     global sqlCursor
+
     sqlDatabaseFile = os.getenv("FOOD_DELIVERY_DB")
     if sqlDatabaseFile is None:
         print("Env variable `FOOD_DELIVERY_DB` is \
               not set using to /tmp/fds.db")
         sqlDatabaseFile = "/tmp/fds.db"
+    else:
+        print(f"Using database at {sqlDatabaseFile}")
+
     sqlConnection = sqlite3.connect(sqlDatabaseFile)
     sqlCursor = sqlConnection.cursor()
+
     # Create tables if not already present
     sqlCursor.execute('''
         CREATE TABLE IF NOT EXISTS Consumer (
@@ -125,6 +130,9 @@ def verify_session_id(session_id: str) -> Optional[Tuple[str, str]]:
 def open():
     global sqlConnection
     global sqlCursor
+
+    init()
+
     sqlDatabaseFile = os.getenv("FOOD_DELIVERY_DB")
     if sqlDatabaseFile is None:
         sqlDatabaseFile = "/tmp/fds.db"
