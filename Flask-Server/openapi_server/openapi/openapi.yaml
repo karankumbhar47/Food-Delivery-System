@@ -3,9 +3,9 @@ info:
   description: |
     This API allows to communicate with FDS (Food Delivery System) server.
   title: FDS
-  version: 0.0.2
+  version: 0.0.3
 servers:
-- url: /
+- url: http://13.233.99.87:8080
 paths:
   /delivery/acceptOrder:
     post:
@@ -433,15 +433,6 @@ paths:
         schema:
           type: string
         style: simple
-      - explode: false
-        in: header
-        name: filters
-        required: false
-        schema:
-          items:
-            $ref: '#/components/schemas/filter'
-          type: array
-        style: simple
       responses:
         "200":
           content:
@@ -778,7 +769,6 @@ components:
           - rating
           - vendor
           - category
-          title: property
           type: string
         constrainType:
           enum:
@@ -786,16 +776,13 @@ components:
           - lessThan
           - equals
           - notEquals
-          title: constrainType
           type: string
         value:
-          title: value
           type: string
       required:
       - constrainType
       - property
       - value
-      title: filter
       type: object
     foodItem:
       example:
@@ -806,6 +793,9 @@ components:
         price: 0.8008281904610115
         name: name
         rating: 6.027456183070403
+        tags:
+        - tags
+        - tags
       properties:
         itemId:
           maxLength: 40
@@ -830,6 +820,12 @@ components:
         ratedBy:
           title: ratedBy
           type: number
+        tags:
+          description: tags related to food item
+          items:
+            type: string
+          title: tags
+          type: array
       required:
       - itemId
       - name
@@ -851,6 +847,9 @@ components:
         vendorName: vendorName
         starRating: 6.027456183070403
         vendorLocation: vendorLocation
+        tags:
+        - tags
+        - tags
       properties:
         itemId:
           description: ID of the item
@@ -893,6 +892,12 @@ components:
           items:
             type: string
           title: imageUrls
+          type: array
+        tags:
+          description: tags related to food item
+          items:
+            type: string
+          title: tags
           type: array
       title: foodItemFull
       type: object
@@ -1109,6 +1114,12 @@ components:
             minLength: 40
             type: string
           title: imageUrls
+          type: array
+        tags:
+          description: tags related to food item
+          items:
+            type: string
+          title: tags
           type: array
       required:
       - name
