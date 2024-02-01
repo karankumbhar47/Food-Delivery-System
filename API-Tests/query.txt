@@ -1,0 +1,15 @@
+('{item_id}', 'Pizza Margherita', 'pizza_margherita.jpg', 9, 50, 'Pizzeria Inc.');
+('{item_id}', 'Chicken Caesar Salad', 'chicken_caesar_salad.jpg', 7, 30, 'Salad Express');
+('{item_id}', 'Spaghetti Bolognese', 'spaghetti_bolognese.jpg', 12, 40, 'Italian Delights');
+('{item_id}', 'Grilled Salmon', 'grilled_salmon.jpg', 15, 20, 'Seafood Haven');
+('{item_id}', 'Vegetarian Sushi Roll', 'vegetarian_sushi.jpg', 8, 25, 'Sushi Palace');
+('{item_id}', 'Cheeseburger', 'cheeseburger.jpg', 6, 50, 'Burger Kingdom');
+('{item_id}', 'Mushroom Risotto', 'mushroom_risotto.jpg', 10, 35, 'Risotto Ristorante');
+('{item_id}', 'Chicken Tandoori', 'chicken_tandoori.jpg', 13, 30, 'Spice Paradise');
+('{item_id}', 'Caesar Wrap', 'caesar_wrap.jpg', 7, 40, 'Wrap It Up');
+('{item_id}', 'Chocolate Fondue', 'chocolate_fondue.jpg', 14, 15, 'Sweet Delights');
+('{item_id}', 'Shrimp Scampi', 'shrimp_scampi.jpg', 17, 25, 'Seafood Elegance');
+('{item_id}', 'Vegetable Stir Fry', 'vegetable_stir_fry.jpg', 9, 35, 'Wok Master');
+('{item_id}', 'Caprese Salad', 'caprese_salad.jpg', 8, 30, 'Fresh Greens');
+('{item_id}', 'BBQ Ribs', 'bbq_ribs.jpg', 19, 20, 'Smokehouse BBQ');
+('{item_id}', 'Pad Thai', 'pad_thai.jpg', 11, 40, 'Thai Spice');
