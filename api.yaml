@@ -3,7 +3,7 @@ info:
     title: FDS
     description: |
         This API allows to communicate with FDS (Food Delivery System) server.
-    version: 0.0.3
+    version: 0.0.4
 paths:
     # Registration and Authentication paths
     /register:
@@ -184,7 +184,7 @@ paths:
                                             itemId:
                                                 $ref: '#/components/schemas/itemId'
                                             quantity:
-                                                type: number
+                                                type: integer
                                                 description: Quantity of the specific item.
                                 location:
                                     type: string
@@ -223,7 +223,7 @@ paths:
                     content:
                         application/json:
                             schema: #OTP
-                                type: number
+                               type: integer
 
                 "404":
                     description: "Not Found"
@@ -547,7 +547,7 @@ paths:
                                 price:
                                     type: number
                                 maxQuantity:
-                                    type: number
+                                    type: integer
                                 imageUrls:
                                     type: array
                                     items:
@@ -600,7 +600,7 @@ paths:
                                 price:
                                     type: number
                                 maxQuantity:
-                                    type: number
+                                    type: integer
                 required: true
             responses:
                 "200":
@@ -757,7 +757,7 @@ paths:
                                                         minLength: 40
                                                         maxLength: 40
                                                     quantity:
-                                                        type: number
+                                                        type: integer
                                                         description: Quantity of the specific item.
                                         location:
                                             type: string
@@ -809,7 +809,7 @@ paths:
                                                         minLength: 40
                                                         maxLength: 40
                                                     quantity:
-                                                        type: number
+                                                        type: integer
                                                         description: Quantity of the specific item.
                                         location:
                                             type: string
@@ -864,7 +864,7 @@ paths:
                                                     minLength: 40
                                                     maxLength: 40
                                                 quantity:
-                                                    type: number
+                                                    type: integer
                                                     description: Quantity of the specific item.
                                     location:
                                         type: string
@@ -964,7 +964,7 @@ components:
                 rating:
                     type: number
                 ratedBy:
-                    type: number
+                    type: integer
                 tags:
                     type: array
                     description: tags related to food item
