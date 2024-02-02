@@ -16,12 +16,14 @@ import android.widget.SearchView;
 import com.example.swiggy_lite.Common_Fragment.ItemDetailsFragment;
 import com.example.swiggy_lite.DummyData;
 import com.example.swiggy_lite.R;
-import com.example.swiggy_lite.SearchActivity;
 import com.example.swiggy_lite.adapters.CategoryAdapter;
 import com.example.swiggy_lite.adapters.ItemDetailsAdapter;
-import com.example.swiggy_lite.models.FoodModel;
+import com.openapi.deliveryApp.model.FoodItemFull;
+
+import org.jetbrains.skiko.FullscreenAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class category_search extends Fragment {
     public category_search() {}
@@ -44,7 +46,7 @@ public class category_search extends Fragment {
         View view = inflater.inflate(R.layout.fragment_category_search, container, false);
         recyclerView = view.findViewById(R.id.item_details_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(), RecyclerView.VERTICAL, false));
-        itemDetailsAdapter = new ItemDetailsAdapter(DummyData.foodItemList, this.requireContext());
+        itemDetailsAdapter = new ItemDetailsAdapter(DummyData.dummyFoodList, this.requireContext());
 
         searchView = view.findViewById(R.id.food_item_searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -65,7 +67,7 @@ public class category_search extends Fragment {
         ItemDetailsAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                load(new ItemDetailsFragment());
+                load(new ItemDetailsFragment(String.valueOf(DummyData.dummyFoodList.get(0).getItemId())));
             }
         });
         recyclerView.setAdapter(itemDetailsAdapter);
@@ -96,9 +98,9 @@ public class category_search extends Fragment {
     }
 
     public void filteredList(String text) {
-        ArrayList<FoodModel> filteredList = new ArrayList<>();
-        for (FoodModel foodModel: DummyData.foodItemList) {
-            if (foodModel.getName().toLowerCase().contains(text.toLowerCase())) {
+        List<FoodItemFull> filteredList = new ArrayList<>();
+        for (FoodItemFull foodModel: DummyData.dummyFoodList) {
+            if (foodModel.getItemName().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(foodModel);
             }
             itemDetailsAdapter.setList(filteredList);

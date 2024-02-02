@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,23 +16,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.swiggy_lite.R;
-import com.example.swiggy_lite.models.FoodModel;
+import com.openapi.deliveryApp.model.FoodItem;
+import com.openapi.deliveryApp.model.OrderItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.viewHolder> {
-    ArrayList<FoodModel> searchList;
+    List<FoodItem> searchList;
     Context context;
     String searchText = "";
 
-    public void setList(ArrayList<FoodModel> updated_list, String searchText) {
+    public void setList(List<FoodItem> updated_list, String searchText) {
         this.searchList = updated_list;
         this.searchText = searchText;
         notifyDataSetChanged();
     }
 
-    public ListItemsAdapter(ArrayList<FoodModel> list, Context context) {
+    public ListItemsAdapter(List<FoodItem> list, Context context) {
         searchList = list;
         this.context = context;
     }
@@ -56,9 +57,8 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.view
 
     @Override
     public void onBindViewHolder(@NonNull ListItemsAdapter.viewHolder holder, int position) {
-        FoodModel singleItem = searchList.get(position);
+        FoodItem singleItem = searchList.get(position);
         String name = singleItem.getName();
-        holder.itemType.setText("Dish");
 
         int startIndex = name.toLowerCase().indexOf(searchText.toLowerCase());
 
@@ -71,11 +71,10 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.view
             holder.name.setText(name);
         }
 
+        holder.itemType.setText("Dish");
         holder.name.setOnClickListener(v -> listener.onItemClick(holder.getAdapterPosition()));
         holder.itemType.setOnClickListener(v -> listener.onItemClick(holder.getAdapterPosition()));
         holder.picImage.setOnClickListener(v -> listener.onItemClick(holder.getAdapterPosition()));
-
-
 
         int drawableId = holder.itemView.getResources()
                 .getIdentifier("pizza_"+(position+1),"drawable",holder.itemView.getContext().getPackageName());
@@ -83,7 +82,6 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.view
         Glide.with(context)
                 .load(drawableId)
                 .into(holder.picImage);
-//        holder.picImage.setOnClickListener(v -> listener.onItemClick(holder.getAdapterPosition()));
     }
 
     @Override
@@ -91,7 +89,7 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.view
         return searchList.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
 
         TextView name, itemType;
         ImageView picImage;
@@ -101,8 +99,6 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.view
             name = itemView.findViewById(R.id.food_item_name_textView);
             itemType = itemView.findViewById(R.id.list_type_textView);
             picImage = itemView.findViewById(R.id.food_item_imageView);
-
-
         }
     }
 }

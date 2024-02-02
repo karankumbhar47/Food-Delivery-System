@@ -60,8 +60,6 @@ openApiGenerate {
 //    dependsOn("assemble", "openApiGenerate")
 //}
 
-
-
 dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.airbnb.android:lottie:4.0.0")
@@ -85,4 +83,6 @@ dependencies {
     implementation(group = "org.apache.httpcomponents", name = "httpmime", version = "4.3") {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
     }
+    implementation("io.reactivex.rxjava2:rxandroid:2.0.2")
+    implementation("io.reactivex.rxjava2:rxjava:2.1.13")
 }

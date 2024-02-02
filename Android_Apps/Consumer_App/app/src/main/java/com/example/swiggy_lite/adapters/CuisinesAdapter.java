@@ -15,14 +15,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CuisinesAdapter extends RecyclerView.Adapter<CuisinesAdapter.viewHolder> {
-    public static HashMap<String,Boolean> cuisine_map;
-    public static ArrayList<String> cuisine_list;
-
     public interface OnItemClickListener{
         void onItemClick(int position);
     }
 
+    public static ArrayList<String> cuisine_list;
+    public static HashMap<String,Boolean> cuisine_map;
     private static CategoryAdapter.OnItemClickListener listener;
+
     public static void setOnItemClickListener(CategoryAdapter.OnItemClickListener clickListener){
         listener = clickListener;
     }
@@ -31,6 +31,7 @@ public class CuisinesAdapter extends RecyclerView.Adapter<CuisinesAdapter.viewHo
         cuisine_map = items;
         cuisine_list = new ArrayList<>(cuisine_map.keySet());
     }
+
     public void setCuisine_list(HashMap<String , Boolean> updatedMap){
         cuisine_map = updatedMap;
         cuisine_list = new ArrayList<>(updatedMap.keySet());
@@ -67,4 +68,5 @@ public class CuisinesAdapter extends RecyclerView.Adapter<CuisinesAdapter.viewHo
             cuisine_checkbox = itemView.findViewById(R.id.cuisine_item_checkbox);
         }
     }
+
 }

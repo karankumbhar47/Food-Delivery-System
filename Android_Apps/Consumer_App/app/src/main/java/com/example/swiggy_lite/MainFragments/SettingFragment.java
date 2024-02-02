@@ -16,10 +16,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.swiggy_lite.AppConstants;
 import com.example.swiggy_lite.MainActivity;
 import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.Setting_Fragment.AboutFragment;
 import com.example.swiggy_lite.Setting_Fragment.UserProfileFragment;
+
+import java.util.ArrayList;
 
 public class SettingFragment extends Fragment {
     public SettingFragment() {}
@@ -30,21 +33,22 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_setting, container, false);
-        edit_profile_card = view.findViewById(R.id.edit_profile_card);
-        logout_card = view.findViewById(R.id.logout_card);
-        about_card = view.findViewById(R.id.about_card);
-        favourite_restaurant_card = view.findViewById(R.id.favourite_restaurant_card);
-        favourite_order_card = view.findViewById(R.id.favourite_order_card);
+        {
+            edit_profile_card = view.findViewById(R.id.edit_profile_card);
+            logout_card = view.findViewById(R.id.logout_card);
+            about_card = view.findViewById(R.id.about_card);
+            favourite_restaurant_card = view.findViewById(R.id.favourite_restaurant_card);
+            favourite_order_card = view.findViewById(R.id.favourite_order_card);
+        }
 
         edit_profile_card.setOnClickListener(v -> {load(new UserProfileFragment());});
-
-
-        logout_card.setOnClickListener(v -> new AlertDialog.Builder(getActivity())
+        logout_card.setOnClickListener(v -> {
+                new AlertDialog.Builder(getActivity())
                 .setTitle("Confirm")
                 .setMessage("Are you sure you want to go back?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    String[] preferences = new String[]{};
-                    for (String preference: preferences) {
+                    ArrayList<String> preferences = AppConstants.LIST_PREF;
+                    for (String preference: AppConstants.LIST_PREF) {
                         SharedPreferences pref = requireActivity().getSharedPreferences(preference,MODE_PRIVATE);
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
@@ -60,8 +64,8 @@ public class SettingFragment extends Fragment {
                     requireActivity().finish();
                 })
                 .setNegativeButton("No", null)
-                .show());
-
+                .show();
+        });
         about_card.setOnClickListener(v -> {load(new AboutFragment());});
 
         return view;

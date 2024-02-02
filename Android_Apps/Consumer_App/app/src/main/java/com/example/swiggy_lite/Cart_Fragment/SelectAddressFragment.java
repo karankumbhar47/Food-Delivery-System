@@ -27,18 +27,20 @@ public class SelectAddressFragment extends Fragment {
     private Spinner academic_areas;
     private String Address;
     private CardView place_order;
+    private RadioGroup radioGroup;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_select_address, container, false);
-        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
-
-        khanar_room = view.findViewById(R.id.khanar_room_picker_editText);
-        indravati_room = view.findViewById(R.id.indravati_room_picker_editText);
-        shivnath_room = view.findViewById(R.id.shivnath_room_picker_editText);
-        academic_areas = view.findViewById(R.id.academic_areas_dropdown);
-        place_order = view.findViewById(R.id.place_order_cardView);
+        {
+            radioGroup = view.findViewById(R.id.radioGroup);
+            khanar_room = view.findViewById(R.id.khanar_room_picker_editText);
+            indravati_room = view.findViewById(R.id.indravati_room_picker_editText);
+            shivnath_room = view.findViewById(R.id.shivnath_room_picker_editText);
+            academic_areas = view.findViewById(R.id.academic_areas_dropdown);
+            place_order = view.findViewById(R.id.place_order_cardView);
+        }
 
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             academic_areas.setVisibility(View.GONE);
@@ -57,7 +59,6 @@ public class SelectAddressFragment extends Fragment {
                 academic_areas.setVisibility(View.VISIBLE);
             }
         });
-
         place_order.setOnClickListener(v -> {
             boolean isAddressValid = false;
             int selectedId = radioGroup.getCheckedRadioButtonId();
@@ -104,7 +105,7 @@ public class SelectAddressFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
                 //Inflate the layout for the dialog
-                View viewOrder = LayoutInflater.from(requireContext()).inflate(R.layout.order_success_dialog, null);
+                View viewOrder = LayoutInflater.from(requireContext()).inflate(R.layout.custom_alert_dialog, null);
                 LottieAnimationView animationView = viewOrder.findViewById(R.id.lottieAnimation);
                 animationView.playAnimation();
 
@@ -122,6 +123,7 @@ public class SelectAddressFragment extends Fragment {
                 dialog.show();
             }
         });
+
         return view;
     }
 
@@ -153,7 +155,6 @@ public class SelectAddressFragment extends Fragment {
             try {
                 int secondDigit = Character.getNumericValue(roomNumber.charAt(1));
                 int lastTwoDigits = Integer.parseInt(roomNumber.substring(2));
-
 
                 if ("ABCDEFG".indexOf(firstChar) != -1 && secondDigit >= 1 && secondDigit <= 4
                         && lastTwoDigits >= 1 && lastTwoDigits <= 18) {

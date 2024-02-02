@@ -7,50 +7,50 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.swiggy_lite.R;
-import com.example.swiggy_lite.models.FoodModel;
+import com.openapi.deliveryApp.model.OrderItem;
 
-import java.util.ArrayList;
+import java.math.RoundingMode;
+import java.util.List;
 
-
-public class PlaceOrderAdapter extends RecyclerView.Adapter<PlaceOrderAdapter.viewHolder> {
-    ArrayList<FoodModel> foodItemList;
-
-    public PlaceOrderAdapter(ArrayList<FoodModel> items) {
-        foodItemList = items;
-    }
-
-    private PlaceOrderAdapter.OnItemClickListener listener;
+public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewHolder> {
     public interface OnItemClickListener{
         void onMinusClick(int position, int quantity);
         void onPlusClick(int position, int quantity);
     }
-    public void setOnItemClickListener(PlaceOrderAdapter.OnItemClickListener clickListener){
+
+    List<OrderItem> foodItemList;
+    private CartAdapter.OnItemClickListener listener;
+
+    public CartAdapter(List<OrderItem> items) {
+        foodItemList = items;
+    }
+
+    public void setOnItemClickListener(CartAdapter.OnItemClickListener clickListener){
         listener = clickListener;
     }
 
-    public void setList(ArrayList<FoodModel> updateList){
+    public void setList(List<OrderItem> updateList){
         this.foodItemList = updateList;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public PlaceOrderAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CartAdapter.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.place_order_card,parent,false);
         return new viewHolder(inflate);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PlaceOrderAdapter.viewHolder holder, int position) {
-        FoodModel singleItem = foodItemList.get(position);
-        holder.name.setText(singleItem.getName());
-        holder.price.setText(String.format("₹ %s", String.valueOf(singleItem.getPrice() * singleItem.getQuantity())));
-        holder.vegFoodType.setVisibility(singleItem.isPureVeg() ? View.VISIBLE : View.GONE);
-        holder.nonVegFoodType.setVisibility(singleItem.isPureVeg() ? View.GONE : View.VISIBLE);
+    public void onBindViewHolder(@NonNull CartAdapter.viewHolder holder, int position) {
+        OrderItem singleItem = foodItemList.get(position);
+        holder.name.setText(singleItem.getItemName());
+        holder.price.setText(String.format("₹ %s", String.valueOf((singleItem.getPrice().multiply(singleItem.getPrice())).setScale(0, RoundingMode.HALF_UP).intValue())));
+        //holder.vegFoodType.setVisibility(singleItem.isPureVeg() ? View.VISIBLE : View.GONE);
+        //holder.nonVegFoodType.setVisibility(singleItem.isPureVeg() ? View.GONE : View.VISIBLE);
         holder.numberText.setText(String.valueOf(singleItem.getQuantity()));
 
         holder.plusImageView.setOnClickListener(v -> {
@@ -65,7 +65,7 @@ public class PlaceOrderAdapter extends RecyclerView.Adapter<PlaceOrderAdapter.vi
         return foodItemList.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
 
         TextView name, price , numberText;
         ImageView vegFoodType,  nonVegFoodType;

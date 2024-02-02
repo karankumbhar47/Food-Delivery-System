@@ -1,6 +1,5 @@
 package com.example.swiggy_lite.adapters;
 
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.swiggy_lite.R;
-import com.example.swiggy_lite.models.FoodModel;
+import com.openapi.deliveryApp.model.OrderItem;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryItemsDetailsAdapter extends RecyclerView.Adapter<HistoryItemsDetailsAdapter.viewHolder> {
-    ArrayList<FoodModel> itemList;
+    List<OrderItem> itemList;
 
-    public HistoryItemsDetailsAdapter(ArrayList<FoodModel> items) {
+    public HistoryItemsDetailsAdapter(List<OrderItem> items) {
         this.itemList = items;
     }
 
@@ -31,11 +30,10 @@ public class HistoryItemsDetailsAdapter extends RecyclerView.Adapter<HistoryItem
 
     @Override
     public void onBindViewHolder(@NonNull HistoryItemsDetailsAdapter.viewHolder holder, int position) {
-        FoodModel singleItem = itemList.get(position);
-        holder.name.setText(singleItem.getName());
-        holder.vegLogo.setVisibility(singleItem.isPureVeg() ? View.VISIBLE : View.GONE);
-        holder.nonVegLogo.setVisibility(!singleItem.isPureVeg() ? View.VISIBLE : View.GONE);
-
+        OrderItem singleItem = itemList.get(position);
+        holder.name.setText(singleItem.getItemName());
+//        holder.vegLogo.setVisibility(singleItem.isPureVeg() ? View.VISIBLE : View.GONE);
+//        holder.nonVegLogo.setVisibility(!singleItem.isPureVeg() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -43,7 +41,7 @@ public class HistoryItemsDetailsAdapter extends RecyclerView.Adapter<HistoryItem
         return itemList.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
 
         TextView name;
         ImageView vegLogo, nonVegLogo;

@@ -17,54 +17,61 @@ import com.example.swiggy_lite.DummyData;
 import com.example.swiggy_lite.MainFragments.CartFragment;
 import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.adapters.HistoryItemsDetailsAdapter;
-import com.example.swiggy_lite.models.FoodModel;
 import com.example.swiggy_lite.models.OrderModel;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.util.List;
 
 public class HistoryDetailsFragment extends Fragment {
-
-    public HistoryDetailsFragment() {}
     RecyclerView recyclerView;
     HistoryItemsDetailsAdapter historyItemsDetailsAdapter;
     TextView item_total, delivery_fee, delivery_tip, GST_restaurant_charges, total_payment;
     TextView reorder_button;
+    OrderModel orderModel;
 
+    public HistoryDetailsFragment(int position) {
+        //fetch OrderModel with orderId
+        this.orderModel = DummyData.dummyOrderList.get(position);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history_details, container, false);
+        {
+            recyclerView = view.findViewById(R.id.history_details_recyclerView);
+            item_total = view.findViewById(R.id.item_total_textView);
+            delivery_fee = view.findViewById(R.id.delivery_fee_textView);
+            delivery_tip = view.findViewById(R.id.delivery_tip_textView);
+            GST_restaurant_charges = view.findViewById(R.id.GST_restaurant_charges_textView);
+            total_payment = view.findViewById(R.id.total_payment_textView);
+        }
 
-        recyclerView = view.findViewById(R.id.history_details_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(),RecyclerView.VERTICAL,false));
-        historyItemsDetailsAdapter = new HistoryItemsDetailsAdapter(DummyData.historyDetails);
-        recyclerView.setAdapter(historyItemsDetailsAdapter);
-
-        item_total = view.findViewById(R.id.item_total_textView);
-        delivery_fee = view.findViewById(R.id.delivery_fee_textView);
-        delivery_tip = view.findViewById(R.id.delivery_tip_textView);
-        GST_restaurant_charges = view.findViewById(R.id.GST_restaurant_charges_textView);
-        total_payment = view.findViewById(R.id.total_payment_textView);
-
-        item_total.setText("₹ "+String.valueOf(calculateItemTotal(DummyData.historyDetails)));
-        delivery_tip.setText("₹ "+String.valueOf( DummyData.orderList.get(DummyData.position).getTip()));
+        item_total.setText(String.format("₹ %s", String.valueOf(calculateItemTotal(orderModel.getOrderDetails()))));
+        delivery_tip.setText(String.format("₹ %s", String.valueOf(orderModel.getTip())));
         calculateTotalPayment();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        historyItemsDetailsAdapter = new HistoryItemsDetailsAdapter(orderModel.getOrderDetails());
+        recyclerView.setAdapter(historyItemsDetailsAdapter);
 
         reorder_button = view.findViewById(R.id.reorder_textView);
         reorder_button.setOnClickListener(v ->{
-            OrderModel orderModel = new OrderModel();
-            orderModel.setOrderedItems(DummyData.historyDetails);
-            load( new CartFragment(orderModel));
+            orderModel.saveToSharedPreferences(requireContext());
+            load( new CartFragment());
         });
         return view;
     }
 
 
-    public int calculateItemTotal(ArrayList<FoodModel> list){
-        int sum = 0;
-        for (FoodModel foodmodel : list) {
-            sum+= foodmodel.getPrice() * foodmodel.getQuantity();
+
+    public BigDecimal calculateItemTotal(List<com.openapi.deliveryApp.model.OrderItem> list) {
+        BigDecimal sum = BigDecimal.ZERO; // Initialize sum as BigDecimal.ZERO
+
+        for (com.openapi.deliveryApp.model.OrderItem foodmodel : list) {
+            BigDecimal itemTotal = foodmodel.getPrice().multiply(BigDecimal.valueOf(foodmodel.getQuantity()));
+            sum = sum.add(itemTotal);
         }
+
         return sum;
     }
 

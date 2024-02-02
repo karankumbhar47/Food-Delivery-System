@@ -9,16 +9,16 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieAnimation"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"
         app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/order_success"
-        app:lottie_loop="false" />
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/order_success" />
 
     <TextView
-        android:id="@+id/dialogMessage"
+        android:id="@+id/dialog_message_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"

@@ -1,6 +1,7 @@
 package com.example.swiggy_lite.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,27 +10,39 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.collection.ObjectIntMap;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.swiggy_lite.MainFragments.CartFragment;
+import com.example.swiggy_lite.MainPage;
 import com.example.swiggy_lite.R;
-import com.example.swiggy_lite.models.FoodModel;
+import com.openapi.deliveryApp.model.FoodItemFull;
+import com.openapi.deliveryApp.model.OrderItem;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 public class RestaurantMenuAdapter extends RecyclerView.Adapter<RestaurantMenuAdapter.viewHolder> {
-    ArrayList<FoodModel> menuList;
     Context context;
+    List<FoodItemFull> menuList;
+    Map<String,OrderItem> orderItemMap;
+    private static RestaurantMenuAdapter.OnItemClickListener listener;
 
-    public RestaurantMenuAdapter(ArrayList<FoodModel> items,Context context) {
-        menuList = items;
+    public RestaurantMenuAdapter(List<FoodItemFull> items, Context context) {
+        this.menuList = items;
         this.context = context;
+        this.orderItemMap = MainPage.orderItemMap;
     }
 
+    public void changeQuantityList() {
+        this.orderItemMap = MainPage.orderItemMap;
+        notifyDataSetChanged();
+    }
 
-    public void setList(ArrayList<FoodModel> updated_list) {
+    public void setList(List<FoodItemFull> updated_list) {
         this.menuList = updated_list;
         notifyDataSetChanged();
     }
@@ -39,8 +52,6 @@ public class RestaurantMenuAdapter extends RecyclerView.Adapter<RestaurantMenuAd
         void onPlusClick(int position, int quantity);
     }
 
-
-    private static RestaurantMenuAdapter.OnItemClickListener listener;
     public static void setOnItemClickListener(RestaurantMenuAdapter.OnItemClickListener clickListener){
         listener = clickListener;
     }
@@ -54,33 +65,33 @@ public class RestaurantMenuAdapter extends RecyclerView.Adapter<RestaurantMenuAd
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        FoodModel singleItem = menuList.get(position);
-        holder.item_name.setText(singleItem.getName());
-        holder.rating.setText(singleItem.getRating() + " (1k+)");
-        holder.item_description.setText(singleItem.getRender_location());
-        int drawableId = holder.itemView.getResources()
-                .getIdentifier("restaurant_"+(position+1),"drawable",holder.itemView.getContext().getPackageName());
+        FoodItemFull singleItem = menuList.get(position);
 
-        Glide.with(context)
-                .load(drawableId)
-                .into(holder.item_pic);
-        //holder.item_list.setText();
+        int drawableId = holder.itemView.getResources().getIdentifier("restaurant_"+(position+1),"drawable",holder.itemView.getContext().getPackageName());
+        Glide.with(context).load(drawableId).into(holder.item_pic);
+
+        holder.item_name.setText(singleItem.getItemName());
+        holder.rating.setText(String.format("%s (1k+)", singleItem.getStarRating()));
+        holder.item_description.setText(singleItem.getVendorLocation());
         holder.item_price.setText(String.format("₹ %s", String.valueOf(singleItem.getPrice())));
-        holder.minusImageView.setOnClickListener(v -> {
-            if(singleItem.getQuantity()-1<=0){
-                holder.add_button.setVisibility(holder.add_button.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
-                holder.number_picker.setVisibility(holder.number_picker.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
-                notifyDataSetChanged();
-            }
-            listener.onMinusClick(position,singleItem.getQuantity()-1);
-        });
-        holder.plusImageView.setOnClickListener(v -> listener.onPlusClick(position,singleItem.getQuantity()+1));
-        holder.add_button.setOnClickListener(v -> {
-            holder.add_button.setVisibility(holder.add_button.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
-            holder.number_picker.setVisibility(holder.number_picker.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
-            notifyDataSetChanged();
+
+        if (orderItemMap.get(singleItem.getItemId()) != null) {
+                OrderItem orderItem = orderItemMap.get(singleItem.getItemId());
+                holder.add_button.setVisibility(View.GONE);
+                holder.number_picker.setVisibility(View.VISIBLE);
+                holder.number_text.setText(String.valueOf(orderItem.getQuantity()));
+                holder.minusImageView.setOnClickListener(v -> listener.onMinusClick(position, orderItem.getQuantity() - 1));
+                holder.plusImageView.setOnClickListener(v -> listener.onPlusClick(position, orderItem.getQuantity() + 1));
+        } else {
+                holder.add_button.setVisibility(View.VISIBLE);
+                holder.number_picker.setVisibility(View.GONE);
         }
-        );
+
+         holder.add_button.setOnClickListener(v -> {
+            holder.add_button.setVisibility(View.GONE);
+            holder.number_picker.setVisibility(View.VISIBLE);
+            listener.onPlusClick(position,1);
+        });
     }
 
     @Override
@@ -88,9 +99,9 @@ public class RestaurantMenuAdapter extends RecyclerView.Adapter<RestaurantMenuAd
         return menuList.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
 
-        TextView item_name, rating , item_description, item_price;
+        TextView item_name, rating , item_description, item_price, number_text;
         ImageView item_pic, veg_imageView, nonVeg_imageView, plusImageView, minusImageView;
         CardView add_button;
         ConstraintLayout number_picker;
@@ -108,7 +119,20 @@ public class RestaurantMenuAdapter extends RecyclerView.Adapter<RestaurantMenuAd
             minusImageView = itemView.findViewById(R.id.minusIcon);
             add_button = itemView.findViewById(R.id.add_button_cardView);
             number_picker = itemView.findViewById(R.id.numberPicker_constrainLayout);
+            number_text = itemView.findViewById(R.id.numberText);
         }
     }
+//
+//    public OrderItem getOrderItem(String itemId){
+//        if(orderItemMap !=null) {
+//            for (OrderItem orderItem : orderItemMap) {
+//                if (orderItem.getItemId().equals(itemId)) {
+//                    return orderItem;
+//                }
+//            }
+//        }
+//        return null;
+//    }
+
 }
 

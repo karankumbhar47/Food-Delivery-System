@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.WindowManager;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -20,17 +20,12 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 SharedPreferences preferences = getSharedPreferences(AppConstants.PREF_LOGIN,MODE_PRIVATE);
                 boolean login_flag = preferences.getBoolean(AppConstants.KEY_LOGIN_FLAG,false);
                 String sessionId = preferences.getString(AppConstants.KEY_SESSION_ID,"");
-
-                Log.d("myTag", "run: loginFlag "+login_flag);
-                Log.d("myTag", "run: sessionId "+sessionId);
 
                 if(!login_flag) {
                     Intent intent = new Intent(MainActivity.this, UserLogin.class);
@@ -43,6 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 finish();
             }
-        }, 2000);
+        }, 1500);
     }
 }
