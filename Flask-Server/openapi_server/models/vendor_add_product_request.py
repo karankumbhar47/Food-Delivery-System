@@ -22,7 +22,7 @@ class VendorAddProductRequest(Model):
         :param price: The price of this VendorAddProductRequest.  # noqa: E501
         :type price: float
         :param max_quantity: The max_quantity of this VendorAddProductRequest.  # noqa: E501
-        :type max_quantity: float
+        :type max_quantity: int
         :param image_urls: The image_urls of this VendorAddProductRequest.  # noqa: E501
         :type image_urls: List[str]
         :param tags: The tags of this VendorAddProductRequest.  # noqa: E501
@@ -32,7 +32,7 @@ class VendorAddProductRequest(Model):
             'name': str,
             'thumbnail': str,
             'price': float,
-            'max_quantity': float,
+            'max_quantity': int,
             'image_urls': List[str],
             'tags': List[str]
         }
@@ -132,22 +132,22 @@ class VendorAddProductRequest(Model):
         self._price = price
 
     @property
-    def max_quantity(self) -> float:
+    def max_quantity(self) -> int:
         """Gets the max_quantity of this VendorAddProductRequest.
 
 
         :return: The max_quantity of this VendorAddProductRequest.
-        :rtype: float
+        :rtype: int
         """
         return self._max_quantity
 
     @max_quantity.setter
-    def max_quantity(self, max_quantity: float):
+    def max_quantity(self, max_quantity: int):
         """Sets the max_quantity of this VendorAddProductRequest.
 
 
         :param max_quantity: The max_quantity of this VendorAddProductRequest.
-        :type max_quantity: float
+        :type max_quantity: int
         """
 
         self._max_quantity = max_quantity

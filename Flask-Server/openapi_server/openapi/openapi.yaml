@@ -3,7 +3,7 @@ info:
   description: |
     This API allows to communicate with FDS (Food Delivery System) server.
   title: FDS
-  version: 0.0.3
+  version: 0.0.4
 servers:
 - url: http://13.233.99.87:8080
 paths:
@@ -265,7 +265,7 @@ paths:
           content:
             application/json:
               schema:
-                type: number
+                type: integer
           description: OK
         "404":
           description: Not Found
@@ -788,7 +788,7 @@ components:
       example:
         itemId: itemId
         thumbnail: thumbnail
-        ratedBy: 1.4658129805029452
+        ratedBy: 1
         vendor: vendor
         price: 0.8008281904610115
         name: name
@@ -819,7 +819,7 @@ components:
           type: number
         ratedBy:
           title: ratedBy
-          type: number
+          type: integer
         tags:
           description: tags related to food item
           items:
@@ -1053,7 +1053,7 @@ components:
         quantity:
           description: Quantity of the specific item.
           title: quantity
-          type: number
+          type: integer
       required:
       - itemId
       - quantity
@@ -1107,7 +1107,7 @@ components:
           type: number
         maxQuantity:
           title: maxQuantity
-          type: number
+          type: integer
         imageUrls:
           items:
             maxLength: 40
@@ -1144,7 +1144,7 @@ components:
           type: number
         maxQuantity:
           title: maxQuantity
-          type: number
+          type: integer
       required:
       - itemId
       title: vendorEditProduct_request
@@ -1185,7 +1185,7 @@ components:
     vendorGetRequestedOrders_200_response_inner_orderItems_inner:
       example:
         itemId: itemId
-        quantity: 0.8008281904610115
+        quantity: 0
       properties:
         itemId:
           maxLength: 40
@@ -1195,7 +1195,7 @@ components:
         quantity:
           description: Quantity of the specific item.
           title: quantity
-          type: number
+          type: integer
       required:
       - itemId
       - quantity
@@ -1211,9 +1211,9 @@ components:
         userId: userId
         orderItems:
         - itemId: itemId
-          quantity: 0.8008281904610115
+          quantity: 0
         - itemId: itemId
-          quantity: 0.8008281904610115
+          quantity: 0
       properties:
         orderId:
           title: orderId

@@ -18,11 +18,11 @@ class PlaceOrderRequestItemCartInner(Model):
         :param item_id: The item_id of this PlaceOrderRequestItemCartInner.  # noqa: E501
         :type item_id: str
         :param quantity: The quantity of this PlaceOrderRequestItemCartInner.  # noqa: E501
-        :type quantity: float
+        :type quantity: int
         """
         self.openapi_types = {
             'item_id': str,
-            'quantity': float
+            'quantity': int
         }
 
         self.attribute_map = {
@@ -72,24 +72,24 @@ class PlaceOrderRequestItemCartInner(Model):
         self._item_id = item_id
 
     @property
-    def quantity(self) -> float:
+    def quantity(self) -> int:
         """Gets the quantity of this PlaceOrderRequestItemCartInner.
 
         Quantity of the specific item.  # noqa: E501
 
         :return: The quantity of this PlaceOrderRequestItemCartInner.
-        :rtype: float
+        :rtype: int
         """
         return self._quantity
 
     @quantity.setter
-    def quantity(self, quantity: float):
+    def quantity(self, quantity: int):
         """Sets the quantity of this PlaceOrderRequestItemCartInner.
 
         Quantity of the specific item.  # noqa: E501
 
         :param quantity: The quantity of this PlaceOrderRequestItemCartInner.
-        :type quantity: float
+        :type quantity: int
         """
         if quantity is None:
             raise ValueError("Invalid value for `quantity`, must not be `None`")  # noqa: E501

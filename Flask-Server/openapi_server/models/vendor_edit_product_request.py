@@ -24,14 +24,14 @@ class VendorEditProductRequest(Model):
         :param price: The price of this VendorEditProductRequest.  # noqa: E501
         :type price: float
         :param max_quantity: The max_quantity of this VendorEditProductRequest.  # noqa: E501
-        :type max_quantity: float
+        :type max_quantity: int
         """
         self.openapi_types = {
             'item_id': str,
             'name': str,
             'thumbnail': str,
             'price': float,
-            'max_quantity': float
+            'max_quantity': int
         }
 
         self.attribute_map = {
@@ -150,22 +150,22 @@ class VendorEditProductRequest(Model):
         self._price = price
 
     @property
-    def max_quantity(self) -> float:
+    def max_quantity(self) -> int:
         """Gets the max_quantity of this VendorEditProductRequest.
 
 
         :return: The max_quantity of this VendorEditProductRequest.
-        :rtype: float
+        :rtype: int
         """
         return self._max_quantity
 
     @max_quantity.setter
-    def max_quantity(self, max_quantity: float):
+    def max_quantity(self, max_quantity: int):
         """Sets the max_quantity of this VendorEditProductRequest.
 
 
         :param max_quantity: The max_quantity of this VendorEditProductRequest.
-        :type max_quantity: float
+        :type max_quantity: int
         """
 
         self._max_quantity = max_quantity
