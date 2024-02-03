@@ -193,7 +193,7 @@ def get_product(id_):  # noqa: E501
 
     query = '''
         SELECT Catalog.item_id, Catalog.item_name, Catalog.thumbnail_picture, Catalog.price,
-            Vendor.user_name, Vendor.location, Catalog.current_rating, Catalog.is_available,
+            Vendor.username, Vendor.location, Catalog.current_rating, Catalog.is_available,
             Catalog.max_quantity
             FROM Catalog
             INNER JOIN Vendor ON Catalog.vendor = Vendor.user_id
@@ -339,11 +339,6 @@ def query():  # noqa: E501
     """
     session_id = connexion.request.headers.get("sessionId")
     query_request = connexion.request.headers.get("query")
-    if session_id:
-        #check if session id is valid
-        print(session_id)
-    else:
-        return  ("Session Id missing in headers", 401)
 
     if query_request:
         database.init()
