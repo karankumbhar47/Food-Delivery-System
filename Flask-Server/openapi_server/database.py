@@ -96,7 +96,8 @@ def init():
             consumer_id         INT REFERENCES Consumer(user_id),
             vendor_id           INT REFERENCES Vendor(user_id), 
             delivery_person_id  INT REFERENCES DeliveryPerson(user_id), 
-            status              VARCHAR(50)
+            status              VARCHAR(50),
+            otp                 INT
         )
     ''')
     sqlConnection.commit()
