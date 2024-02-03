@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Vendor_App</string>
-    <string-array name="programming_languages">
-        <item>Java</item>
-        <item>Kotlin</item>
-        <item>Python</item>
-        <item>CPP</item>
-    </string-array>
+
+    <string name="logo_description">App Logo</string>
+    <string name="mission_statement">Our mission is to deliver delicious meals to your doorstep with speed and quality.</string>
+    <string name="features">Key Features:</string>
+    <string name="our_team">Our Team</string>
+    <string name="team_member_1">Karan Kumbhar ( Frontend + Backend )</string>
+    <string name="team_member_2">Vedant Udan ( Frontend + Backend )</string>
+    <string name="team_member_3">Shubham Daule ( Backend + Testing )</string>
+    <string name="team_member_4">Sandesh Ahire (Frontend + Backend + Testing )</string>
+    <string name="select_gender">Select Gender</string>
+
 </resources>

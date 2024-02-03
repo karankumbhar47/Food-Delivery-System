@@ -117,7 +117,7 @@ tools:context=".NewOrder">
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/cancelleOrderEmailButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -131,10 +131,10 @@ tools:context=".NewOrder">
             android:textColor="@color/primary"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/cancelleOrderCallButton" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/cancelleOrderNavigationButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -150,7 +150,7 @@ tools:context=".NewOrder">
             android:textColor="@color/primary"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/cancelleOrderEmailButton" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView10"
@@ -203,12 +203,12 @@ tools:context=".NewOrder">
             android:layout_marginTop="25dp"
             android:text="Ward No. 2, Vasagade Kolhapur, Maharashtram India "
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/textView6"
+            app:layout_constraintEnd_toStartOf="@+id/cancelleOrderEmailButton"
             app:layout_constraintStart_toEndOf="@+id/cardView12"
             app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/cancelleOrderCallButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
