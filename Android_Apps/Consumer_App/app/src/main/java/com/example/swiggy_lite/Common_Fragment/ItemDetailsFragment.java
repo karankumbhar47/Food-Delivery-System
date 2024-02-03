@@ -59,7 +59,6 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
     private ItemDetailsAdapter adapter;
     private String item_id;
     private DefaultApi api;
-    private NestedScrollView nestedScrollView;
     private boolean isCardTranslated = false;
     private RecyclerView recyclerView;
     private LoadingDialog loadingDialog;
@@ -90,7 +89,6 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
             searchView = view.findViewById(R.id.food_item_searchView);
             searchCard = view.findViewById(R.id.search_card);
             recyclerViewCard = view.findViewById(R.id.recyclerView_card);
-            nestedScrollView = view.findViewById(R.id.nestedScrollView);
             number_picker = view.findViewById(R.id.numberPicker_constrainLayout);
             item_name_textView = view.findViewById(R.id.food_item_name_textView);
             price_textView = view.findViewById(R.id.price_textView);
@@ -106,9 +104,8 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
             public void onRegistrationSuccess(FoodItemFull foodItem) {
                 Random random = new Random();
                 int randomNumber = random.nextInt(1000) + 1;
-
                 item_name_textView.setText(foodItem.getItemName());
-                rating_textView.setText((CharSequence) foodItem.getStarRating() +"("+String.valueOf(randomNumber)+"+ ratings)");
+//                rating_textView.setText((CharSequence) foodItem.getStarRating() +"("+String.valueOf(randomNumber)+"+ ratings)");
                 price_textView.setText("₹ "+foodItem.getPrice());
 
                 orderItem.setItemId(foodItem.getItemId());
@@ -119,6 +116,7 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
 
             @Override
             public void onRegistrationError(int errorCode, String errorMessage) {
+                Log.d("myTag", "error code "+errorCode);
                 if(errorCode==0)
                     Toast.makeText(requireContext(), "Please Check your internet connection", Toast.LENGTH_SHORT).show();
                 else{
@@ -316,6 +314,7 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
+                    Log.d("myTag", "error volley " + error);
                     int statusCode = error.networkResponse.statusCode;
                     String data = new String(error.networkResponse.data);
                     callback.onRegistrationError(statusCode, data.trim().replace("\"",""));

@@ -48,7 +48,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewHolder> {
     public void onBindViewHolder(@NonNull CartAdapter.viewHolder holder, int position) {
         OrderItem singleItem = foodItemList.get(position);
         holder.name.setText(singleItem.getItemName());
-        holder.price.setText(String.format("₹ %s", String.valueOf((singleItem.getPrice().multiply(singleItem.getPrice())).setScale(0, RoundingMode.HALF_UP).intValue())));
+        holder.price.setText(String.format("₹ %s", String.valueOf((singleItem.getPrice()*singleItem.getQuantity()))));
         //holder.vegFoodType.setVisibility(singleItem.isPureVeg() ? View.VISIBLE : View.GONE);
         //holder.nonVegFoodType.setVisibility(singleItem.isPureVeg() ? View.GONE : View.VISIBLE);
         holder.numberText.setText(String.valueOf(singleItem.getQuantity()));

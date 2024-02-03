@@ -219,12 +219,11 @@ public class CartFragment extends Fragment {
     }
 
     public int calculateItemTotal(List<OrderItem> list) {
-        BigDecimal sum = BigDecimal.ZERO;
+        float sum = 0;
         for (OrderItem foodModel : list) {
-            BigDecimal itemTotal = foodModel.getPrice().multiply(BigDecimal.valueOf(foodModel.getQuantity()));
-            sum = sum.add(itemTotal);
+            sum +=foodModel.getPrice()*foodModel.getQuantity();
         }
-        return sum.setScale(0, RoundingMode.HALF_UP).intValue();
+        return (int)sum;
     }
 
     public void calculateTotalPayment() {

@@ -91,6 +91,7 @@ public class RestaurantInfo extends Fragment {
         for (FoodItemFull foodItem : this.restaurantMenuList) {
             if (foodItem.getItemName().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(foodItem);
+                restaurantMenuList = filteredList;
             }
             restaurantMenuAdapter.setList(filteredList);
         }
@@ -103,11 +104,4 @@ public class RestaurantInfo extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-
-//    @Override
-//    public void onPause() {
-//        OrderModel.saveToSharedPreferences(requireContext(),MainPage.orderItemMap);
-//        Log.d("myTag", "save from res");
-//        super.onPause();
-//    }
 }

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
@@ -32,6 +33,7 @@ import io.reactivex.subjects.PublishSubject;
 public class SearchActivity extends AppCompatActivity {
     private DefaultApi api;
     private Filter filterItem;
+    private String sessionId;
     private SearchView searchView;
     private SharedPreferences prefLogin;
     private List<FoodItem> searchedList;
@@ -50,13 +52,15 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         {
+            prefLogin = getSharedPreferences(AppConstants.PREF_LOGIN, MODE_PRIVATE);
+            sessionId = prefLogin.getString(AppConstants.KEY_SESSION_ID,"");
             searchView = findViewById(R.id.food_item_searchView);
             back_button_imageView = findViewById(R.id.back_button_imageView);
             recentSearchCardView = findViewById(R.id.recent_search_cardView);
             recentSearchRecyclerView = findViewById(R.id.popular_search_recyclerView);
             recentSearchRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             categoryAdapter = new CategoryAdapter(DummyData.categoryList, this);
-            prefLogin = getSharedPreferences(AppConstants.PREF_LOGIN, MODE_PRIVATE);
+            foodItemSearchRecyclerView = findViewById(R.id.food_items_recyclerView);
             editor = prefLogin.edit();
             api = new DefaultApi();
             filterItem = new Filter();
@@ -73,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
         recentSearchRecyclerView.setAdapter(categoryAdapter);
-        foodItemSearchRecyclerView = findViewById(R.id.food_items_recyclerView);
+
         foodItemSearchRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         listItemsAdapter = new ListItemsAdapter(searchedList,this);
         ListItemsAdapter.setOnItemClickListener(new ListItemsAdapter.OnItemClickListener() {
@@ -89,42 +93,27 @@ public class SearchActivity extends AppCompatActivity {
         foodItemSearchRecyclerView.setAdapter(listItemsAdapter);
 
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    recentSearchCardView.setVisibility(View.VISIBLE);
+                    foodItemSearchRecyclerView.setVisibility(View.GONE);
+                } else {
+                    recentSearchCardView.setVisibility(View.GONE);
+                    foodItemSearchRecyclerView.setVisibility(View.VISIBLE);
+                    foodItemSearchRecyclerView.setAdapter(listItemsAdapter);
+                }
 
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                if (newText.isEmpty()) {
-//                    recentSearchCardView.setVisibility(View.VISIBLE);
-//                    foodItemSearchRecyclerView.setVisibility(View.GONE);
-//                } else {
-//                    recentSearchCardView.setVisibility(View.GONE);
-//                    foodItemSearchRecyclerView.setVisibility(View.VISIBLE);
-//                    foodItemSearchRecyclerView.setAdapter(listItemsAdapter);
-//                }
-//
-//                filteredList(newText);
-//                return true;
-//            }
-//        });
-//        debouncingQueryTextListener = new DebouncingQueryTextListener(
-//                (newText) -> {
-//                    if (newText != null) {
-//                        if (newText.isEmpty()) {
-//                            viewModel.resetSearch();
-//                        } else {
-//                            viewModel.searchMovies(newText);
-//                        }
-//                    }
-//                },
-//                this.getLifecycle()
-//        );
-//        searchView.setOnQueryTextListener(debouncingQueryTextListener);
+                filteredList(newText);
+                return true;
+            }
+        });
 
         boolean isSearchBarActivated = getIntent().getBooleanExtra("isSearchBarActivated", false);
         if (isSearchBarActivated) {
@@ -133,17 +122,16 @@ public class SearchActivity extends AppCompatActivity {
 
         back_button_imageView.setOnClickListener(v -> {startActivity(new Intent(this,MainPage.class));});
 
-
-        Disposable disposable = fromView(searchView)
-                .debounce(1500, TimeUnit.MILLISECONDS)
-                .filter(text -> !text.isEmpty() && text.length() >= 3)
-                .map(text -> text.toLowerCase().trim())
-                .distinctUntilChanged()
-                .switchMap(s -> Observable.just(s))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(query ->
-                        {}
-                );
+//        Disposable disposable = fromView(searchView)
+//                .debounce(1500, TimeUnit.MILLISECONDS)
+//                .filter(text -> !text.isEmpty() && text.length() >= 3)
+//                .map(text -> text.toLowerCase().trim())
+//                .distinctUntilChanged()
+//                .switchMap(s -> Observable.just(s))
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(query ->
+//                        {}
+//                );
     }
 
     public static Observable<String> fromView(SearchView searchView) {
@@ -166,32 +154,35 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void filteredList(String text) {
-        String sessionId = prefLogin.getString(AppConstants.KEY_SESSION_ID,"");
-
+        Log.d("myTag", "query send ... "+ text);
         api.query(sessionId, text,  new Response.Listener<List<FoodItem>>() {
             @Override
             public void onResponse(List<FoodItem> response) {
                 if(response != null) {
                     searchedList = (ArrayList<FoodItem>) response;
+                    Log.d("myTag", "search response size "+searchedList.size());
                     listItemsAdapter.setList(searchedList, text);
                 }
                 else{
+                    Log.d("myTag", "search not found  ");
                     searchedList = new ArrayList<>();
+                    listItemsAdapter.setList(searchedList,"");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
-                    Log.d("myTag", "Error "+error);
-                    Log.d("myTag", "Error " + new String(error.networkResponse.data));
-                    Log.d("myTag", "Error " + error.networkResponse.statusCode);
+                    Log.d("myTag", "Error in search "+error);
+                    Log.d("myTag", "Error data in search " + new String(error.networkResponse.data));
+                    Log.d("myTag", "Error code in search " + error.networkResponse.statusCode);
                 }catch (Exception e){
                     Log.d("myTag", "onErrorResponse: error "+e);
                 }
+                searchedList = new ArrayList<>();
+                listItemsAdapter.setList(searchedList,text);
             }
         });
-        listItemsAdapter.setList(searchedList,text);
     }
 
 }

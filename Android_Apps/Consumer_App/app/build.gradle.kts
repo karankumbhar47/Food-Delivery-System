@@ -1,3 +1,5 @@
+import org.openapitools.generator.gradle.plugin.extensions.OpenApiGeneratorGenerateExtension
+
 plugins {
     id("com.android.application")
     id("org.openapi.generator")
@@ -53,6 +55,7 @@ openApiGenerate {
     apiPackage.set("com.openapi.deliveryApp.api")
     invokerPackage.set("com.openapi.deliveryApp.invoker")
     modelPackage.set("com.openapi.deliveryApp.model")
+    typeMappings.set(mapOf("number" to "Float"))
     configOptions.set(mapOf("dateLibrary" to "java8"))
 }
 
@@ -86,3 +89,4 @@ dependencies {
     implementation("io.reactivex.rxjava2:rxandroid:2.0.2")
     implementation("io.reactivex.rxjava2:rxjava:2.1.13")
 }
+

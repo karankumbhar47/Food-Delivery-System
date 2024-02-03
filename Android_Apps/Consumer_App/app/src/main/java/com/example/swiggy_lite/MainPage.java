@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+
 public class MainPage extends AppCompatActivity {
     public static final int YOUR_REQUEST_CODE = 409;
     public static final int FRAGMENT_ITEM_DETAILS = 5;
@@ -45,6 +46,7 @@ public class MainPage extends AppCompatActivity {
 
         Intent intent = getIntent();
         sessionId = intent.getStringExtra(AppConstants.KEY_SESSION_ID);
+
 
         OrderModel orderModel = OrderModel.retrieveFromSharedPreferences(this);
         List<OrderItem> orderItemList = (orderModel == null) ? new ArrayList<>() : orderModel.getOrderDetails();

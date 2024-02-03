@@ -68,8 +68,8 @@ public class HistoryDetailsFragment extends Fragment {
         BigDecimal sum = BigDecimal.ZERO; // Initialize sum as BigDecimal.ZERO
 
         for (com.openapi.deliveryApp.model.OrderItem foodmodel : list) {
-            BigDecimal itemTotal = foodmodel.getPrice().multiply(BigDecimal.valueOf(foodmodel.getQuantity()));
-            sum = sum.add(itemTotal);
+//            BigDecimal itemTotal = foodmodel.getPrice().multiply(BigDecimal.valueOf(foodmodel.getQuantity()));
+//            sum = sum.add(itemTotal);
         }
 
         return sum;

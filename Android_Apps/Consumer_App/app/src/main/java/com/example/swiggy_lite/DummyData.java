@@ -4,7 +4,6 @@ import com.example.swiggy_lite.models.OrderModel;
 import com.openapi.deliveryApp.model.FoodItemFull;
 import com.openapi.deliveryApp.model.OrderItem;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,51 +22,51 @@ public class DummyData {
 
     public static List<FoodItemFull> getDummyFoodItemList() {
         return Arrays.asList(
-               createDummyFoodItem("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5zA", "Delicious Pizza", "pizza_thumbnail.jpg", BigDecimal.valueOf(15.99), "Pizzeria Uno", "New York", BigDecimal.valueOf(4.5), true, 5,
+               createDummyFoodItem("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5zA", "Delicious Pizza", "pizza_thumbnail.jpg", 15.99f, "Pizzeria Uno", "New York", 4.5f, true, 5,
                        Arrays.asList("pizza_image_1.jpg", "pizza_image_2.jpg"), Arrays.asList("Italian", "Pizza")),
-               createDummyFoodItem("BcDeFgHiJkLmNoPqRsTuVwXyZa0123456789bcdefghijk", "Burger Bonanza", "burger_thumbnail.jpg", BigDecimal.valueOf(12.49), "Burger Shack", "Los Angeles", BigDecimal.valueOf(3.8), true, 7,
+               createDummyFoodItem("BcDeFgHiJkLmNoPqRsTuVwXyZa0123456789bcdefghijk", "Burger Bonanza", "burger_thumbnail.jpg", 12.49f, "Burger Shack", "Los Angeles", 3.8f, true, 7,
                        Arrays.asList("burger_image_1.jpg", "burger_image_2.jpg"), Arrays.asList("Fast Food", "Burger")),
-               createDummyFoodItem("C123456789012345678901234567890123456789C", "Sushi Delight", "sushi_thumbnail.jpg", BigDecimal.valueOf(24.99), "Tokyo Sushi", "Tokyo", BigDecimal.valueOf(4.7), true, 4,
+               createDummyFoodItem("C123456789012345678901234567890123456789C", "Sushi Delight", "sushi_thumbnail.jpg", 24.99f, "Tokyo Sushi", "Tokyo", 4.7f, true, 4,
                        Arrays.asList("sushi_image_1.jpg", "sushi_image_2.jpg"), Arrays.asList("Japanese", "Sushi")),
-               createDummyFoodItem("D23456789012345678901234567890123456789D", "Healthy Salad", "salad_thumbnail.jpg", BigDecimal.valueOf(9.99), "Green Eats", "San Francisco", BigDecimal.valueOf(4.2), true, 10,
+               createDummyFoodItem("D23456789012345678901234567890123456789D", "Healthy Salad", "salad_thumbnail.jpg", 9.99f, "Green Eats", "San Francisco", 4.2f, true, 10,
                        Arrays.asList("salad_image_1.jpg", "salad_image_2.jpg"), Arrays.asList("Vegetarian", "Salad")),
-               createDummyFoodItem("E3456789012345678901234567890123456789E", "Mexican Fiesta", "mexican_thumbnail.jpg", BigDecimal.valueOf(18.99), "Hola Amigos", "Mexico City", BigDecimal.valueOf(4.6), true, 6,
+               createDummyFoodItem("E3456789012345678901234567890123456789E", "Mexican Fiesta", "mexican_thumbnail.jpg", 18.99f, "Hola Amigos", "Mexico City", 4.6f, true, 6,
                        Arrays.asList("mexican_image_1.jpg", "mexican_image_2.jpg"), Arrays.asList("Mexican", "Tacos")),
-               createDummyFoodItem("F45678901234567890123456789012345678901F", "Classic Pasta", "pasta_thumbnail.jpg", BigDecimal.valueOf(14.99), "Nonna's Kitchen", "Rome", BigDecimal.valueOf(4.4), true, 8,
+               createDummyFoodItem("F45678901234567890123456789012345678901F", "Classic Pasta", "pasta_thumbnail.jpg", 14.99f, "Nonna's Kitchen", "Rome", 4.4f, true, 8,
                        Arrays.asList("pasta_image_1.jpg", "pasta_image_2.jpg"), Arrays.asList("Italian", "Pasta")),
-               createDummyFoodItem("G56789012345678901234567890123456789012G", "Seafood Extravaganza", "seafood_thumbnail.jpg", BigDecimal.valueOf(29.99), "Ocean Delights", "Sydney", BigDecimal.valueOf(4.9), true, 3,
+               createDummyFoodItem("G56789012345678901234567890123456789012G", "Seafood Extravaganza", "seafood_thumbnail.jpg", 29.99f, "Ocean Delights", "Sydney", 4.9f, true, 3,
                        Arrays.asList("seafood_image_1.jpg", "seafood_image_2.jpg"), Arrays.asList("Seafood", "Exotic")),
-               createDummyFoodItem("H67890123456789012345678901234567890123H", "Vegetarian Delight", "vegetarian_thumbnail.jpg", BigDecimal.valueOf(11.99), "Green Bites", "Berlin", BigDecimal.valueOf(4.1), true, 12,
+               createDummyFoodItem("H67890123456789012345678901234567890123H", "Vegetarian Delight", "vegetarian_thumbnail.jpg", 11.99f, "Green Bites", "Berlin", 4.1f, true, 12,
                        Arrays.asList("vegetarian_image_1.jpg", "vegetarian_image_2.jpg"), Arrays.asList("Vegetarian", "Healthy")),
-               createDummyFoodItem("I78901234567890123456789012345678901234I", "Mediterranean Feast", "mediterranean_thumbnail.jpg", BigDecimal.valueOf(21.99), "Olive Garden", "Athens", BigDecimal.valueOf(4.8), true, 5,
+               createDummyFoodItem("I78901234567890123456789012345678901234I", "Mediterranean Feast", "mediterranean_thumbnail.jpg", 21.99f, "Olive Garden", "Athens", 4.8f, true, 5,
                        Arrays.asList("mediterranean_image_1.jpg", "mediterranean_image_2.jpg"), Arrays.asList("Mediterranean", "Gourmet")),
-               createDummyFoodItem("J89012345678901234567890123456789012345J", "Indian Spice Express", "indian_thumbnail.jpg", BigDecimal.valueOf(16.99), "Spice Route", "Mumbai", BigDecimal.valueOf(4.3), true, 9,
+               createDummyFoodItem("J89012345678901234567890123456789012345J", "Indian Spice Express", "indian_thumbnail.jpg", 16.99f, "Spice Route", "Mumbai", 4.3f, true, 9,
                        Arrays.asList("indian_image_1.jpg", "indian_image_2.jpg"), Arrays.asList("Indian", "Spicy")),
-               createDummyFoodItem("K90123456789012345678901234567890123456K", "Dessert Paradise", "dessert_thumbnail.jpg", BigDecimal.valueOf(8.99), "Sweet Haven", "Paris", BigDecimal.valueOf(4.0), true, 15,
+               createDummyFoodItem("K90123456789012345678901234567890123456K", "Dessert Paradise", "dessert_thumbnail.jpg", 8.99f, "Sweet Haven", "Paris", 4.0f, true, 15,
                        Arrays.asList("dessert_image_1.jpg", "dessert_image_2.jpg"), Arrays.asList("Dessert", "Sweet")),
-               createDummyFoodItem("L01234567890123456789012345678901234567L", "Vegan Delight", "vegan_thumbnail.jpg", BigDecimal.valueOf(13.99), "Green Eats", "San Francisco", BigDecimal.valueOf(4.6), true, 8,
+               createDummyFoodItem("L01234567890123456789012345678901234567L", "Vegan Delight", "vegan_thumbnail.jpg", 13.99f, "Green Eats", "San Francisco", 4.6f, true, 8,
                        Arrays.asList("vegan_image_1.jpg", "vegan_image_2.jpg"), Arrays.asList("Vegan", "Healthy")),
-               createDummyFoodItem("M12345678901234567890123456789012345678M", "BBQ Extravaganza", "bbq_thumbnail.jpg", BigDecimal.valueOf(22.99), "Smokehouse Grill", "Texas", BigDecimal.valueOf(4.7), true, 6,
+               createDummyFoodItem("M12345678901234567890123456789012345678M", "BBQ Extravaganza", "bbq_thumbnail.jpg", 22.99f, "Smokehouse Grill", "Texas", 4.7f, true, 6,
                        Arrays.asList("bbq_image_1.jpg", "bbq_image_2.jpg"), Arrays.asList("Barbecue", "Grill")),
-               createDummyFoodItem("N23456789012345678901234567890123456789N", "Asian Fusion", "asian_thumbnail.jpg", BigDecimal.valueOf(17.99), "Wok & Roll", "Tokyo", BigDecimal.valueOf(4.3), true, 10,
+               createDummyFoodItem("N23456789012345678901234567890123456789N", "Asian Fusion", "asian_thumbnail.jpg", 17.99f, "Wok & Roll", "Tokyo", 4.3f, true, 10,
                        Arrays.asList("asian_image_1.jpg", "asian_image_2.jpg"), Arrays.asList("Asian", "Fusion")),
-               createDummyFoodItem("O34567890123456789012345678901234567890O", "Mouthwatering Pies", "pies_thumbnail.jpg", BigDecimal.valueOf(10.99), "Pie Paradise", "London", BigDecimal.valueOf(4.2), true, 12,
+               createDummyFoodItem("O34567890123456789012345678901234567890O", "Mouthwatering Pies", "pies_thumbnail.jpg", 10.99f, "Pie Paradise", "London", 4.2f, true, 12,
                        Arrays.asList("pies_image_1.jpg", "pies_image_2.jpg"), Arrays.asList("Dessert", "Pies")),
-               createDummyFoodItem("P45678901234567890123456789012345678901P", "Exotic Smoothies", "smoothies_thumbnail.jpg", BigDecimal.valueOf(8.49), "Tropical Blends", "Hawaii", BigDecimal.valueOf(4.5), true, 15,
+               createDummyFoodItem("P45678901234567890123456789012345678901P", "Exotic Smoothies", "smoothies_thumbnail.jpg", 8.49f, "Tropical Blends", "Hawaii", 4.5f, true, 15,
                        Arrays.asList("smoothies_image_1.jpg", "smoothies_image_2.jpg"), Arrays.asList("Beverages", "Smoothies")),
-               createDummyFoodItem("Q56789012345678901234567890123456789012Q", "Gourmet Burgers", "gourmet_burgers_thumbnail.jpg", BigDecimal.valueOf(19.99), "Epic Burger Co.", "Chicago", BigDecimal.valueOf(4.8), true, 7,
+               createDummyFoodItem("Q56789012345678901234567890123456789012Q", "Gourmet Burgers", "gourmet_burgers_thumbnail.jpg", 19.99f, "Epic Burger Co.", "Chicago", 4.8f, true, 7,
                        Arrays.asList("gourmet_burgers_image_1.jpg", "gourmet_burgers_image_2.jpg"), Arrays.asList("Gourmet", "Burgers")),
-               createDummyFoodItem("R67890123456789012345678901234567890123R", "Delightful Donuts", "donuts_thumbnail.jpg", BigDecimal.valueOf(7.99), "Sweet Treats", "New York", BigDecimal.valueOf(4.4), true, 20,
+               createDummyFoodItem("R67890123456789012345678901234567890123R", "Delightful Donuts", "donuts_thumbnail.jpg", 7.99f, "Sweet Treats", "New York", 4.4f, true, 20,
                        Arrays.asList("donuts_image_1.jpg", "donuts_image_2.jpg"), Arrays.asList("Dessert", "Donuts")),
-               createDummyFoodItem("S78901234567890123456789012345678901234S", "Fiesta Tamales", "tamales_thumbnail.jpg", BigDecimal.valueOf(15.99), "Mexican Fiesta", "Mexico City", BigDecimal.valueOf(4.6), true, 9,
+               createDummyFoodItem("S78901234567890123456789012345678901234S", "Fiesta Tamales", "tamales_thumbnail.jpg", 15.99f, "Mexican Fiesta", "Mexico City", 4.6f, true, 9,
                        Arrays.asList("tamales_image_1.jpg", "tamales_image_2.jpg"), Arrays.asList("Mexican", "Tamales")),
-               createDummyFoodItem("T89012345678901234567890123456789012345T", "Classic Ice Cream", "ice_cream_thumbnail.jpg", BigDecimal.valueOf(6.99), "Scoops & Swirls", "Paris", BigDecimal.valueOf(4.0), true, 25,
+               createDummyFoodItem("T89012345678901234567890123456789012345T", "Classic Ice Cream", "ice_cream_thumbnail.jpg", 6.99f, "Scoops & Swirls", "Paris", 4.0f, true, 25,
                        Arrays.asList("ice_cream_image_1.jpg", "ice_cream_image_2.jpg"), Arrays.asList("Dessert", "Ice Cream"))
                );
     }
 
-    private static FoodItemFull createDummyFoodItem(String itemId, String itemName, String thumbnailPicture, BigDecimal price,
-                                                    String vendorName, String vendorLocation, BigDecimal starRating, boolean isAvailable, int maxQuantity,
+    private static FoodItemFull createDummyFoodItem(String itemId, String itemName, String thumbnailPicture, Float price,
+                                                    String vendorName, String vendorLocation, Float starRating, boolean isAvailable, int maxQuantity,
                                                     List<String> imageUrls, List<String> tags) {
         FoodItemFull foodItem = new FoodItemFull();
         foodItem.setItemId(itemId);
@@ -115,7 +114,7 @@ public class DummyData {
         for (int i = 0; i < numberOfItems; i++) {
             FoodItemFull randomFoodItem = dummyFoodList.get(random.nextInt(dummyFoodList.size()));
             int quantity = random.nextInt(5) + 1; // Random quantity between 1 and 5
-            BigDecimal totalPrice = randomFoodItem.getPrice().multiply(BigDecimal.valueOf(quantity));
+            float totalPrice = randomFoodItem.getPrice()*quantity;
 
             OrderItem orderItem = new OrderItem();
             orderItem.setItemId(randomFoodItem.getItemId());

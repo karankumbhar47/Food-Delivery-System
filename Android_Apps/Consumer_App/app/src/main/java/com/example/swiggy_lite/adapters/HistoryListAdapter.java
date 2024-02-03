@@ -51,11 +51,10 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         OrderModel orderModel = orderedList.get(position);
-        BigDecimal sum = BigDecimal.ZERO; // Initialize sum as BigDecimal.ZERO
+        Float sum = 0f; // Initialize sum as BigDecimal.ZERO
 
         for (OrderItem foodModel : orderModel.getOrderDetails()) {
-            BigDecimal itemTotal = foodModel.getPrice().multiply(BigDecimal.valueOf(foodModel.getQuantity()));
-            sum = sum.add(itemTotal);
+            sum += foodModel.getPrice()*foodModel.getQuantity();
         }
 
         holder.order_date_textView.setText(String.format("%s, %s", orderModel.getDate(), orderModel.getTime()));
