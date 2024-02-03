@@ -3,11 +3,16 @@ import secrets
 import re
 import bcrypt
 import base64
-
+import random
 
 def generate_uid(length: int = 40):
     characters = string.ascii_letters + string.digits
     return ''.join(secrets.choice(characters) for _ in range(length))
+
+
+def generate_otp():
+    otp = random.randint(100000, 999999)
+    return otp 
 
 
 def username_is_valid(username: str) -> bool:

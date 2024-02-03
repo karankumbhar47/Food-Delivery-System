@@ -4,6 +4,7 @@ from typing import Tuple
 from typing import Union
 
 from openapi_server.models.delivery_accept_order_request import DeliveryAcceptOrderRequest  # noqa: E501
+from openapi_server.models.delivery_accept_order_post_request import DeliveryAcceptOrderPostRequest  # noqa: E501
 from openapi_server.models.delivery_drop_request import DeliveryDropRequest  # noqa: E501
 from openapi_server.models.food_item import FoodItem  # noqa: E501
 from openapi_server.models.food_item_full import FoodItemFull  # noqa: E501
@@ -59,14 +60,35 @@ def confirm_order(session_id, body):  # noqa: E501
     Confirm Order Delivery # noqa: E501
 
     :param session_id: 
-    :type session_id: str
+    :type  stringsession_id: str
     :param body: 
     :type body: str
 
     :rtype: Union[float, Tuple[float, int], Tuple[float, int, Dict[str, str]]
     """
 
-    return 'do some magic!'
+    if connexion.request.is_json:
+        body = Order.from_dict(connexion.request.get_json())  # noqa: E501
+        session_id = connexion.request.headers.get("sessionId")
+        verify_status = database.verify_session_id(session_id)
+        if verify_status is None:
+            return "Unauthorized", 401
+        _, userType = verify_status
+        if userType == "Consumer":
+            database.open()
+            while True:
+                otp = basicUtils.generate_otp()
+                if not database.check_exists(otp, "otp", "FoodOrder"):
+                    break
+            database.sqlCursor.execute(f'SELECT COUNT(*) FROM FoodOrder WHERE order_id = {body.order_id}')
+            result = database.sqlCursor.fetchone()
+            if result:
+                database.sqlCursor.execute(f'INSERT INTO FoodOrder (otp) VALUES ({otp});')
+                database.close()
+                return "OTP", otp 
+            database.close()
+            return  "Not Found", 404
+        return  "Unauthorized", 401
 
 
 def delivery_accept_order(session_id, delivery_accept_order_request=None):  # noqa: E501
@@ -83,7 +105,21 @@ def delivery_accept_order(session_id, delivery_accept_order_request=None):  # no
     """
     if connexion.request.is_json:
         delivery_accept_order_request = DeliveryAcceptOrderRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        session_id = connexion.request.headers.get("sessionId")
+        verify_status = database.verify_session_id(session_id)
+        if verify_status is None:
+            return "Unauthorized", 401
+        _, userType = verify_status
+        if userType == "Other":
+            database.open()
+            database.sqlCursor.execute(f'SELECT COUNT(*) FROM FoodOrder WHERE order_id = {delivery_accept_order_request.order_id}')
+            result = database.sqlCursor.fetchone()
+            database.close()
+            if result:
+                return "Accepted", 200
+            return "Not Found", 404
+        return "Unauthorized", 401
+    return "Not Found", 404
 
 
 def delivery_drop(session_id, delivery_drop_request=None):  # noqa: E501
@@ -92,7 +128,7 @@ def delivery_drop(session_id, delivery_drop_request=None):  # noqa: E501
      # noqa: E501
 
     :param session_id: Session ID of the delivery person
-    :type session_id: str
+    :type session_id: strBhilai, Chhattisgarh
     :param delivery_drop_request: 
     :type delivery_drop_request: dict | bytes
 
@@ -100,7 +136,21 @@ def delivery_drop(session_id, delivery_drop_request=None):  # noqa: E501
     """
     if connexion.request.is_json:
         delivery_drop_request = DeliveryDropRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+        session_id = connexion.request.headers.get("sessionId")
+        verify_status = database.verify_session_id(session_id)
+        if verify_status is None:
+            return "Unauthorized", 401
+        _, userType = verify_status
+        if userType == "Other":
+            database.open()
+            database.sqlCursor.execute(f'SELECT otp FROM FoodOrder WHERE order_id = {delivery_drop_request.order_id}')
+            result = database.sqlCursor.fetchone()
+            database.close()
+            if result == delivery_drop_request.otp:
+                return "Drop", 200
+            return "Incorrect OTP", 401
+        return "Unauthorized", 401
+    return  "Not Found", 404
 
 
 def delivery_pick(session_id, order_id):  # noqa: E501
@@ -110,12 +160,28 @@ def delivery_pick(session_id, order_id):  # noqa: E501
 
     :param session_id: Session ID of the delivery person
     :type session_id: str
-    :param order_id: ID of the order to be picked up
+    :para stringm order_id: ID of the order to be picked up
     :type order_id: str
-
-    :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    
+    
+    if connexion.request.is_json:
+        delivery_accept_order_post_request = DeliveryAcceptOrderPostRequest.from_dict(connexion.request.get_json())  # noqa: E501
+        session_id = connexion.request.headers.get("sessionId")
+        verify_status = database.verify_session_id(session_id)
+        if verify_status is None:
+            return ["Unauthorized"], 401
+        _, userType = verify_status
+        if userType == "Other":
+            database.open()
+            database.sqlCursor.execute(f'UPDATE FoodOrder SET status = "picked"  WHERE order_id = {delivery_accept_order_post_request.order_id};')
+            database.sqlCursor.execute(f'SELECT FoodOrder.items FROM FoodOrder INNER JOIN Vendor ON FoodOrder.vendor_id = Vendor.user_id WHERE  FoodOrder.delivery_person_id is NULL AND FoodOrder.status = Completed;')
+            result = database.sqlCursor.fetchall()
+            database.sqlCursor.execute(f'UPDATE  DeliveryPerson SET picked_up_items = picked_up_items || {result} WHERE user_id IN (SELECT user_id FROM Session WHERE session_id = {session_id});')
+            database.close()
+            return None, 200
+        return None, 401
+    return None, 403
 
 
 def delivery_view_accepted_orders(session_id):  # noqa: E501
@@ -128,26 +194,58 @@ def delivery_view_accepted_orders(session_id):  # noqa: E501
 
     :rtype: Union[List[Order], Tuple[List[Order], int], Tuple[List[Order], int, Dict[str, str]]
     """
-    return 'do some magic!'
+    if connexion.request.is_json:
+        session_id = connexion.request.headers.get("sessionId")
+        verify_status = database.verify_session_id(session_id)
+        if verify_status is None:
+            return ["Unauthorized"], 401
+        _, userType = verify_status
+        if userType == "Other":
+            database.open()
+            database.sqlCursor.execute(f'SELECT order_id FROM FoodOrder WHERE delivery_person_id IN (SELECT user_id FROM Session WHERE session_id = {session_id});')
+            result = database.sqlCursor.fetchall()
+            database.close()
+            if result:
+                return result
+            return [], 204 
+        return [], 401
+    return [], 403
 
 
-def delivery_view_waiting_orders(session_id):  # noqa: E501
+def delivery_view_waiting_orders():  # noqa: E501
     """View Waiting Orders
 
      # noqa: E501
+   6                             $ref: '#/components/schemas/orderId'
 
     :param session_id: Session ID of the delivery person
     :type session_id: str
 
     :rtype: Union[List[Order], Tuple[List[Order], int], Tuple[List[Order], int, Dict[str, str]]
     """
-    return 'do some magic!'
+    session_id = connexion.request.headers.get("sessionId")
+    verify_status = database.verify_session_id(session_id)
+    if verify_status is None:
+        return ["Unauthorized"], 401
+    _, userType = verify_status
+    if userType == "Other":
+        database.open()
+        database.sqlCursor.execute(f'SELECT FoodOrder.order_id, FoodOrder.consumer_id, FoodOrder.delivery_location, Vendor.location, FoodOrder.items FROM FoodOrder INNER JOIN Vendor ON FoodOrder.vendor_id = Vendor.user_id WHERE  FoodOrder.delivery_person_id is NULL AND FoodOrder.status = Completed;')
+        result = database.sqlCursor.fetchall()
+        database.close()
+        if result:
+            return Order(result)
+            # return (**Order(result))
+        return  [], 204
+    return ["Unauthorized"], 401
+
 
 
 def get_file():  # noqa: E501
     """Get file by file ID
 
-    Retrieve a file, typically an image, based on the provided file ID. # noqa: E501
+    Retrieve a file, typically an image   6                             $ref: '#/components/schemas/orderId'
+, based on the provided file ID. # noqa: E501
 
     :param file_id: ID of the file to retrieve
     :type file_id: str
@@ -190,7 +288,6 @@ def get_product(id_):  # noqa: E501
     :rtype: Union[FoodItemFull, Tuple[FoodItemFull, int], Tuple[FoodItemFull, int, Dict[str, str]]
     """
     database.init()
-
     query = '''
         SELECT Catalog.item_id, Catalog.item_name, Catalog.thumbnail_picture, Catalog.price,
             Vendor.username, Vendor.location, Catalog.current_rating, Catalog.is_available,
