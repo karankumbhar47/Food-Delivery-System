@@ -1,9 +1,5 @@
 package com.example.swiggy_lite.Cart_Fragment;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,22 +14,55 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.swiggy_lite.MainPage;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.swiggy_lite.LoadingDialog;
+import com.example.swiggy_lite.MasterActivity;
 import com.example.swiggy_lite.R;
+import com.example.swiggy_lite.models.OrderModel;
+import com.openapi.deliveryApp.api.DefaultApi;
+import com.openapi.deliveryApp.model.OrderItem;
+import com.openapi.deliveryApp.model.PlaceOrderRequest;
+import com.openapi.deliveryApp.model.PlaceOrderRequestItemCartInner;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class SelectAddressFragment extends Fragment {
+    public interface OrderCallback {
+        void onOrderPlaced(String orderId);
+        void onOrderPlacementError(int statusCode, String errorMessage);
+    }
+
     private EditText khanar_room, indravati_room , shivnath_room;
     private Spinner academic_areas;
-    private String Address;
+    public String Address;
     private CardView place_order;
     private RadioGroup radioGroup;
+    private OrderModel orderModel;
+    private DefaultApi api;
+    private LoadingDialog loadingDialog;
+
+    public SelectAddressFragment(OrderModel orderModel){
+        this.orderModel = orderModel;
+    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_select_address, container, false);
         {
+            api = new DefaultApi();
+            loadingDialog = new LoadingDialog(requireActivity());
             radioGroup = view.findViewById(R.id.radioGroup);
             khanar_room = view.findViewById(R.id.khanar_room_picker_editText);
             indravati_room = view.findViewById(R.id.indravati_room_picker_editText);
@@ -109,12 +138,21 @@ public class SelectAddressFragment extends Fragment {
                 LottieAnimationView animationView = viewOrder.findViewById(R.id.lottieAnimation);
                 animationView.playAnimation();
 
+
+                Date currentDate = new Date();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
+
+                orderModel.setDeliveryAddress(this.Address);
+                orderModel.setDate(dateFormat.format(currentDate));
+                orderModel.setTime(timeFormat.format(currentDate));
+
                 builder.setView(viewOrder)
                         .setTitle("Order Placed Successfully")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(requireContext(), MainPage.class));
+                                startActivity(new Intent(requireContext(),MasterActivity.class));
                                 dialog.dismiss();
                             }
                         });
@@ -165,6 +203,44 @@ public class SelectAddressFragment extends Fragment {
             }
         }
         return false;
+    }
+
+
+    public void placeOrder(String sessionId, Map<String, Integer> items, final OrderCallback callback) {
+        PlaceOrderRequest placeOrderRequest = new PlaceOrderRequest();
+        placeOrderRequest.setItemCart(getItemList(orderModel.getOrderDetails()));
+        placeOrderRequest.setLocation(orderModel.getDeliveryAddress());
+        loadingDialog.startLoadingDialog();
+        api.placeOrder(sessionId, placeOrderRequest, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.onOrderPlaced(response.trim().toString().substring(1,41));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    int statusCode = error.networkResponse.statusCode;
+                    String data = new String(error.networkResponse.data);
+                    callback.onOrderPlacementError(statusCode, data.trim().substring(1,41));;
+                    loadingDialog.dismissDialog();
+                } catch (Exception e) {
+                    callback.onOrderPlacementError(0, null);
+                    loadingDialog.dismissDialog();
+                }
+            }
+        });
+    }
+
+    public List<PlaceOrderRequestItemCartInner> getItemList(List<OrderItem> orderItemList){
+        List<PlaceOrderRequestItemCartInner> list = new ArrayList<>();
+        for(OrderItem orderItem : orderItemList) {
+             PlaceOrderRequestItemCartInner cartItem = new PlaceOrderRequestItemCartInner();
+             cartItem.setItemId(orderItem.getItemId());
+             cartItem.setQuantity(orderItem.getQuantity());
+             list.add(cartItem);
+        }
+        return list;
     }
 }
 

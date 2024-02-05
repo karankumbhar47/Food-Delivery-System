@@ -1,7 +1,6 @@
 package com.example.swiggy_lite;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.swiggy_lite.Common_Fragment.ItemDetailsFragment;
 import com.example.swiggy_lite.MainFragments.CartFragment;
 import com.example.swiggy_lite.MainFragments.HistoryFragment;
 import com.example.swiggy_lite.MainFragments.HomeFragment;
@@ -23,48 +21,28 @@ import com.openapi.deliveryApp.model.FoodItemFull;
 import com.openapi.deliveryApp.model.OrderItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-public class MainPage extends AppCompatActivity {
-    public static final int YOUR_REQUEST_CODE = 409;
-    public static final int FRAGMENT_ITEM_DETAILS = 5;
+public class MasterActivity extends AppCompatActivity {
     public static BottomNavigationView bottomNavigationBar;
-    public static final String EXTRA_FRAGMENT_ID = "fragment_id";
-    private boolean isFragmentLoaded = false;
-    private String sessionId;
-    public static Map<String, OrderItem> orderItemMap;
-
+    public static Map<String, OrderItem> itemCart;
+    public static final String TAG = "myTag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+        itemCart = new HashMap<>();
 
-        Intent intent = getIntent();
-        sessionId = intent.getStringExtra(AppConstants.KEY_SESSION_ID);
+        Log.d(TAG, "onCreate: ");
+        //Log.d("myTag", "map main activity "+ MasterActivity.logMapEntries());
 
-
-        OrderModel orderModel = OrderModel.retrieveFromSharedPreferences(this);
-        List<OrderItem> orderItemList = (orderModel == null) ? new ArrayList<>() : orderModel.getOrderDetails();
-        Log.d("myTag", "size "+orderItemList.size());
-        orderItemMap = orderItemList.stream().collect(Collectors.toMap(OrderItem::getItemId, Function.identity()));
-
-        try {
-            if (FRAGMENT_ITEM_DETAILS == intent.getIntExtra(EXTRA_FRAGMENT_ID, 0)) {
-                if (intent.getStringExtra(AppConstants.KEY_ITEM_ID) != null) {
-                    load(new ItemDetailsFragment(intent.getStringExtra(AppConstants.KEY_ITEM_ID)));
-                    isFragmentLoaded = true;
-                }
-            }
-        } catch (Exception e) {}
-
-        if (!isFragmentLoaded) {
-            load(new HomeFragment());
-        }
+        load(new HomeFragment());
 
         bottomNavigationBar = findViewById(R.id.bottom_navigation_bar);
 
@@ -82,7 +60,6 @@ public class MainPage extends AppCompatActivity {
             return true;
         });
     }
-
 
     public void load(Fragment fragment) {
         FragmentManager fragmentManager = this.getSupportFragmentManager();
@@ -121,36 +98,83 @@ public class MainPage extends AppCompatActivity {
                 .show();
     }
 
-    public static void addToCart(FoodItemFull item, int quantity) {
-        if (orderItemMap.get(item.getItemId()) == null && quantity>0) {
+    public static void addToCart(FoodItemFull item, int quantity, boolean isIncrease) {
+        if (itemCart.get(item.getItemId()) == null && isIncrease) {
             OrderItem orderItem = new OrderItem();
             orderItem.setItemName(item.getItemName());
             orderItem.setPrice(item.getPrice());
             orderItem.setItemId(item.getItemId());
             orderItem.setQuantity(quantity);
-            orderItemMap.put(item.getItemId(), orderItem);
+            Log.d("myTag", "initial quan "+quantity);
+            itemCart.put(item.getItemId(), orderItem);
         } else {
-            OrderItem orderItem = orderItemMap.get(item.getItemId());
+            OrderItem orderItem = itemCart.get(item.getItemId());
             if (quantity <= 0) {
-                orderItemMap.remove(item.getItemId());
+                itemCart.remove(item.getItemId());
+                //Log.d("myTag", "remove "+item.getItemId());
+                Log.d("myTag", "size in cart "+itemCart.size());
             } else {
                 orderItem.setQuantity(quantity);
-                orderItemMap.put(orderItem.getItemId(), orderItem);
+                itemCart.put(orderItem.getItemId(), orderItem);
+                //Log.d("myTag", "add "+orderItem.getQuantity()+ " "+orderItem.getItemId());
+                Log.d("myTag", "size in cart "+itemCart.size());
             }
         }
     }
 
     public static void addToCart(OrderItem item, int quantity) {
         if (quantity <= 0) {
-            orderItemMap.remove(item.getItemId());
+            itemCart.remove(item.getItemId());
+            Log.d("myTag", "size in cart "+itemCart.size());
         } else {
-            orderItemMap.put(item.getItemId(), item);
+            itemCart.put(item.getItemId(), item);
+            Log.d("myTag", "size in cart "+itemCart.size());
         }
     }
 
     @Override
     protected void onStop() {
-        OrderModel.saveToSharedPreferences(this,orderItemMap);
+        SharedPreferences prefCart = getSharedPreferences(AppConstants.PREF_CART_INFO, MODE_PRIVATE);
+        SharedPreferences.Editor editorCart = prefCart.edit();
+        Log.d("myTag", "onStop:cart flag previous"+prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,false));
+        if(!prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,false)){
+            OrderModel.saveToSharedPreferences(this, itemCart);
+            editorCart.putBoolean(AppConstants.KEY_IS_DATA_CHANGED,true);
+            editorCart.apply();
+        }
+        Log.d("myTag", "onStop:cart flag after "+prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,false));
         super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+//        SharedPreferences prefCart = getSharedPreferences(AppConstants.PREF_CART_INFO, MODE_PRIVATE);
+//        SharedPreferences.Editor editorCart = prefCart.edit();
+//        Log.d(TAG, "onStart: cart flag previous  "+prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,true));
+//        if(prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,true)){
+//            OrderModel orderModel = OrderModel.retrieveFromSharedPreferences(MasterActivity.this);
+//            List<OrderItem> orderItemList = (orderModel == null) ? new ArrayList<>() : orderModel.getOrderDetails();
+//            MasterActivity.itemCart = orderItemList.stream().collect(Collectors.toMap(OrderItem::getItemId, Function.identity()));
+//            editorCart.putBoolean(AppConstants.KEY_IS_DATA_CHANGED,false);
+//            editorCart.apply();
+//        }
+//        Log.d(TAG, "onStart: cart flag after "+prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,true));
+        super.onStart();
+    }
+
+    public static String logMapEntries() {
+        StringBuilder logMessage = new StringBuilder("Map Entries: {");
+        for (Map.Entry<String, OrderItem> entry : itemCart.entrySet()) {
+            logMessage.append(entry.getKey())
+                    .append(" = ")
+                    .append(entry.getValue().getItemName())
+                    .append(" ==> ")
+                    .append(entry.getValue().getQuantity())
+                    .append(", ");
+        }
+        if (itemCart.size() > 0) { logMessage.setLength(logMessage.length() - 2); }
+        logMessage.append("}");
+        System.out.println(logMessage.toString());
+        return logMessage.toString();
     }
 }

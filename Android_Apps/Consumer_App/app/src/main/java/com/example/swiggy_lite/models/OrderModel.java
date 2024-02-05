@@ -2,6 +2,7 @@ package com.example.swiggy_lite.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.swiggy_lite.AppConstants;
 import com.google.gson.Gson;
@@ -67,8 +68,9 @@ public class OrderModel extends Order {
     }
 
     public static void saveToSharedPreferences(Context context, Map<String, OrderItem> map) {
-        SharedPreferences prefData = context.getSharedPreferences(AppConstants.PREF_CART_INFO, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefData.edit();
+        Log.d("myTag", "Saving ...");
+        SharedPreferences prefCart = context.getSharedPreferences(AppConstants.PREF_CART_INFO, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefCart.edit();
         Gson gson = new Gson();
         String deviceModelJson;
 
@@ -87,9 +89,14 @@ public class OrderModel extends Order {
             }
         }
 
-        List<OrderItem> listCurrent = new ArrayList<>(map.values());
-        orderModel.setOrderDetails(Stream.concat(listPrevious.stream(), listCurrent.stream())
-                .collect(Collectors.toList()));
+        if(map!=null && !map.isEmpty()) {
+            List<OrderItem> listCurrent = new ArrayList<>(map.values());
+            orderModel.setOrderDetails(Stream.concat(listPrevious.stream(), listCurrent.stream())
+                    .collect(Collectors.toList()));
+        }
+        else{
+            orderModel.setOrderDetails(listPrevious);
+        }
 
         deviceModelJson = gson.toJson(orderModel);
         editor.putString(AppConstants.KEY_CURRENT_CART, deviceModelJson);
@@ -97,8 +104,9 @@ public class OrderModel extends Order {
     }
 
     public static OrderModel retrieveFromSharedPreferences(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(AppConstants.PREF_CART_INFO, Context.MODE_PRIVATE);
-        String deviceModelJson = preferences.getString(AppConstants.KEY_CURRENT_CART, null);
+        Log.d("myTag", "retrieving ..");
+        SharedPreferences prefCart = context.getSharedPreferences(AppConstants.PREF_CART_INFO, Context.MODE_PRIVATE);
+        String deviceModelJson = prefCart.getString(AppConstants.KEY_CURRENT_CART, null);
 
         if (deviceModelJson!=null) {
             Gson gson = new Gson();

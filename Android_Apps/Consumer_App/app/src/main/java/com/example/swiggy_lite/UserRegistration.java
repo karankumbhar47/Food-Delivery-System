@@ -93,7 +93,7 @@ public class UserRegistration extends AppCompatActivity {
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(UserRegistration.this, MainPage.class);
+                                        Intent intent = new Intent(UserRegistration.this, MasterActivity.class);
                                         startActivity(intent);
                                         finish();
                                         dialog.dismiss();
