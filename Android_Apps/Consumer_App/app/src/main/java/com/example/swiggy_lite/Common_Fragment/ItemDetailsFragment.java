@@ -163,10 +163,13 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
             public void onClick(View v) {
                 int currentValue = Integer.parseInt(numberText.getText().toString());
                 currentValue += 1;
-                if (currentValue < Integer.MAX_VALUE) {
+                if (currentValue <= foodItemFull.getMaxQuantity()) {
                     animateNumberChange(currentValue, true);
                     added_items_status.setText(String.format("%d %s added", currentValue, currentValue == 1 ? " item " : " items "));
                     MasterActivity.addToCart(foodItemFull,currentValue,true);
+                }
+                else{
+                    Toast.makeText(requireContext(),"Max Quantity Reached",Toast.LENGTH_SHORT).show();
                 }
             }
         });

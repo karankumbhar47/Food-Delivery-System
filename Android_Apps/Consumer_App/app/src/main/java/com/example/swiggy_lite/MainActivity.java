@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.swiggy_lite.Interface.RegistrationCallback;
+import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.example.swiggy_lite.models.OrderModel;
 import com.openapi.deliveryApp.api.DefaultApi;
 import com.openapi.deliveryApp.model.LoginRequest;
@@ -167,8 +168,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onStart: cart flag previous  "+prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,true));
         if(prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,true)){
             OrderModel orderModel = OrderModel.retrieveFromSharedPreferences(MainActivity.this);
-            List<OrderItem> orderItemList = (orderModel == null) ? new ArrayList<>() : orderModel.getOrderDetails();
-            MasterActivity.itemCart = orderItemList.stream().collect(Collectors.toMap(OrderItem::getItemId, Function.identity()));
+            List<OrderItemAdvanced> orderItemList = (orderModel == null) ? new ArrayList<>() : (orderModel.getOrderItemAdvanced()!=null ? orderModel.getOrderItemAdvanced()  : new ArrayList<>());
+            MasterActivity.itemCart = orderItemList.stream().collect(Collectors.toMap(OrderItemAdvanced::getItemId, Function.identity()));
             editorCart.putBoolean(AppConstants.KEY_IS_DATA_CHANGED,false);
             editorCart.apply();
         }

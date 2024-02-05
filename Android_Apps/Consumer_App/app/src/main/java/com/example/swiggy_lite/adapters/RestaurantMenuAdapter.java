@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.swiggy_lite.MasterActivity;
 import com.example.swiggy_lite.R;
+import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.openapi.deliveryApp.model.FoodItemFull;
 import com.openapi.deliveryApp.model.OrderItem;
 
@@ -25,7 +26,7 @@ import java.util.Map;
 public class RestaurantMenuAdapter extends RecyclerView.Adapter<RestaurantMenuAdapter.viewHolder> {
     Context context;
     List<FoodItemFull> menuList;
-    Map<String,OrderItem> orderItemMap;
+    Map<String, OrderItemAdvanced> orderItemMap;
     private static RestaurantMenuAdapter.OnItemClickListener listener;
 
     public RestaurantMenuAdapter(List<FoodItemFull> items, Context context) {
