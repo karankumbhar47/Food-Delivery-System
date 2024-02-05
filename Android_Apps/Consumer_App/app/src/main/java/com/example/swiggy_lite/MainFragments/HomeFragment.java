@@ -21,8 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.swiggy_lite.AppConstants;
@@ -91,17 +93,34 @@ public class HomeFragment extends Fragment {
         });
         recommendation_recyclerView.setAdapter(recommendationAdapter);
 
-        food_item_searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
+//        search_bar_cardView.setOnClickListener(v -> {
+//            Intent intent = new Intent(requireActivity(), SearchActivity.class);
+//            startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
+//        });
+
+        setSearchViewOnClickListener(food_item_searchView,new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSearch(v);
             }
         });
+//
+//        food_item_searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                Intent intent = new Intent(requireActivity(), SearchActivity.class);
+//                startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                Intent intent = new Intent(requireActivity(), SearchActivity.class);
+//                startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
+//                return true;
+//            }
+//        });
 
-        search_bar_cardView.setOnClickListener(v -> {
-            Intent intent = new Intent(requireActivity(), SearchActivity.class);
-            startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
-        });
 
         filter_button.setOnClickListener(v -> {
             BottomSheetDialogFragment filter_fragment = new MainFilterFragment(filter_button);
@@ -202,6 +221,30 @@ public class HomeFragment extends Fragment {
             if (resultCode == RESULT_OK && data != null) {
                 String resultData = data.getStringExtra(AppConstants.KEY_ITEM_ID);
                 load(new ItemDetailsFragment(resultData));
+            }
+        }
+    }
+
+    public void openSearch(View view) {
+        Intent intent = new Intent(requireActivity(), SearchActivity.class);
+        startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
+    }
+
+    public static void setSearchViewOnClickListener(View v, View.OnClickListener listener) {
+        if (v instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup)v;
+            int count = group.getChildCount();
+            for (int i = 0; i < count; i++) {
+                View child = group.getChildAt(i);
+                if (child instanceof LinearLayout || child instanceof RelativeLayout) {
+                    setSearchViewOnClickListener(child, listener);
+                }
+
+                if (child instanceof TextView) {
+                    TextView text = (TextView)child;
+                    text.setFocusable(false);
+                }
+                child.setOnClickListener(listener);
             }
         }
     }

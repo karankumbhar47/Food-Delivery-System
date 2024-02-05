@@ -1,5 +1,6 @@
 package com.example.swiggy_lite;
 
+import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.example.swiggy_lite.models.OrderModel;
 import com.openapi.deliveryApp.model.FoodItem;
 import com.openapi.deliveryApp.model.FoodItemFull;
@@ -167,23 +168,24 @@ public class DummyData {
         );
     }
 
-    private static List<OrderItem> getRandomOrderItems() {
+    private static List<OrderItemAdvanced> getRandomOrderItems() {
         List<FoodItemFull> dummyFoodList = getDummyFoodItemList();
         Random random = new Random();
 
         int numberOfItems = random.nextInt(dummyFoodList.size()) + 1;
-        List<OrderItem> orderItems = new ArrayList<>();
+        List<OrderItemAdvanced> orderItems = new ArrayList<>();
 
         for (int i = 0; i < numberOfItems; i++) {
             FoodItemFull randomFoodItem = dummyFoodList.get(random.nextInt(dummyFoodList.size()));
             int quantity = random.nextInt(5) + 1; // Random quantity between 1 and 5
             float totalPrice = randomFoodItem.getPrice()*quantity;
 
-            OrderItem orderItem = new OrderItem();
+            OrderItemAdvanced orderItem = new OrderItemAdvanced();
             orderItem.setItemId(randomFoodItem.getItemId());
             orderItem.setItemName(randomFoodItem.getItemName());
             orderItem.setQuantity(quantity);
             orderItem.setPrice(totalPrice);
+            orderItem.setMaxQuantity(randomFoodItem.getMaxQuantity());
 
             orderItems.add(orderItem);
         }

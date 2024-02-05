@@ -8,12 +8,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.swiggy_lite.DummyData;
 import com.example.swiggy_lite.MainFragments.CartFragment;
@@ -78,8 +78,12 @@ public class RestaurantInfo extends Fragment {
             @Override
             public void onPlusClick(int position, int quantity) {
                 FoodItemFull foodModel = restaurantMenuList.get(position);
-                MasterActivity.addToCart(foodModel, quantity,true);
-                restaurantMenuAdapter.changeQuantityList();
+                if(foodModel.getMaxQuantity()>=quantity) {
+                    MasterActivity.addToCart(foodModel, quantity, true);
+                    restaurantMenuAdapter.changeQuantityList();
+                }else {
+                    Toast.makeText(requireContext(),"Max Quantity Reached",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

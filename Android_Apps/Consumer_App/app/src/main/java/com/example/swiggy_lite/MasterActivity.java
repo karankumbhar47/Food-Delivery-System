@@ -15,18 +15,21 @@ import com.example.swiggy_lite.MainFragments.CartFragment;
 import com.example.swiggy_lite.MainFragments.HistoryFragment;
 import com.example.swiggy_lite.MainFragments.HomeFragment;
 import com.example.swiggy_lite.MainFragments.SettingFragment;
+import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.example.swiggy_lite.models.OrderModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.openapi.deliveryApp.model.FoodItemFull;
 import com.openapi.deliveryApp.model.OrderItem;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class MasterActivity extends AppCompatActivity {
     public static BottomNavigationView bottomNavigationBar;
-    public static Map<String, OrderItem> itemCart;
+    public static Map<String, OrderItemAdvanced> itemCart;
     public static final String TAG = "myTag";
 
     @Override
@@ -87,16 +90,17 @@ public class MasterActivity extends AppCompatActivity {
     }
 
     public static void addToCart(FoodItemFull item, int quantity, boolean isIncrease) {
-        if (itemCart.get(item.getItemId()) == null && isIncrease) {
-            OrderItem orderItem = new OrderItem();
+        if (itemCart.get(item.getItemId()) == null && isIncrease && quantity<=item.getMaxQuantity()) {
+            OrderItemAdvanced orderItem = new OrderItemAdvanced();
             orderItem.setItemName(item.getItemName());
             orderItem.setPrice(item.getPrice());
             orderItem.setItemId(item.getItemId());
             orderItem.setQuantity(quantity);
+            orderItem.setMaxQuantity(item.getMaxQuantity());
             Log.d("myTag", "initial quan "+quantity);
             itemCart.put(item.getItemId(), orderItem);
         } else {
-            OrderItem orderItem = itemCart.get(item.getItemId());
+            OrderItemAdvanced orderItem = itemCart.get(item.getItemId());
             if (quantity <= 0) {
                 itemCart.remove(item.getItemId());
                 //Log.d("myTag", "remove "+item.getItemId());
@@ -110,7 +114,7 @@ public class MasterActivity extends AppCompatActivity {
         }
     }
 
-    public static void addToCart(OrderItem item, int quantity) {
+    public static void addToCart(OrderItemAdvanced item, int quantity) {
         if (quantity <= 0) {
             itemCart.remove(item.getItemId());
             Log.d("myTag", "size in cart "+itemCart.size());
@@ -126,7 +130,7 @@ public class MasterActivity extends AppCompatActivity {
         SharedPreferences.Editor editorCart = prefCart.edit();
         Log.d("myTag", "onStop:cart flag previous "+prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,false));
         if(!prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,false)){
-            OrderModel.saveToSharedPreferences(this, itemCart);
+            OrderModel.saveToSharedPreferences(this,itemCart);
             editorCart.putBoolean(AppConstants.KEY_IS_DATA_CHANGED,true);
             editorCart.apply();
         }
@@ -134,35 +138,22 @@ public class MasterActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    @Override
-    protected void onStart() {
-//        SharedPreferences prefCart = getSharedPreferences(AppConstants.PREF_CART_INFO, MODE_PRIVATE);
-//        SharedPreferences.Editor editorCart = prefCart.edit();
-//        Log.d(TAG, "onStart: cart flag previous  "+prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,true));
-//        if(prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,true)){
-//            OrderModel orderModel = OrderModel.retrieveFromSharedPreferences(MasterActivity.this);
-//            List<OrderItem> orderItemList = (orderModel == null) ? new ArrayList<>() : orderModel.getOrderDetails();
-//            MasterActivity.itemCart = orderItemList.stream().collect(Collectors.toMap(OrderItem::getItemId, Function.identity()));
-//            editorCart.putBoolean(AppConstants.KEY_IS_DATA_CHANGED,false);
-//            editorCart.apply();
+//    public static String logMapEntries() {
+//        StringBuilder logMessage = new StringBuilder("Map Entries: {");
+//        for (Map.Entry<String, OrderItem> entry : itemCart.entrySet()) {
+//            logMessage.append(entry.getKey())
+//                    .append(" = ")
+//                    .append(entry.getValue().getItemName())
+//                    .append(" ==> ")
+//                    .append(entry.getValue().getQuantity())
+//                    .append(", ");
 //        }
-//        Log.d(TAG, "onStart: cart flag after "+prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,true));
-        super.onStart();
-    }
+//        if (itemCart.size() > 0) { logMessage.setLength(logMessage.length() - 2); }
+//        logMessage.append("}");
+//        System.out.println(logMessage.toString());
+//        return logMessage.toString();
+//    }
 
-    public static String logMapEntries() {
-        StringBuilder logMessage = new StringBuilder("Map Entries: {");
-        for (Map.Entry<String, OrderItem> entry : itemCart.entrySet()) {
-            logMessage.append(entry.getKey())
-                    .append(" = ")
-                    .append(entry.getValue().getItemName())
-                    .append(" ==> ")
-                    .append(entry.getValue().getQuantity())
-                    .append(", ");
-        }
-        if (itemCart.size() > 0) { logMessage.setLength(logMessage.length() - 2); }
-        logMessage.append("}");
-        System.out.println(logMessage.toString());
-        return logMessage.toString();
-    }
+
+
 }

@@ -5,12 +5,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.window.OnBackInvokedDispatcher;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.swiggy_lite.R;
-import com.openapi.deliveryApp.model.OrderItem;
+import com.example.swiggy_lite.models.OrderItemAdvanced;
 
 import java.math.RoundingMode;
 import java.util.List;
@@ -21,10 +22,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewHolder> {
         void onPlusClick(int position, int quantity);
     }
 
-    List<OrderItem> foodItemList;
+    List<OrderItemAdvanced> foodItemList;
     private CartAdapter.OnItemClickListener listener;
 
-    public CartAdapter(List<OrderItem> items) {
+    public CartAdapter(List<OrderItemAdvanced> items) {
         foodItemList = items;
     }
 
@@ -32,7 +33,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewHolder> {
         listener = clickListener;
     }
 
-    public void setList(List<OrderItem> updateList){
+    public void setList(List<OrderItemAdvanced> updateList){
         this.foodItemList = updateList;
         notifyDataSetChanged();
     }
@@ -46,7 +47,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CartAdapter.viewHolder holder, int position) {
-        OrderItem singleItem = foodItemList.get(position);
+        OrderItemAdvanced singleItem = foodItemList.get(position);
         holder.name.setText(singleItem.getItemName());
         holder.price.setText(String.format("₹ %s", String.valueOf((singleItem.getPrice()*singleItem.getQuantity()))));
         //holder.vegFoodType.setVisibility(singleItem.isPureVeg() ? View.VISIBLE : View.GONE);

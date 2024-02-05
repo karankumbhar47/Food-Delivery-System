@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -27,6 +28,7 @@ import com.example.swiggy_lite.LoadingDialog;
 import com.example.swiggy_lite.MasterActivity;
 import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.adapters.CartAdapter;
+import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.example.swiggy_lite.models.OrderModel;
 import com.openapi.deliveryApp.model.OrderItem;
 
@@ -39,10 +41,9 @@ public class CartFragment extends Fragment {
     private static OrderModel orderModel;
     private EditText custom_tip_editText;
     private RecyclerView orderRecyclerView;
-    private SharedPreferences.Editor editor;
     private CartAdapter cartAdapter;
     private CardView back_to_add_button, select_address_button, title_card, empty_card;
-    private static List<OrderItem> orderedItemsList;
+    private static List<OrderItemAdvanced> orderedItemsList;
     private CheckBox tip_20_textView, tip_30_textView, tip_50_textView, tip_other_textView;
     private TextView item_total, delivery_fee, delivery_tip, GST_restaurant_charges, total_payment;
     private ConstraintLayout main_layout;
@@ -89,7 +90,7 @@ public class CartFragment extends Fragment {
             cartAdapter.setOnItemClickListener(new CartAdapter.OnItemClickListener() {
                 @Override
                 public void onMinusClick(int position, int quantity) {
-                    OrderItem foodModel = orderedItemsList.get(position);
+                    OrderItemAdvanced foodModel = orderedItemsList.get(position);
                     foodModel.setQuantity(quantity);
                     MasterActivity.addToCart(foodModel,quantity);
                     cartAdapter.setList(new ArrayList<>(MasterActivity.itemCart.values()));
@@ -98,11 +99,16 @@ public class CartFragment extends Fragment {
 
                 @Override
                 public void onPlusClick(int position, int quantity) {
-                    OrderItem foodModel = orderedItemsList.get(position);
-                    foodModel.setQuantity(quantity);
-                    MasterActivity.addToCart(foodModel,quantity);
-                    cartAdapter.setList(new ArrayList<>(MasterActivity.itemCart.values()));
-                    updateUI();
+                    OrderItemAdvanced foodModel = orderedItemsList.get(position);
+                    if(quantity<=foodModel.getMaxQuantity()) {
+                        foodModel.setQuantity(quantity);
+                        MasterActivity.addToCart(foodModel, quantity);
+                        cartAdapter.setList(new ArrayList<>(MasterActivity.itemCart.values()));
+                        updateUI();
+                    }
+                    else{
+                        Toast.makeText(requireContext(),"Only "+foodModel.getMaxQuantity()+" items are available", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             });
@@ -218,9 +224,9 @@ public class CartFragment extends Fragment {
         calculateTotalPayment();
     }
 
-    public int calculateItemTotal(List<OrderItem> list) {
+    public int calculateItemTotal(List<OrderItemAdvanced> list) {
         float sum = 0;
-        for (OrderItem foodModel : list) {
+        for (OrderItemAdvanced foodModel : list) {
             sum +=foodModel.getPrice()*foodModel.getQuantity();
         }
         return (int)sum;
