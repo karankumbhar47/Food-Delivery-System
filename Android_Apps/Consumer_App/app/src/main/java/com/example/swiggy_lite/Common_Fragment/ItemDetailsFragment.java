@@ -36,6 +36,7 @@ import com.example.swiggy_lite.adapters.CategoryAdapter;
 import com.example.swiggy_lite.adapters.ItemDetailsAdapter;
 import com.example.swiggy_lite.models.OrderModel;
 import com.openapi.deliveryApp.api.DefaultApi;
+import com.openapi.deliveryApp.model.FoodItem;
 import com.openapi.deliveryApp.model.FoodItemFull;
 import com.openapi.deliveryApp.model.OrderItem;
 
@@ -194,7 +195,7 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
         });
 
         recyclerView = view.findViewById(R.id.item_details_recyclerView);
-        adapter = new ItemDetailsAdapter(DummyData.dummyFoodList,requireContext());
+        adapter = new ItemDetailsAdapter(DummyData.dummyFood,requireContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL,false));
         ItemDetailsAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
@@ -269,9 +270,9 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
     }
 
     public void filteredList(String text) {
-        List<FoodItemFull> filteredList = new ArrayList<>();
-        for (FoodItemFull item: DummyData.dummyFoodList) {
-            if (item.getItemName().toLowerCase().contains(text.toLowerCase())) {
+        List<FoodItem> filteredList = new ArrayList<>();
+        for (FoodItem item: DummyData.dummyFood) {
+            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(item);
             }
             adapter.setList(filteredList);

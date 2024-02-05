@@ -76,13 +76,13 @@ public class HomeFragment extends Fragment {
         CategoryAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                load(new category_search());
+                load(new category_search(AppConstants.LIST_CATEGORY.get(position)));
             }
         });
 
         recommendation_recyclerView = view.findViewById(R.id.recommendation_recyclerView);
         recommendation_recyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(), RecyclerView.VERTICAL, false));
-        recommendationAdapter = new ItemDetailsAdapter(DummyData.dummyFoodList, this.requireContext());
+        recommendationAdapter = new ItemDetailsAdapter(DummyData.dummyFood, this.requireContext());
         ItemDetailsAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {

@@ -20,12 +20,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.openapi.deliveryApp.model.FoodItemFull;
 import com.openapi.deliveryApp.model.OrderItem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
 public class MasterActivity extends AppCompatActivity {
@@ -37,15 +33,12 @@ public class MasterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
-        itemCart = new HashMap<>();
-
-        Log.d(TAG, "onCreate: ");
-        //Log.d("myTag", "map main activity "+ MasterActivity.logMapEntries());
+        {
+            itemCart = new HashMap<>();
+            bottomNavigationBar = findViewById(R.id.bottom_navigation_bar);
+        }
 
         load(new HomeFragment());
-
-        bottomNavigationBar = findViewById(R.id.bottom_navigation_bar);
-
         bottomNavigationBar.setOnNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.home_menu) {
@@ -76,11 +69,6 @@ public class MasterActivity extends AppCompatActivity {
         } else {
             showExitConfirmationDialog();
         }
-    }
-
-    @Override
-    public void setTheme(int resId) {
-        super.setTheme(resId);
     }
 
     private void showExitConfirmationDialog() {
@@ -136,7 +124,7 @@ public class MasterActivity extends AppCompatActivity {
     protected void onStop() {
         SharedPreferences prefCart = getSharedPreferences(AppConstants.PREF_CART_INFO, MODE_PRIVATE);
         SharedPreferences.Editor editorCart = prefCart.edit();
-        Log.d("myTag", "onStop:cart flag previous"+prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,false));
+        Log.d("myTag", "onStop:cart flag previous "+prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,false));
         if(!prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,false)){
             OrderModel.saveToSharedPreferences(this, itemCart);
             editorCart.putBoolean(AppConstants.KEY_IS_DATA_CHANGED,true);
