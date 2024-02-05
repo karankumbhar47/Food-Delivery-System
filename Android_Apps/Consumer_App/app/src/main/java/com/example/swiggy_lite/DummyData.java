@@ -25,15 +25,15 @@ public class DummyData {
 
     public static List<FoodItemFull> getDummyFoodItemList() {
         return Arrays.asList(
-               createDummyFoodItem("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5zA", "Delicious Pizza", "pizza_thumbnail.jpg", 15.99f, "Pizzeria Uno", "New York", 4.5f, true, 5,
+               createDummyFoodItem("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0", "Delicious Pizza", "pizza_thumbnail.jpg", 15.99f, "Pizzeria Uno", "New York", 4.5f, true, 5,
                        Arrays.asList("pizza_image_1.jpg", "pizza_image_2.jpg"), Arrays.asList("Italian", "Pizza")),
-               createDummyFoodItem("BcDeFgHiJkLmNoPqRsTuVwXyZa0123456789bcdefghijk", "Burger Bonanza", "burger_thumbnail.jpg", 12.49f, "Burger Shack", "Los Angeles", 3.8f, true, 7,
+               createDummyFoodItem("BcDeFgHiJkLmNoPqRsTuVwXyZa0123456789bcde", "Burger Bonanza", "burger_thumbnail.jpg", 12.49f, "Burger Shack", "Los Angeles", 3.8f, true, 7,
                        Arrays.asList("burger_image_1.jpg", "burger_image_2.jpg"), Arrays.asList("Fast Food", "Burger")),
-               createDummyFoodItem("C123456789012345678901234567890123456789C", "Sushi Delight", "sushi_thumbnail.jpg", 24.99f, "Tokyo Sushi", "Tokyo", 4.7f, true, 4,
+               createDummyFoodItem("C123456789012345678901234567890123456789", "Sushi Delight", "sushi_thumbnail.jpg", 24.99f, "Tokyo Sushi", "Tokyo", 4.7f, true, 4,
                        Arrays.asList("sushi_image_1.jpg", "sushi_image_2.jpg"), Arrays.asList("Japanese", "Sushi")),
                createDummyFoodItem("D23456789012345678901234567890123456789D", "Healthy Salad", "salad_thumbnail.jpg", 9.99f, "Green Eats", "San Francisco", 4.2f, true, 10,
                        Arrays.asList("salad_image_1.jpg", "salad_image_2.jpg"), Arrays.asList("Vegetarian", "Salad")),
-               createDummyFoodItem("E3456789012345678901234567890123456789E", "Mexican Fiesta", "mexican_thumbnail.jpg", 18.99f, "Hola Amigos", "Mexico City", 4.6f, true, 6,
+               createDummyFoodItem("E3456789012345678901234567890123456789EE", "Mexican Fiesta", "mexican_thumbnail.jpg", 18.99f, "Hola Amigos", "Mexico City", 4.6f, true, 6,
                        Arrays.asList("mexican_image_1.jpg", "mexican_image_2.jpg"), Arrays.asList("Mexican", "Tacos")),
                createDummyFoodItem("F45678901234567890123456789012345678901F", "Classic Pasta", "pasta_thumbnail.jpg", 14.99f, "Nonna's Kitchen", "Rome", 4.4f, true, 8,
                        Arrays.asList("pasta_image_1.jpg", "pasta_image_2.jpg"), Arrays.asList("Italian", "Pasta")),
@@ -71,15 +71,15 @@ public class DummyData {
 
     public static List<FoodItem> getDummyFoodItem() {
         return Arrays.asList(
-                createDummyFood("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5zA", "Delicious Pizza", "pizza_thumbnail.jpg", 15.99f, "Pizzeria Uno", "New York", 4.5f, true, 5,
+                createDummyFood("a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0", "Delicious Pizza", "pizza_thumbnail.jpg", 15.99f, "Pizzeria Uno", "New York", 4.5f, true, 5,
                         Arrays.asList("pizza_image_1.jpg", "pizza_image_2.jpg"), Arrays.asList("Italian", "Pizza")),
-                createDummyFood("BcDeFgHiJkLmNoPqRsTuVwXyZa0123456789bcdefghijk", "Burger Bonanza", "burger_thumbnail.jpg", 12.49f, "Burger Shack", "Los Angeles", 3.8f, true, 7,
+                createDummyFood("BcDeFgHiJkLmNoPqRsTuVwXyZa0123456789bcde", "Burger Bonanza", "burger_thumbnail.jpg", 12.49f, "Burger Shack", "Los Angeles", 3.8f, true, 7,
                         Arrays.asList("burger_image_1.jpg", "burger_image_2.jpg"), Arrays.asList("Fast Food", "Burger")),
-                createDummyFood("C123456789012345678901234567890123456789C", "Sushi Delight", "sushi_thumbnail.jpg", 24.99f, "Tokyo Sushi", "Tokyo", 4.7f, true, 4,
+                createDummyFood("C123456789012345678901234567890123456789", "Sushi Delight", "sushi_thumbnail.jpg", 24.99f, "Tokyo Sushi", "Tokyo", 4.7f, true, 4,
                         Arrays.asList("sushi_image_1.jpg", "sushi_image_2.jpg"), Arrays.asList("Japanese", "Sushi")),
                 createDummyFood("D23456789012345678901234567890123456789D", "Healthy Salad", "salad_thumbnail.jpg", 9.99f, "Green Eats", "San Francisco", 4.2f, true, 10,
                         Arrays.asList("salad_image_1.jpg", "salad_image_2.jpg"), Arrays.asList("Vegetarian", "Salad")),
-                createDummyFood("E3456789012345678901234567890123456789E", "Mexican Fiesta", "mexican_thumbnail.jpg", 18.99f, "Hola Amigos", "Mexico City", 4.6f, true, 6,
+                createDummyFood("E3456789012345678901234567890123456789EE", "Mexican Fiesta", "mexican_thumbnail.jpg", 18.99f, "Hola Amigos", "Mexico City", 4.6f, true, 6,
                         Arrays.asList("mexican_image_1.jpg", "mexican_image_2.jpg"), Arrays.asList("Mexican", "Tacos")),
                 createDummyFood("F45678901234567890123456789012345678901F", "Classic Pasta", "pasta_thumbnail.jpg", 14.99f, "Nonna's Kitchen", "Rome", 4.4f, true, 8,
                         Arrays.asList("pasta_image_1.jpg", "pasta_image_2.jpg"), Arrays.asList("Italian", "Pasta")),
@@ -176,7 +176,7 @@ public class DummyData {
         List<OrderItemAdvanced> orderItems = new ArrayList<>();
 
         for (int i = 0; i < numberOfItems; i++) {
-            FoodItemFull randomFoodItem = dummyFoodList.get(random.nextInt(dummyFoodList.size()));
+            FoodItemFull randomFoodItem = dummyFoodList.get(i);
             int quantity = random.nextInt(5) + 1; // Random quantity between 1 and 5
             float totalPrice = randomFoodItem.getPrice()*quantity;
 

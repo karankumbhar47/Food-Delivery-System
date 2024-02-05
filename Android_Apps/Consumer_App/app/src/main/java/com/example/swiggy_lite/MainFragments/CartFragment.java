@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class CartFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
         {
             orderedItemsList = new ArrayList<>(MasterActivity.itemCart.values());
+            Log.d("myTag", "order size "+orderedItemsList.size());
             loadingDialog = new LoadingDialog(requireActivity());
             title_card = view.findViewById(R.id.header_card);
             main_layout = view.findViewById(R.id.main_layout);
@@ -132,7 +134,7 @@ public class CartFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 orderModel = new OrderModel();
-                orderModel.setOrderDetails(new ArrayList<>(MasterActivity.itemCart.values()));
+                orderModel.setOrderItemAdvanced(new ArrayList<>(MasterActivity.itemCart.values()));
                 orderModel.setTip(tip);
                 load(new SelectAddressFragment(orderModel));
             }

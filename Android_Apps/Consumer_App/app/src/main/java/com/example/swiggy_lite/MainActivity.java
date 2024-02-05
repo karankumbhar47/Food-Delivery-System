@@ -26,6 +26,8 @@ import java.util.concurrent.BlockingDeque;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.crypto.MacSpi;
+
 
 public class MainActivity extends AppCompatActivity {
     public String TAG = "myTag";
@@ -170,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
             OrderModel orderModel = OrderModel.retrieveFromSharedPreferences(MainActivity.this);
             List<OrderItemAdvanced> orderItemList = (orderModel == null) ? new ArrayList<>() : (orderModel.getOrderItemAdvanced()!=null ? orderModel.getOrderItemAdvanced()  : new ArrayList<>());
             MasterActivity.itemCart = orderItemList.stream().collect(Collectors.toMap(OrderItemAdvanced::getItemId, Function.identity()));
+            Log.d("myTag", "item cart lenght "+ MasterActivity.itemCart.size());
             editorCart.putBoolean(AppConstants.KEY_IS_DATA_CHANGED,false);
             editorCart.apply();
         }
