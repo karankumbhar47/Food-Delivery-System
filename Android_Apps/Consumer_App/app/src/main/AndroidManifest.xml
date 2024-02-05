@@ -20,7 +20,7 @@
             android:name=".UserRegistration"
             android:exported="false" />
         <activity
-            android:name=".MainPage"
+            android:name=".MasterActivity"
             android:exported="false" />
         <activity
             android:name=".SearchActivity"

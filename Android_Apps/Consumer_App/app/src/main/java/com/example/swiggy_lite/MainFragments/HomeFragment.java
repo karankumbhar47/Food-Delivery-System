@@ -1,9 +1,13 @@
 package com.example.swiggy_lite.MainFragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -11,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +23,14 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
+import com.example.swiggy_lite.AppConstants;
+import com.example.swiggy_lite.Common_Fragment.ItemDetailsFragment;
 import com.example.swiggy_lite.DummyData;
 import com.example.swiggy_lite.Home_Fragments.MainFilterFragment;
 import com.example.swiggy_lite.Home_Fragments.category_search;
+import com.example.swiggy_lite.MainActivity;
 import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.Home_Fragments.RestaurantInfo;
 import com.example.swiggy_lite.SearchActivity;
@@ -40,10 +49,10 @@ public class HomeFragment extends Fragment {
     RecyclerView category_recyclerView, recommendation_recyclerView;
     CategoryAdapter categoryAdapter;
     ItemDetailsAdapter recommendationAdapter;
-    ArrayList<OrderItem> foodItemList;
     private PopupWindow popupWindow;
     CheckBox sort_button,cuisine,filter_button,fast_delivery,pureVeg,offers;
     SearchView food_item_searchView;
+    CardView search_bar_cardView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +67,7 @@ public class HomeFragment extends Fragment {
             pureVeg = view.findViewById(R.id.pure_veg_textView);
             offers = view.findViewById(R.id.offers_textView);
             sort_button = view.findViewById(R.id.sort_textView);
+            search_bar_cardView = view.findViewById(R.id.search_bar_cardView);
         }
 
         category_recyclerView.setLayoutManager(new GridLayoutManager(this.requireContext(), 1, RecyclerView.HORIZONTAL, false));
@@ -84,10 +94,15 @@ public class HomeFragment extends Fragment {
         food_item_searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra("isSearchBarActivated", true);
-                startActivity(intent);
+                startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
             }
         });
+
+        search_bar_cardView.setOnClickListener(v -> {
+            Intent intent = new Intent(requireActivity(), SearchActivity.class);
+            startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
+        });
+
         filter_button.setOnClickListener(v -> {
             BottomSheetDialogFragment filter_fragment = new MainFilterFragment(filter_button);
             if (filter_button.isChecked()) {
@@ -137,7 +152,6 @@ public class HomeFragment extends Fragment {
                 showCustomDialog(v);
             }
         });
-
         return view;
     }
 
@@ -180,4 +194,15 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+       if (requestCode == AppConstants.SECOND_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK && data != null) {
+                String resultData = data.getStringExtra(AppConstants.KEY_ITEM_ID);
+                load(new ItemDetailsFragment(resultData));
+            }
+        }
+    }
 }

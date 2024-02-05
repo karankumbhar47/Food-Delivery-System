@@ -11,12 +11,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -32,8 +34,6 @@ public class UserLogin extends AppCompatActivity {
     EditText user_name_textView;
     EditTextWithDrawableClick password_textView;
     String sessionId;
-    DefaultApi api;
-    LoadingDialog loadingDialog;
     ImageView appLogo;
     SharedPreferences loginPreference;
     Context context;
@@ -52,14 +52,12 @@ public class UserLogin extends AppCompatActivity {
             //show_password = findViewById(R.id.show_password_checkBox);
             password_textView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             appLogo = findViewById(R.id.app_logo_imageView);
-            loadingDialog = new LoadingDialog(this);
             loginPreference = getSharedPreferences(AppConstants.PREF_LOGIN,MODE_PRIVATE);
-            api = new DefaultApi();
             context = this;
         }
 
         appLogo.setOnClickListener(v -> {
-            Intent i = new Intent(UserLogin.this, MainPage.class);
+            Intent i = new Intent(UserLogin.this, MasterActivity.class);
             startActivity(i);
         });
 
@@ -67,11 +65,13 @@ public class UserLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = loginPreference.edit();
-                validateUser(new RegistrationCallback() {
+                validateUser(UserLogin.this, new RegistrationCallback() {
                     @Override
                     public void onRegistrationSuccess(String sessionId) {
                         editor.putBoolean(AppConstants.KEY_LOGIN_FLAG, true);
                         editor.putString(AppConstants.KEY_SESSION_ID, sessionId);
+                        editor.putString(AppConstants.KEY_PASSWORD,password_textView.getText().toString().trim());
+                        editor.putString(AppConstants.KEY_USER_NAME,user_name_textView.getText().toString().trim());
                         editor.apply();
 
                         String message = "Enjoy Your Favourite Dish \uD83D\uDE01";
@@ -88,7 +88,7 @@ public class UserLogin extends AppCompatActivity {
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(UserLogin.this, MainPage.class);
+                                        Intent intent = new Intent(UserLogin.this, MasterActivity.class);
                                         startActivity(intent);
                                         finish();
                                         dialog.dismiss();
@@ -158,39 +158,16 @@ public class UserLogin extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-    public void validateUser(RegistrationCallback callback) {
-
+    public void validateUser(Activity activity, RegistrationCallback callback) {
         String user_name = user_name_textView.getText().toString().trim();
         String password = password_textView.getText().toString().trim();
-
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername(user_name);
         loginRequest.setPassword(password);
 
         if (user_name.length() >= 4) {
             if (password.length() >= 8) {
-                loadingDialog.startLoadingDialog();
-                api.login(loginRequest, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        callback.onRegistrationSuccess(response.trim().substring(1, 41));
-                        loadingDialog.dismissDialog();
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        try {
-                            int statusCode = error.networkResponse.statusCode;
-                            String data = new String(error.networkResponse.data);
-                            callback.onRegistrationError(statusCode, data.trim().substring(1,41));;
-                            loadingDialog.dismissDialog();
-                        } catch (Exception e) {
-                            callback.onRegistrationError(0, null);
-                            loadingDialog.dismissDialog();
-                        }
-                    }
-                });
+                sendRequest(loginRequest,activity,callback);
             } else {
                 if (password.length() == 0) {
                     password_textView.setError("Please Enter Valid Password");
@@ -201,5 +178,32 @@ public class UserLogin extends AppCompatActivity {
         } else {
             user_name_textView.setError("Username can't be less than 4 characters");
         }
+    }
+
+    public static void sendRequest(LoginRequest loginRequest, Activity activity ,RegistrationCallback callback){
+        LoadingDialog loadingDialog = new LoadingDialog(activity);
+        DefaultApi api = new DefaultApi();
+        Log.d("myTag", "api "+api.getBasePath());
+        loadingDialog.startLoadingDialog();
+        api.login(loginRequest, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                callback.onRegistrationSuccess(response.trim().substring(1, 41));
+                loadingDialog.dismissDialog();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    int statusCode = error.networkResponse.statusCode;
+                    String data = new String(error.networkResponse.data);
+                    callback.onRegistrationError(statusCode, data.trim().substring(1,41));;
+                    loadingDialog.dismissDialog();
+                } catch (Exception e) {
+                    callback.onRegistrationError(0, null);
+                    loadingDialog.dismissDialog();
+                }
+            }
+        });
     }
 }

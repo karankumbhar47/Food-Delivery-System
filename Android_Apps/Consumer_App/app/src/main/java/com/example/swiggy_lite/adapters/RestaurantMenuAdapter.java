@@ -1,7 +1,6 @@
 package com.example.swiggy_lite.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +9,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.collection.ObjectIntMap;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.swiggy_lite.MainFragments.CartFragment;
-import com.example.swiggy_lite.MainPage;
+import com.example.swiggy_lite.MasterActivity;
 import com.example.swiggy_lite.R;
 import com.openapi.deliveryApp.model.FoodItemFull;
 import com.openapi.deliveryApp.model.OrderItem;
@@ -34,11 +31,11 @@ public class RestaurantMenuAdapter extends RecyclerView.Adapter<RestaurantMenuAd
     public RestaurantMenuAdapter(List<FoodItemFull> items, Context context) {
         this.menuList = items;
         this.context = context;
-        this.orderItemMap = MainPage.orderItemMap;
+        this.orderItemMap = MasterActivity.itemCart;
     }
 
     public void changeQuantityList() {
-        this.orderItemMap = MainPage.orderItemMap;
+        this.orderItemMap = MasterActivity.itemCart;
         notifyDataSetChanged();
     }
 

@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -23,27 +22,21 @@ import com.android.volley.Response;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 
 public class SearchActivity extends AppCompatActivity {
     private DefaultApi api;
-    private Filter filterItem;
     private String sessionId;
     private SearchView searchView;
+    private CardView recentSearchCardView;
     private SharedPreferences prefLogin;
     private List<FoodItem> searchedList;
     private ImageView back_button_imageView;
-    private SharedPreferences.Editor editor;
     private CategoryAdapter categoryAdapter;
     private ListItemsAdapter listItemsAdapter;
-    private CardView recentSearchCardView, foodItemListCardView;
     private RecyclerView recentSearchRecyclerView, foodItemSearchRecyclerView;
-    private Integer quantity = null;
 
 
     @Override
@@ -61,19 +54,16 @@ public class SearchActivity extends AppCompatActivity {
             recentSearchRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             categoryAdapter = new CategoryAdapter(DummyData.categoryList, this);
             foodItemSearchRecyclerView = findViewById(R.id.food_items_recyclerView);
-            editor = prefLogin.edit();
+            //editor = prefLogin.edit();
             api = new DefaultApi();
-            filterItem = new Filter();
+            //filterItem = new Filter();
             searchedList = new ArrayList<>();
         }
 
         CategoryAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent = new Intent(SearchActivity.this, MainPage.class);
-                intent.putExtra(MainPage.EXTRA_FRAGMENT_ID,MainPage.FRAGMENT_ITEM_DETAILS);
-                startActivity(intent);
-                finish();
+                searchView.setQuery(AppConstants.LIST_CATEGORY.get(position),false);
             }
         });
         recentSearchRecyclerView.setAdapter(categoryAdapter);
@@ -83,10 +73,9 @@ public class SearchActivity extends AppCompatActivity {
         ListItemsAdapter.setOnItemClickListener(new ListItemsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent = new Intent(SearchActivity.this, MainPage.class);
-                intent.putExtra(MainPage.EXTRA_FRAGMENT_ID,MainPage.FRAGMENT_ITEM_DETAILS);
-                intent.putExtra(AppConstants.KEY_ITEM_ID,searchedList.get(position).getItemId());
-                startActivity(intent);
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra(AppConstants.KEY_ITEM_ID, searchedList.get(position).getItemId());
+                setResult(RESULT_OK, resultIntent);
                 finish();
             }
         });
@@ -115,12 +104,9 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        boolean isSearchBarActivated = getIntent().getBooleanExtra("isSearchBarActivated", false);
-        if (isSearchBarActivated) {
-            searchView.setIconified(false);
-        }
+        searchView.setIconified(false);
 
-        back_button_imageView.setOnClickListener(v -> {startActivity(new Intent(this,MainPage.class));});
+        back_button_imageView.setOnClickListener(v -> {finish();});
 
 //        Disposable disposable = fromView(searchView)
 //                .debounce(1500, TimeUnit.MILLISECONDS)
@@ -154,17 +140,15 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void filteredList(String text) {
-        Log.d("myTag", "query send ... "+ text);
+//        Log.d("myTag", "query send ... "+ text);
         api.query(sessionId, text,  new Response.Listener<List<FoodItem>>() {
             @Override
             public void onResponse(List<FoodItem> response) {
                 if(response != null) {
                     searchedList = (ArrayList<FoodItem>) response;
-                    Log.d("myTag", "search response size "+searchedList.size());
                     listItemsAdapter.setList(searchedList, text);
                 }
                 else{
-                    Log.d("myTag", "search not found  ");
                     searchedList = new ArrayList<>();
                     listItemsAdapter.setList(searchedList,"");
                 }
@@ -172,17 +156,22 @@ public class SearchActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                try {
-                    Log.d("myTag", "Error in search "+error);
-                    Log.d("myTag", "Error data in search " + new String(error.networkResponse.data));
-                    Log.d("myTag", "Error code in search " + error.networkResponse.statusCode);
-                }catch (Exception e){
-                    Log.d("myTag", "onErrorResponse: error "+e);
-                }
+//                try {
+//                    Log.d("myTag", "Error in search "+error);
+//                    Log.d("myTag", "Error data in search " + new String(error.networkResponse.data));
+//                    Log.d("myTag", "Error code in search " + error.networkResponse.statusCode);
+//                }catch (Exception e){
+//                    Log.d("myTag", "onErrorResponse: error "+e);
+//                }
                 searchedList = new ArrayList<>();
                 listItemsAdapter.setList(searchedList,text);
             }
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

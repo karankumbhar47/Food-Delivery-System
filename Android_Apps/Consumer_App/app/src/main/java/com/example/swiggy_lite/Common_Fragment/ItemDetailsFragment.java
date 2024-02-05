@@ -3,7 +3,6 @@ package com.example.swiggy_lite.Common_Fragment;
 
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -29,7 +28,9 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.example.swiggy_lite.DummyData;
 import com.example.swiggy_lite.LoadingDialog;
+import com.example.swiggy_lite.MainActivity;
 import com.example.swiggy_lite.MainFragments.CartFragment;
+import com.example.swiggy_lite.MasterActivity;
 import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.adapters.CategoryAdapter;
 import com.example.swiggy_lite.adapters.ItemDetailsAdapter;
@@ -53,7 +54,7 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
     private ConstraintLayout number_picker;
     private TextView numberText, added_items_status, view_cart_button;
     private ImageView plusIcon, minusIcon, item_pic;
-    private TextView item_name_textView, rating_textView, price_textView;
+    private TextView item_name_textView, rating_textView, price_textView, restaurant_name_textView;
     private CardView add_button, sticky_button, searchCard, recyclerViewCard;
     private SearchView searchView;
     private ItemDetailsAdapter adapter;
@@ -62,10 +63,8 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
     private boolean isCardTranslated = false;
     private RecyclerView recyclerView;
     private LoadingDialog loadingDialog;
-    private OrderModel orderModel;
-    private ArrayList<OrderItem> orderedList;
     private OrderItem orderItem;
-    private Map<String,OrderItem> orderItemMap;
+    FoodItemFull foodItemFull;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,9 +73,7 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
         {
             api = new DefaultApi();
             orderItem = new OrderItem();
-            orderModel = new OrderModel();
-            orderedList = new ArrayList<>();
-            orderItemMap = new HashMap<>();
+            foodItemFull = new FoodItemFull();
             loadingDialog = new LoadingDialog(requireActivity());
             item_pic = view.findViewById(R.id.item_profile_imageView);
             numberText = view.findViewById(R.id.numberText);
@@ -94,6 +91,7 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
             price_textView = view.findViewById(R.id.price_textView);
             rating_textView = view.findViewById(R.id.rating_textView);
             view_cart_button = view.findViewById(R.id.view_cart_textView);
+            restaurant_name_textView = view.findViewById(R.id.restaurant_name_textView);
 
             int drawableId = getResources().getIdentifier("food_image","drawable",this.requireContext().getPackageName());
             Glide.with(this).load(drawableId).into(item_pic);
@@ -105,13 +103,24 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
                 Random random = new Random();
                 int randomNumber = random.nextInt(1000) + 1;
                 item_name_textView.setText(foodItem.getItemName());
-//                rating_textView.setText((CharSequence) foodItem.getStarRating() +"("+String.valueOf(randomNumber)+"+ ratings)");
+                //rating_textView.setText((CharSequence) foodItem.getStarRating() +"("+String.valueOf(randomNumber)+"+ ratings)");
                 price_textView.setText("₹ "+foodItem.getPrice());
+                rating_textView.setText("4.5 (234+ rating)");
+                restaurant_name_textView.setText("Shree Sai and Galav Food IIT Bhilai");
 
-                orderItem.setItemId(foodItem.getItemId());
-                orderItem.setItemName(foodItem.getItemName());
-                orderItem.setPrice(foodItem.getPrice());
-                orderItem.setQuantity(0);
+                foodItemFull = foodItem;
+
+                if(MasterActivity.itemCart.get(foodItem.getItemId())!=null){
+                    orderItem = MasterActivity.itemCart.get(foodItem.getItemId());
+                    Log.d("myTag", "value set "+orderItem.getItemName()+" "+ orderItem.getQuantity());
+                    numberText.setText(String.valueOf(orderItem.getQuantity()));
+                    added_items_status.setText(String.format("%d %s added", orderItem.getQuantity(), orderItem.getQuantity() == 1 ? " item " : " items "));
+
+                    add_button.setVisibility(add_button.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
+                    number_picker.setVisibility(number_picker.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
+                    sticky_button.setVisibility(View.VISIBLE);
+                }
+
             }
 
             @Override
@@ -145,16 +154,18 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
         add_button.setOnClickListener(v -> {
             add_button.setVisibility(add_button.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
             number_picker.setVisibility(number_picker.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
+            numberText.setText("1");
             sticky_button.setVisibility(View.VISIBLE);
         });
         plusIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int currentValue = Integer.parseInt(numberText.getText().toString());
+                currentValue += 1;
                 if (currentValue < Integer.MAX_VALUE) {
-                    animateNumberChange(++currentValue, true);
+                    animateNumberChange(currentValue, true);
                     added_items_status.setText(String.format("%d %s added", currentValue, currentValue == 1 ? " item " : " items "));
-                    changeQuantity(currentValue);
+                    MasterActivity.addToCart(foodItemFull,currentValue,true);
                 }
             }
         });
@@ -162,15 +173,16 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
             @Override
             public void onClick(View v) {
                 int currentValue = Integer.parseInt(numberText.getText().toString());
-                if (currentValue > 1) {
-                    animateNumberChange(--currentValue,false);
-                    changeQuantity(currentValue);
+                currentValue -= 1;
+                if (currentValue >= 1) {
+                    animateNumberChange(currentValue,false);
                 }
                 else{
                     number_picker.setVisibility(number_picker.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
                     add_button.setVisibility(add_button.getVisibility()==View.GONE ? View.VISIBLE : View.GONE);
                     sticky_button.setVisibility(View.GONE);
                 }
+                MasterActivity.addToCart(foodItemFull,currentValue,false);
                 added_items_status.setText(String.format("%d %s added", currentValue, currentValue == 1 ? " item " : " items "));
             }
         });
@@ -194,20 +206,19 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
 
         return view;
     }
-
-    public void changeQuantity(int quantity){
-        if(quantity!=0) {
-            orderItem.setQuantity(quantity);
-            orderedList.add(0, orderItem);
-            orderModel.setOrderDetails(orderedList);
-            orderItemMap.put(item_id, orderItem);
-            orderModel.saveToSharedPreferences(requireContext(), orderItemMap);
-        }
-        else{
-            orderedList.clear();
-            orderModel.setOrderDetails(orderedList);
-        }
-    }
+//    public void changeQuantity(int quantity){
+//        if(quantity!=0) {
+//            orderItem.setQuantity(quantity);
+//            orderedList.add(0, orderItem);
+//            orderModel.setOrderDetails(orderedList);
+//            orderItemMap.put(item_id, orderItem);
+//            orderModel.saveToSharedPreferences(requireContext(), orderItemMap);
+//        }
+//        else{
+//            orderedList.clear();
+//            orderModel.setOrderDetails(orderedList);
+//        }
+//    }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
@@ -300,8 +311,8 @@ public class ItemDetailsFragment extends Fragment implements View.OnFocusChangeL
     }
 
     public void getProductDetails(String item_id, ApiResponseCallback callback){
-        Log.d("myTag", "getProductDetails: len "+item_id.length());
-        Log.d("myTag", "getProductDetails: len "+item_id);
+        //Log.d("myTag", "getProductDetails: len "+item_id.length());
+        //Log.d("myTag", "getProductDetails: len "+item_id);
 
         loadingDialog.startLoadingDialog();
         api.getProduct(item_id, new Response.Listener<com.openapi.deliveryApp.model.FoodItemFull>() {

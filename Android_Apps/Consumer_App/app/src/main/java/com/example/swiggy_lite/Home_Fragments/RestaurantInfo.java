@@ -18,7 +18,7 @@ import android.widget.SearchView;
 import com.example.swiggy_lite.DummyData;
 import com.example.swiggy_lite.MainFragments.CartFragment;
 import com.example.swiggy_lite.MainFragments.HomeFragment;
-import com.example.swiggy_lite.MainPage;
+import com.example.swiggy_lite.MasterActivity;
 import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.adapters.RestaurantMenuAdapter;
 import com.example.swiggy_lite.models.OrderModel;
@@ -71,14 +71,14 @@ public class RestaurantInfo extends Fragment {
             @Override
             public void onMinusClick(int position, int quantity) {
                 FoodItemFull foodModel = restaurantMenuList.get(position);
-                MainPage.addToCart(foodModel, quantity);
+                MasterActivity.addToCart(foodModel, quantity,false);
                 restaurantMenuAdapter.changeQuantityList();
             }
 
             @Override
             public void onPlusClick(int position, int quantity) {
                 FoodItemFull foodModel = restaurantMenuList.get(position);
-                MainPage.addToCart(foodModel, quantity);
+                MasterActivity.addToCart(foodModel, quantity,true);
                 restaurantMenuAdapter.changeQuantityList();
             }
         });

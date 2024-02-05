@@ -1,19 +1,10 @@
 package com.example.swiggy_lite.MainFragments;
 
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,17 +13,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.swiggy_lite.Cart_Fragment.SelectAddressFragment;
 import com.example.swiggy_lite.Common_Fragment.ItemDetailsFragment;
 import com.example.swiggy_lite.LoadingDialog;
-import com.example.swiggy_lite.MainPage;
+import com.example.swiggy_lite.MasterActivity;
 import com.example.swiggy_lite.R;
-import com.example.swiggy_lite.Cart_Fragment.SelectAddressFragment;
 import com.example.swiggy_lite.adapters.CartAdapter;
 import com.example.swiggy_lite.models.OrderModel;
 import com.openapi.deliveryApp.model.OrderItem;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +55,7 @@ public class CartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
         {
-            orderedItemsList = new ArrayList<>(MainPage.orderItemMap.values());
+            orderedItemsList = new ArrayList<>(MasterActivity.itemCart.values());
             loadingDialog = new LoadingDialog(requireActivity());
             title_card = view.findViewById(R.id.header_card);
             main_layout = view.findViewById(R.id.main_layout);
@@ -94,8 +91,8 @@ public class CartFragment extends Fragment {
                 public void onMinusClick(int position, int quantity) {
                     OrderItem foodModel = orderedItemsList.get(position);
                     foodModel.setQuantity(quantity);
-                    MainPage.addToCart(foodModel,quantity);
-                    cartAdapter.notifyDataSetChanged();
+                    MasterActivity.addToCart(foodModel,quantity);
+                    cartAdapter.setList(new ArrayList<>(MasterActivity.itemCart.values()));
                     updateUI();
                 }
 
@@ -103,8 +100,8 @@ public class CartFragment extends Fragment {
                 public void onPlusClick(int position, int quantity) {
                     OrderItem foodModel = orderedItemsList.get(position);
                     foodModel.setQuantity(quantity);
-                    MainPage.addToCart(foodModel,quantity);
-                    cartAdapter.notifyDataSetChanged();
+                    MasterActivity.addToCart(foodModel,quantity);
+                    cartAdapter.setList(new ArrayList<>(MasterActivity.itemCart.values()));
                     updateUI();
                 }
 
@@ -128,7 +125,10 @@ public class CartFragment extends Fragment {
         select_address_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                load(new SelectAddressFragment());
+                orderModel = new OrderModel();
+                orderModel.setOrderDetails(new ArrayList<>(MasterActivity.itemCart.values()));
+                orderModel.setTip(tip);
+                load(new SelectAddressFragment(orderModel));
             }
         });
         back_button.setOnClickListener(new View.OnClickListener() {

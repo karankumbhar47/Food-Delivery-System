@@ -12,12 +12,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.swiggy_lite.AppConstants;
 import com.example.swiggy_lite.MainActivity;
+import com.example.swiggy_lite.MasterActivity;
 import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.Setting_Fragment.AboutFragment;
 import com.example.swiggy_lite.Setting_Fragment.UserProfileFragment;
@@ -47,10 +49,11 @@ public class SettingFragment extends Fragment {
                 .setTitle("Confirm")
                 .setMessage("Are you sure you want to go back?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    ArrayList<String> preferences = AppConstants.LIST_PREF;
                     for (String preference: AppConstants.LIST_PREF) {
+                        Log.d("myTag", "preferences "+preference);
                         SharedPreferences pref = requireActivity().getSharedPreferences(preference,MODE_PRIVATE);
                         SharedPreferences.Editor editor = pref.edit();
+                        MasterActivity.itemCart.clear();
                         editor.clear();
                         editor.apply();
                     }
