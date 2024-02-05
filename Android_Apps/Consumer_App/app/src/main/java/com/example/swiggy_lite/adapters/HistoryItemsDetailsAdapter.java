@@ -10,14 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.swiggy_lite.R;
+import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.openapi.deliveryApp.model.OrderItem;
 
 import java.util.List;
 
 public class HistoryItemsDetailsAdapter extends RecyclerView.Adapter<HistoryItemsDetailsAdapter.viewHolder> {
-    List<OrderItem> itemList;
+    List<OrderItemAdvanced> itemList;
 
-    public HistoryItemsDetailsAdapter(List<OrderItem> items) {
+    public HistoryItemsDetailsAdapter(List<OrderItemAdvanced> items) {
         this.itemList = items;
     }
 
@@ -30,7 +31,7 @@ public class HistoryItemsDetailsAdapter extends RecyclerView.Adapter<HistoryItem
 
     @Override
     public void onBindViewHolder(@NonNull HistoryItemsDetailsAdapter.viewHolder holder, int position) {
-        OrderItem singleItem = itemList.get(position);
+        OrderItemAdvanced singleItem = itemList.get(position);
         holder.name.setText(singleItem.getItemName());
 //        holder.vegLogo.setVisibility(singleItem.isPureVeg() ? View.VISIBLE : View.GONE);
 //        holder.nonVegLogo.setVisibility(!singleItem.isPureVeg() ? View.VISIBLE : View.GONE);

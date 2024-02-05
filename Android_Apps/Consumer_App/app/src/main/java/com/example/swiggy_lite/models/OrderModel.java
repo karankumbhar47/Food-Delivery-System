@@ -77,7 +77,6 @@ public class OrderModel extends Order {
     }
 
     public static void saveToSharedPreferences(Context context, Map<String, OrderItemAdvanced> map) {
-        Log.d("myTag", "Saving ...");
         SharedPreferences prefCart = context.getSharedPreferences(AppConstants.PREF_CART_INFO, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefCart.edit();
         Gson gson = new Gson();
@@ -110,6 +109,7 @@ public class OrderModel extends Order {
         deviceModelJson = gson.toJson(orderModel);
         editor.putString(AppConstants.KEY_CURRENT_CART, deviceModelJson);
         editor.apply();
+        Log.d("myTag", "Saving ...size "+orderModel.getOrderItemAdvanced().size());
     }
 
     public static OrderModel retrieveFromSharedPreferences(Context context) {
@@ -125,12 +125,20 @@ public class OrderModel extends Order {
         }
     }
 
-    public List<OrderItem> convertToOrderItemList(Map<String, OrderItemAdvanced> map) {
-        List<OrderItem> orderItemList = map.values().stream()
-                .map(OrderItemAdvanced::toOrderItem)
-                .collect(Collectors.toList());
-
+    public List<OrderItem> convertToOrderItemList(List<OrderItemAdvanced> list) {
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for (OrderItemAdvanced item : list){
+           OrderItem orderItem = new OrderItem();
+           orderItem.setItemId(item.getItemId());
+           orderItem.setItemName(item.getItemName());
+           orderItem.setPrice(item.getPrice());
+           orderItem.setQuantity(item.getQuantity());
+        }
         return orderItemList;
+    }
+
+    public void changeAndSet(){
+        this.setOrderDetails(this.convertToOrderItemList(this.getOrderItemAdvanced()));
     }
 
 }

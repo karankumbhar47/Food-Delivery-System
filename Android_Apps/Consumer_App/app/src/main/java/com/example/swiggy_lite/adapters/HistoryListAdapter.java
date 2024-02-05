@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.swiggy_lite.R;
+import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.example.swiggy_lite.models.OrderModel;
 import com.openapi.deliveryApp.model.OrderItem;
 
@@ -36,7 +37,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
         listener = clickListener;
     }
 
-    public void setList(ArrayList<OrderModel> updateList){
+    public void setList(List<OrderModel> updateList){
         this.orderedList = updateList;
         notifyDataSetChanged();
     }
@@ -53,7 +54,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
         OrderModel orderModel = orderedList.get(position);
         Float sum = 0f; // Initialize sum as BigDecimal.ZERO
 
-        for (OrderItem foodModel : orderModel.getOrderDetails()) {
+        for (OrderItemAdvanced foodModel : orderModel.getOrderItemAdvanced()) {
             sum += foodModel.getPrice()*foodModel.getQuantity();
         }
 
@@ -61,7 +62,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
         holder.order_total_textView.setText(String.format("₹ %s", String.valueOf(sum)));
         holder.view_details_button.setOnClickListener(v -> listener.viewDetails(position));
 
-        HistoryItemsDetailsAdapter itemList = new HistoryItemsDetailsAdapter(orderModel.getOrderDetails());
+        HistoryItemsDetailsAdapter itemList = new HistoryItemsDetailsAdapter(orderModel.getOrderItemAdvanced());
         holder.item_list_recyclerView.setLayoutManager(new LinearLayoutManager(context,RecyclerView.VERTICAL, false));
         holder.item_list_recyclerView.setAdapter(itemList);
     }

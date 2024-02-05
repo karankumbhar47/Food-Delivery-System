@@ -1,7 +1,9 @@
 package com.example.swiggy_lite.Cart_Fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -21,15 +24,18 @@ import androidx.fragment.app.Fragment;
 import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.swiggy_lite.AppConstants;
 import com.example.swiggy_lite.LoadingDialog;
 import com.example.swiggy_lite.MasterActivity;
 import com.example.swiggy_lite.R;
+import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.example.swiggy_lite.models.OrderModel;
 import com.openapi.deliveryApp.api.DefaultApi;
 import com.openapi.deliveryApp.model.OrderItem;
 import com.openapi.deliveryApp.model.PlaceOrderRequest;
 import com.openapi.deliveryApp.model.PlaceOrderRequestItemCartInner;
 
+import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,11 +52,14 @@ public class SelectAddressFragment extends Fragment {
     private EditText khanar_room, indravati_room , shivnath_room;
     private Spinner academic_areas;
     public String Address;
+    private String sessionId;
     private CardView place_order;
     private RadioGroup radioGroup;
     private OrderModel orderModel;
     private DefaultApi api;
     private LoadingDialog loadingDialog;
+    private SharedPreferences prefLogin;
+    private SharedPreferences.Editor prefEdit;
 
     public SelectAddressFragment(OrderModel orderModel){
         this.orderModel = orderModel;
@@ -63,6 +72,9 @@ public class SelectAddressFragment extends Fragment {
         {
             api = new DefaultApi();
             loadingDialog = new LoadingDialog(requireActivity());
+            prefLogin = getActivity().getSharedPreferences(AppConstants.PREF_LOGIN, Context.MODE_PRIVATE);
+            prefEdit = prefLogin.edit();
+            sessionId = prefLogin.getString(AppConstants.KEY_SESSION_ID,"");
             radioGroup = view.findViewById(R.id.radioGroup);
             khanar_room = view.findViewById(R.id.khanar_room_picker_editText);
             indravati_room = view.findViewById(R.id.indravati_room_picker_editText);
@@ -120,6 +132,9 @@ public class SelectAddressFragment extends Fragment {
                 } else if (selectedId == R.id.academic_area_radioButton) {
                     this.Address = "Academic Area " + this.Address;
                     isAddressValid = true;
+                } else if (selectedId == R.id.director_house_radioButton) {
+                    this.Address = this.Address.replace("'","");
+                    isAddressValid = true;
                 } else {
                     this.Address = selectedRadioButton.getText().toString();
                     isAddressValid = true;
@@ -134,9 +149,7 @@ public class SelectAddressFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
                 //Inflate the layout for the dialog
-                View viewOrder = LayoutInflater.from(requireContext()).inflate(R.layout.custom_alert_dialog, null);
-                LottieAnimationView animationView = viewOrder.findViewById(R.id.lottieAnimation);
-                animationView.playAnimation();
+
 
 
                 Date currentDate = new Date();
@@ -146,19 +159,54 @@ public class SelectAddressFragment extends Fragment {
                 orderModel.setDeliveryAddress(this.Address);
                 orderModel.setDate(dateFormat.format(currentDate));
                 orderModel.setTime(timeFormat.format(currentDate));
+                placeOrder(sessionId, new OrderCallback() {
+                    @Override
+                    public void onOrderPlaced(String orderId) {
+                        View viewOrder = LayoutInflater.from(requireContext()).inflate(R.layout.custom_alert_dialog, null);
+                        LottieAnimationView animationView = viewOrder.findViewById(R.id.lottieAnimation);
+                        TextView message = viewOrder.findViewById(R.id.dialog_message_textView);
+                        message.setText("Your order has been successfully placed!");
+                        animationView.setAnimation(R.raw.order_success);
+                        animationView.playAnimation();
 
-                builder.setView(viewOrder)
-                        .setTitle("Order Placed Successfully")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(requireContext(),MasterActivity.class));
-                                dialog.dismiss();
-                            }
-                        });
+                        builder.setView(viewOrder)
+                                .setTitle("Order Placed Successfully")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        startActivity(new Intent(requireContext(),MasterActivity.class));
+                                        dialog.dismiss();
+                                    }
+                                });
 
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+
+                    @Override
+                    public void onOrderPlacementError(int statusCode, String errorMessage) {
+                        View viewOrder = LayoutInflater.from(requireContext()).inflate(R.layout.custom_alert_dialog, null);
+                        LottieAnimationView animationView = viewOrder.findViewById(R.id.lottieAnimation);
+                        TextView message = viewOrder.findViewById(R.id.dialog_message_textView);
+                        message.setText("Your order has not been placed successfully!");
+                        animationView.setAnimation(R.raw.failure_animation);
+                        animationView.playAnimation();
+
+                        builder.setView(viewOrder)
+                                .setTitle("Error Occur !! ")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                });
+
+
             }
         });
 
@@ -206,9 +254,9 @@ public class SelectAddressFragment extends Fragment {
     }
 
 
-    public void placeOrder(String sessionId, Map<String, Integer> items, final OrderCallback callback) {
+    public void placeOrder(String sessionId, final OrderCallback callback) {
         PlaceOrderRequest placeOrderRequest = new PlaceOrderRequest();
-        placeOrderRequest.setItemCart(getItemList(orderModel.getOrderDetails()));
+        placeOrderRequest.setItemCart(getItemList(orderModel.getOrderItemAdvanced()));
         placeOrderRequest.setLocation(orderModel.getDeliveryAddress());
         loadingDialog.startLoadingDialog();
         api.placeOrder(sessionId, placeOrderRequest, new Response.Listener<String>() {
@@ -232,9 +280,9 @@ public class SelectAddressFragment extends Fragment {
         });
     }
 
-    public List<PlaceOrderRequestItemCartInner> getItemList(List<OrderItem> orderItemList){
+    public List<PlaceOrderRequestItemCartInner> getItemList(List<OrderItemAdvanced> orderItemList){
         List<PlaceOrderRequestItemCartInner> list = new ArrayList<>();
-        for(OrderItem orderItem : orderItemList) {
+        for(OrderItemAdvanced orderItem : orderItemList) {
              PlaceOrderRequestItemCartInner cartItem = new PlaceOrderRequestItemCartInner();
              cartItem.setItemId(orderItem.getItemId());
              cartItem.setQuantity(orderItem.getQuantity());

@@ -1,31 +1,45 @@
 package com.example.swiggy_lite.History_Fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.swiggy_lite.AppConstants;
 import com.example.swiggy_lite.DummyData;
+import com.example.swiggy_lite.MainActivity;
 import com.example.swiggy_lite.MainFragments.CartFragment;
+import com.example.swiggy_lite.MasterActivity;
 import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.adapters.HistoryItemsDetailsAdapter;
+import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.example.swiggy_lite.models.OrderModel;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class HistoryDetailsFragment extends Fragment {
     RecyclerView recyclerView;
     HistoryItemsDetailsAdapter historyItemsDetailsAdapter;
     TextView item_total, delivery_fee, delivery_tip, GST_restaurant_charges, total_payment;
+    SharedPreferences prefCart;
+    SharedPreferences.Editor editorCart;
     TextView reorder_button;
     OrderModel orderModel;
 
@@ -44,34 +58,53 @@ public class HistoryDetailsFragment extends Fragment {
             delivery_tip = view.findViewById(R.id.delivery_tip_textView);
             GST_restaurant_charges = view.findViewById(R.id.GST_restaurant_charges_textView);
             total_payment = view.findViewById(R.id.total_payment_textView);
+            prefCart = getActivity().getSharedPreferences(AppConstants.PREF_LOGIN, Context.MODE_PRIVATE);
+            editorCart = prefCart.edit();
         }
 
-        item_total.setText(String.format("₹ %s", String.valueOf(calculateItemTotal(orderModel.getOrderDetails()))));
+        item_total.setText(String.format("₹ %s", String.valueOf(calculateItemTotal(orderModel.getOrderItemAdvanced()))));
         delivery_tip.setText(String.format("₹ %s", String.valueOf(orderModel.getTip())));
         calculateTotalPayment();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        historyItemsDetailsAdapter = new HistoryItemsDetailsAdapter(orderModel.getOrderDetails());
+        historyItemsDetailsAdapter = new HistoryItemsDetailsAdapter(orderModel.getOrderItemAdvanced());
         recyclerView.setAdapter(historyItemsDetailsAdapter);
 
         reorder_button = view.findViewById(R.id.reorder_textView);
         reorder_button.setOnClickListener(v ->{
-            orderModel.saveToSharedPreferences(requireContext());
-            load( new CartFragment());
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Add New Cart")
+                    .setCancelable(false)
+                    .setMessage("Are you sure you want remove previous cart items?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            orderModel.saveToSharedPreferences(requireContext());
+                            List<OrderItemAdvanced> orderItemList = (orderModel == null) ? new ArrayList<>() : (orderModel.getOrderItemAdvanced()!=null ? orderModel.getOrderItemAdvanced()  : new ArrayList<>());
+                            MasterActivity.itemCart = orderItemList.stream().collect(Collectors.toMap(OrderItemAdvanced::getItemId, Function.identity()));
+                            Log.d("myTag", "itecart size "+MasterActivity.itemCart.size());
+                            editorCart.putBoolean(AppConstants.KEY_IS_DATA_CHANGED,false);
+                            editorCart.apply();
+                            load( new CartFragment());
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+
+
+
+
         });
         return view;
     }
 
 
 
-    public BigDecimal calculateItemTotal(List<com.openapi.deliveryApp.model.OrderItem> list) {
-        BigDecimal sum = BigDecimal.ZERO; // Initialize sum as BigDecimal.ZERO
-
-        for (com.openapi.deliveryApp.model.OrderItem foodmodel : list) {
-//            BigDecimal itemTotal = foodmodel.getPrice().multiply(BigDecimal.valueOf(foodmodel.getQuantity()));
-//            sum = sum.add(itemTotal);
+    public int calculateItemTotal(List<OrderItemAdvanced> list) {
+        int sum = 0;
+        for (OrderItemAdvanced foodmodel : list) {
+            sum  += foodmodel.getPrice()*foodmodel.getQuantity();
         }
-
         return sum;
     }
 

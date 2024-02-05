@@ -37,7 +37,9 @@ public class MasterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
         {
-            itemCart = new HashMap<>();
+            if(itemCart == null){
+                itemCart = new HashMap<>();
+            }
             bottomNavigationBar = findViewById(R.id.bottom_navigation_bar);
         }
 
@@ -130,6 +132,7 @@ public class MasterActivity extends AppCompatActivity {
         SharedPreferences.Editor editorCart = prefCart.edit();
         Log.d("myTag", "onStop:cart flag previous "+prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,false));
         if(!prefCart.getBoolean(AppConstants.KEY_IS_DATA_CHANGED,false)){
+            Log.d("myTag", "size in mast "+itemCart.size());
             OrderModel.saveToSharedPreferences(this,itemCart);
             editorCart.putBoolean(AppConstants.KEY_IS_DATA_CHANGED,true);
             editorCart.apply();
