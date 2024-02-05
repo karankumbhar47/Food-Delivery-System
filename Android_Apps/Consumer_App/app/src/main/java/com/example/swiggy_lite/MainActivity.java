@@ -45,10 +45,8 @@ public class MainActivity extends AppCompatActivity {
         boolean login_flag = prefLogin.getBoolean(AppConstants.KEY_LOGIN_FLAG,false);
 
         if (!login_flag) {
-            Log.d(TAG, "onCreate: login flag "+login_flag);
             redirectToLogin();
         } else {
-            Log.d(TAG, "onCreate: login flag "+login_flag);
             attemptLogin(editorLogin, editorCart);
         }
 /*
@@ -123,12 +121,10 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
     private void redirectToLogin() {
-        Log.d(TAG, "redirectToLogin: ");
         startActivity(new Intent(MainActivity.this, UserLogin.class));
         finish();
     }
     private void attemptLogin(SharedPreferences.Editor editorLogin, SharedPreferences.Editor editorCart) {
-        Log.d(TAG, "attemptLogin: ");
         LoginRequest loginRequest = createLoginRequest();
         sendLoginRequest(loginRequest, new RegistrationCallback() {
             @Override
@@ -143,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private LoginRequest createLoginRequest() {
-        Log.d(TAG, "createLoginRequest: ");
         SharedPreferences prefLogin = getSharedPreferences(AppConstants.PREF_LOGIN, MODE_PRIVATE);
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername(prefLogin.getString(AppConstants.KEY_USER_NAME, ""));
@@ -153,8 +148,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendLoginRequest(LoginRequest loginRequest, RegistrationCallback callback) {
         DefaultApi api = new DefaultApi();
-        Log.d(TAG, "sendLoginRequest: ");
-        Log.d(TAG, "sendLoginRequest: path "+api.getBasePath());
         api.login(loginRequest, response -> callback.onRegistrationSuccess(response.trim().substring(1, 41)),
                 error -> {
                     try {
@@ -168,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleSuccessfulLogin(SharedPreferences.Editor editorLogin, SharedPreferences.Editor editorCart, String sessionId) {
-        Log.d(TAG, "handleSuccessfulLogin: ");
         editorLogin.putString(AppConstants.KEY_SESSION_ID, sessionId).apply();
         editorCart.putBoolean(AppConstants.KEY_IS_DATA_CHANGED, true).apply();
 
@@ -185,14 +177,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void redirectToMasterActivity(String sessionId) {
-        Log.d(TAG, "redirectToMasterActivity: ");
         startActivity(new Intent(MainActivity.this, MasterActivity.class)
                 .putExtra(AppConstants.KEY_SESSION_ID, sessionId));
         finish();
     }
 
     private void handleFailedLogin() {
-        Log.d(TAG, "handleFailedLogin: ");
         Toast.makeText(MainActivity.this, "Inappropriate Login Credentials", Toast.LENGTH_SHORT).show();
         new Handler().postDelayed(this::redirectToLogin, 1000);
     }
