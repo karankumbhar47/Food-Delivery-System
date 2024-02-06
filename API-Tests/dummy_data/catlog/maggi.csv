@@ -1,0 +1,6 @@
+name,img_path,tags,price,max_quantity,is_available,current_rating,generic_name
+Masala Maggi,masala_maggi,veg|Indian,70,8,1,4.1,maggi
+Plain Maggi,plain_maggi,veg|Indian,99,16,1,4.1,maggi
+Italian Maggi,italian_maggi,veg|Italian,109,14,1,4.0,maggi
+Schezwan Maggi,schezwan_maggi,veg|Indian,90,13,1,4.0,maggi
+Veg Maggi,veg_maggi,veg|Indian,110,34,1,4.0,maggi
