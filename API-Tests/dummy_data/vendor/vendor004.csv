@@ -1,0 +1,8 @@
+name,img_path,tags,price,max_quantity,is_available,current_rating,generic_name
+Italian Maggi,italian_maggi,veg|Italian,109,14,1,4.0,maggi
+Fried Chicken Burger,fried_chicken_burgur,non-veg|Indian,139,6,1,4.3,burger
+Chicken Biryani,chicken_biryani,non-veg|Indian,195,9,1,4.1,biryani
+Margherita Pizza,margherita_pizza,veg|Indian,169,20,1,4.3,pizza
+Plum Cake,plum_cake,non-veg|Indian,90,12,1,4.4,cake
+Chocolate Pastry,chocolate_pastry,veg|Indian,60,20,1,4.4,pastry
+Masala Dosa,masala_dosa,veg|South Indian,109,20,1,4.2,dosa

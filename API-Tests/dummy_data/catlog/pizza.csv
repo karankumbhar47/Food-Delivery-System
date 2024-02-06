@@ -1,0 +1,6 @@
+name,img_path,tags,price,max_quantity,is_available,current_rating,generic_name
+Margherita Pizza,margherita_pizza,veg|Indian,169,20,1,4.3,pizza
+Tomatoes Pizza,tomatoes_pizza, veg|Indian,79,12,1,4.1,pizza
+Capsicum Pizza,capsicum_pizza, veg|Indian,109,16,1,4.1,pizza
+Chicken Tikka Pizza,chicken_tikka_pizza, veg|Indian, 499, 2,1,4.3,pizza
+Mexican Pizza,mexican_pizza, veg|Indian, 309,5,1,4.3,pizza  

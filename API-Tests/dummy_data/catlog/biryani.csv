@@ -1,0 +1,6 @@
+name,img_path,tags,price,max_quantity,is_available,current_rating,generic_name
+Veg Biryani,veg_biryani,veg|Indian,130,12,1,4.3,biryani
+Mutton Biryani,mutton_biryani,non-veg|Indian,250,10,1,4.1,biryani
+Paneer Biryani,paneer_biryani,veg|Indian,130,8,1,4.2,biryani
+Roasted Biryani,roasted_biryani,non-veg|Indian,140,8,1,4.2,biryani 
+Chicken Biryani,chicken_biryani,non-veg|Indian,195,9,1,4.1,biryani
