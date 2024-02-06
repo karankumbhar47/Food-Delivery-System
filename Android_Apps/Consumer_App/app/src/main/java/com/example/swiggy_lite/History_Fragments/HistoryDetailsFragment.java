@@ -90,10 +90,6 @@ public class HistoryDetailsFragment extends Fragment {
                     })
                     .setNegativeButton("No", null)
                     .show();
-
-
-
-
         });
         return view;
     }
