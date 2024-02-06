@@ -65,7 +65,6 @@ public class SelectAddressFragment extends Fragment {
         this.orderModel = orderModel;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_select_address, container, false);
@@ -154,7 +153,7 @@ public class SelectAddressFragment extends Fragment {
 
                 Date currentDate = new Date();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
+                SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
 
                 orderModel.setDeliveryAddress(this.Address);
                 orderModel.setDate(dateFormat.format(currentDate));
@@ -252,7 +251,6 @@ public class SelectAddressFragment extends Fragment {
         }
         return false;
     }
-
 
     public void placeOrder(String sessionId, final OrderCallback callback) {
         PlaceOrderRequest placeOrderRequest = new PlaceOrderRequest();
