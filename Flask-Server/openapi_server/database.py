@@ -79,6 +79,8 @@ def init():
         CREATE TABLE IF NOT EXISTS DeliveryPerson (
             user_id             CHAR(40) PRIMARY KEY,
             user_name           VARCHAR(100),
+            phone_number        VARCHAR(20) NOT NULL,
+            email_id            VARCHAR(255), 
             profile_picture     BLOB,
             name                VARCHAR(100),
             is_available        INT,
@@ -93,6 +95,7 @@ def init():
             items               TEXT,
             total_price         DECIMAL(10, 2),
             delivery_location   VARCHAR(255),
+            pickup_location     VARCHAR(255),
             consumer_id         INT REFERENCES Consumer(user_id),
             vendor_id           INT REFERENCES Vendor(user_id), 
             delivery_person_id  INT REFERENCES DeliveryPerson(user_id), 

@@ -11,6 +11,7 @@ openapi_server/models/__init__.py
 openapi_server/models/base_model.py
 openapi_server/models/delivery_accept_order_request.py
 openapi_server/models/delivery_drop_request.py
+openapi_server/models/delivery_person_details.py
 openapi_server/models/filter.py
 openapi_server/models/food_item.py
 openapi_server/models/food_item_full.py

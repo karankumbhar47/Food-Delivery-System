@@ -3,7 +3,7 @@ info:
   description: |
     This API allows to communicate with FDS (Food Delivery System) server.
   title: FDS
-  version: 0.0.4
+  version: 0.0.5
 servers:
 - url: http://13.233.99.87:8080
 paths:
@@ -127,6 +127,59 @@ paths:
                 type: array
           description: OK
       summary: View Waiting Orders
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /deliveryPerson/login:
+    post:
+      description: Get username and password and authenticate the delivery person.
+        Returns sessionId for further requests
+      operationId: login_delivery_person
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionId'
+          description: OK
+        "403":
+          description: Forbidden
+      summary: Login to delivery person account
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /deliveryPerson/register:
+    post:
+      description: "Create a new deliveryPerson account with unique username, strong\
+        \ password for authentication and other deliveryPerson info."
+      operationId: register_delivery_person
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/deliveryPersonDetails'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionId'
+          description: OK
+        "409":
+          content:
+            application/json:
+              schema:
+                enum:
+                - Username
+                - Phone
+                - Email
+                - Password
+                type: string
+          description: Conflict
+      summary: Register a new deliveryPerson
       x-openapi-router-controller: openapi_server.controllers.default_controller
   /file:
     get:
@@ -1029,6 +1082,34 @@ components:
       - phone
       - username
       title: vendorDetails
+      type: object
+    deliveryPersonDetails:
+      properties:
+        username:
+          example: testdeliveryperson1
+          title: username
+          type: string
+        password:
+          example: 1234@Ved
+          title: password
+          type: string
+        name:
+          example: deliveryPerson
+          title: name
+          type: string
+        phone:
+          example: "9878543210"
+          title: phone
+          type: string
+        email:
+          example: deliveryperson001@example.com
+          title: email
+          type: string
+      required:
+      - password
+      - phone
+      - username
+      title: deliveryPersonDetails
       type: object
     login_request:
       properties:

@@ -2,6 +2,7 @@
 # import models into model package
 from openapi_server.models.delivery_accept_order_request import DeliveryAcceptOrderRequest
 from openapi_server.models.delivery_drop_request import DeliveryDropRequest
+from openapi_server.models.delivery_person_details import DeliveryPersonDetails
 from openapi_server.models.filter import Filter
 from openapi_server.models.food_item import FoodItem
 from openapi_server.models.food_item_full import FoodItemFull

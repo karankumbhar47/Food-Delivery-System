@@ -3,7 +3,7 @@ info:
     title: FDS
     description: |
         This API allows to communicate with FDS (Food Delivery System) server.
-    version: 0.0.4
+    version: 0.0.5
 paths:
     # Registration and Authentication paths
     /register:
@@ -456,6 +456,64 @@ paths:
                 '401':
                     description: Unauthorized
 
+    /deliveryPerson/register:
+        post:
+            summary: Register a new deliveryPerson
+            description: Create a new deliveryPerson account with unique username, strong password for authentication and other deliveryPerson info.
+            operationId: registerDeliveryPerson
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/deliveryPersonDetails'
+                required: true
+            responses:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/sessionId'
+                "409":
+                    description: "Conflict"
+                    content:
+                        application/json:
+                            schema:
+                                type: string
+                                enum:
+                                    - Username
+                                    - Phone
+                                    - Email
+                                    - Password
+    /deliveryPerson/login:
+        post:
+            summary: Login to delivery person account
+            description: Get username and password and authenticate the delivery person.
+                Returns sessionId for further requests
+            operationId: loginDeliveryPerson
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - username
+                                - password
+                            properties:
+                                username:
+                                    type: string
+                                password:
+                                    type: string
+                required: true
+            responses:
+                "200":
+                    description: "OK"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/sessionId'
+                "403":
+                    description: "Forbidden"
 
     # Vendor API
     /vendor/register:
@@ -1099,6 +1157,29 @@ components:
                 location:
                     type: string
                     example: "Mess Block"
+
+        deliveryPersonDetails:
+            type: object
+            required:
+                - username
+                - password
+                - phone
+            properties:
+                username:
+                    type: string
+                    example: "testdeliveryperson1"
+                password:
+                    type: string
+                    example: "1234@Ved"
+                name:
+                    type: string
+                    example: "deliveryPerson"
+                phone:
+                    type: string
+                    example: "9878543210"
+                email:
+                    type: string
+                    example: "deliveryperson001@example.com"
 
 servers:
     - url: http://13.233.99.87:8080
