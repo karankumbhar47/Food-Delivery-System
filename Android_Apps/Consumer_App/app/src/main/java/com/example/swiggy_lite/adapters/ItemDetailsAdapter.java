@@ -12,20 +12,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.swiggy_lite.R;
-import com.example.swiggy_lite.models.FoodModel;
+import com.openapi.deliveryApp.model.FoodItem;
+import com.openapi.deliveryApp.model.FoodItemFull;
+import com.openapi.deliveryApp.model.OrderItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ItemDetailsAdapter extends RecyclerView.Adapter<ItemDetailsAdapter.viewHolder> {
-    ArrayList<FoodModel> list;
+    List<FoodItem> list;
     Context context;
 
-    public ItemDetailsAdapter(ArrayList<FoodModel> items, Context context) {
+    public ItemDetailsAdapter(List<FoodItem> items, Context context) {
         this.list = items;
         this.context = context;
     }
 
-    public void setList(ArrayList<FoodModel> updated_list) {
+    public void setList(List<FoodItem> updated_list) {
         this.list = updated_list;
         notifyDataSetChanged();
     }
@@ -48,10 +51,11 @@ public class ItemDetailsAdapter extends RecyclerView.Adapter<ItemDetailsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ItemDetailsAdapter.viewHolder holder, int position) {
-        FoodModel singleItem = list.get(position);
+        FoodItem singleItem = list.get(position);
         holder.item_name.setText(singleItem.getName());
-        holder.rating.setText(singleItem.getRating());
-        holder.location.setText(singleItem.getRender_location());
+        holder.rating.setText(String.format("%s(500+ rating)", singleItem.getRating()));
+        holder.location.setText(singleItem.getVendor());
+
         int drawableId = holder.itemView.getResources()
                 .getIdentifier("restaurant_"+(position+1),"drawable",holder.itemView.getContext().getPackageName());
 

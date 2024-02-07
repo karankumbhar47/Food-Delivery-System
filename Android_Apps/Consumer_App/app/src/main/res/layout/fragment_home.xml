@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:clickable="true"
             android:elevation="5dp"
             app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,8 +83,8 @@
                     android:id="@+id/food_item_searchView"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:clickable="true"
                     android:iconifiedByDefault="false"
-                    android:pointerIcon="wait"
                     android:queryBackground="@android:color/transparent"
                     android:queryHint="Search here"
                     android:searchIcon="@null"
@@ -102,7 +103,7 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/rating_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -126,7 +127,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4">
+            app:layout_constraintTop_toBottomOf="@+id/rating_textView">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/category_recyclerView"

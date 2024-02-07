@@ -1,0 +1,7 @@
+name,img_path,tags,price,max_quantity,is_available,current_rating,generic_name
+McChicken Burger,mcChicken_burgur,non-veg|Indian,138.10,10,1,4.4,burger
+Aloo Tikki Burger,aloo_tikki_burgur,veg|Indian,80,11,1,4.1,burger
+American Burger,american_burgur,veg|American,150,5,1,4.2,burger
+Chicken Zinger Burger,chicken_zinger_burgur,non-veg|Chinese,215,6,1,3.4,burger
+Fried Chicken Burger,fried_chicken_burgur,non-veg|Indian,139,6,1,4.3,burger
+

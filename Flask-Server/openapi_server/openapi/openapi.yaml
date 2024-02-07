@@ -3,7 +3,7 @@ info:
   description: |
     This API allows to communicate with FDS (Food Delivery System) server.
   title: FDS
-  version: 0.0.3
+  version: 0.0.5
 servers:
 - url: http://13.233.99.87:8080
 paths:
@@ -127,6 +127,59 @@ paths:
                 type: array
           description: OK
       summary: View Waiting Orders
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /deliveryPerson/login:
+    post:
+      description: Get username and password and authenticate the delivery person.
+        Returns sessionId for further requests
+      operationId: login_delivery_person
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login_request'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionId'
+          description: OK
+        "403":
+          description: Forbidden
+      summary: Login to delivery person account
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /deliveryPerson/register:
+    post:
+      description: "Create a new deliveryPerson account with unique username, strong\
+        \ password for authentication and other deliveryPerson info."
+      operationId: register_delivery_person
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/deliveryPersonDetails'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sessionId'
+          description: OK
+        "409":
+          content:
+            application/json:
+              schema:
+                enum:
+                - Username
+                - Phone
+                - Email
+                - Password
+                type: string
+          description: Conflict
+      summary: Register a new deliveryPerson
       x-openapi-router-controller: openapi_server.controllers.default_controller
   /file:
     get:
@@ -265,7 +318,7 @@ paths:
           content:
             application/json:
               schema:
-                type: number
+                type: integer
           description: OK
         "404":
           description: Not Found
@@ -788,7 +841,7 @@ components:
       example:
         itemId: itemId
         thumbnail: thumbnail
-        ratedBy: 1.4658129805029452
+        ratedBy: 1
         vendor: vendor
         price: 0.8008281904610115
         name: name
@@ -819,7 +872,7 @@ components:
           type: number
         ratedBy:
           title: ratedBy
-          type: number
+          type: integer
         tags:
           description: tags related to food item
           items:
@@ -1030,6 +1083,34 @@ components:
       - username
       title: vendorDetails
       type: object
+    deliveryPersonDetails:
+      properties:
+        username:
+          example: testdeliveryperson1
+          title: username
+          type: string
+        password:
+          example: 1234@Ved
+          title: password
+          type: string
+        name:
+          example: deliveryPerson
+          title: name
+          type: string
+        phone:
+          example: "9878543210"
+          title: phone
+          type: string
+        email:
+          example: deliveryperson001@example.com
+          title: email
+          type: string
+      required:
+      - password
+      - phone
+      - username
+      title: deliveryPersonDetails
+      type: object
     login_request:
       properties:
         username:
@@ -1053,7 +1134,7 @@ components:
         quantity:
           description: Quantity of the specific item.
           title: quantity
-          type: number
+          type: integer
       required:
       - itemId
       - quantity
@@ -1107,7 +1188,7 @@ components:
           type: number
         maxQuantity:
           title: maxQuantity
-          type: number
+          type: integer
         imageUrls:
           items:
             maxLength: 40
@@ -1144,7 +1225,7 @@ components:
           type: number
         maxQuantity:
           title: maxQuantity
-          type: number
+          type: integer
       required:
       - itemId
       title: vendorEditProduct_request
@@ -1185,7 +1266,7 @@ components:
     vendorGetRequestedOrders_200_response_inner_orderItems_inner:
       example:
         itemId: itemId
-        quantity: 0.8008281904610115
+        quantity: 0
       properties:
         itemId:
           maxLength: 40
@@ -1195,7 +1276,7 @@ components:
         quantity:
           description: Quantity of the specific item.
           title: quantity
-          type: number
+          type: integer
       required:
       - itemId
       - quantity
@@ -1211,9 +1292,9 @@ components:
         userId: userId
         orderItems:
         - itemId: itemId
-          quantity: 0.8008281904610115
+          quantity: 0
         - itemId: itemId
-          quantity: 0.8008281904610115
+          quantity: 0
       properties:
         orderId:
           title: orderId

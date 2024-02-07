@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.example.swiggy_lite.Interface.RegistrationCallback;
 import com.openapi.deliveryApp.api.DefaultApi;
 import com.openapi.deliveryApp.model.UserDetails;
 
@@ -31,23 +32,19 @@ import java.math.BigDecimal;
 
 
 public class UserRegistration extends AppCompatActivity {
-    public interface RegistrationCallback {
-        void onRegistrationSuccess(String sessionId);
-        void onRegistrationError(int errorCode, String errorMessage);
-    }
 
-    CardView create_button;
-    EditText user_name_editText, mobile_number_editText, gender_id_editText, password_editText, confirm_password_editText;
-    TextView back_button;
     DefaultApi api;
+    Context context;
     RequestQueue queue;
+    Boolean login_flag;
+    TextView back_button;
+    CardView create_button;
     Spinner genderDropdown;
     UserDetails userDetails;
-    UserDetails.GenderEnum userGender = UserDetails.GenderEnum.Male;
-    Boolean login_flag = false;
-    SharedPreferences loginPreference;
     LoadingDialog loadingDialog;
-    Context context;
+    UserDetails.GenderEnum userGender;
+    SharedPreferences loginPreference;
+    EditText user_name_editText, mobile_number_editText, password_editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +52,13 @@ public class UserRegistration extends AppCompatActivity {
         setContentView(R.layout.activity_user_registration);
 
         {
+            context = this;
+            login_flag = false;
             api = new DefaultApi();
             userDetails = new UserDetails();
+            userGender = UserDetails.GenderEnum.Male;
             queue = Volley.newRequestQueue(this);
+            loadingDialog = new LoadingDialog(this);
             create_button = findViewById(R.id.register_button_CardView);
             user_name_editText = findViewById(R.id.user_name_editText);
             mobile_number_editText = findViewById(R.id.phone_number_editText);
@@ -65,8 +66,6 @@ public class UserRegistration extends AppCompatActivity {
             password_editText = findViewById(R.id.password_editText);
             back_button = findViewById(R.id.backTologin_textView);
             loginPreference = getSharedPreferences(AppConstants.PREF_LOGIN,MODE_PRIVATE);
-            loadingDialog = new LoadingDialog(this);
-            context = this;
         }
 
         setupDropdown();
@@ -81,18 +80,20 @@ public class UserRegistration extends AppCompatActivity {
                         editor.putString(AppConstants.KEY_SESSION_ID, response);
                         editor.apply();
 
+                        String message = "Enjoy Your Favourite Dish \uD83D\uDE01";
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        View viewOrder = LayoutInflater.from(context).inflate(R.layout.order_success_dialog, null);
+                        View viewOrder = LayoutInflater.from(context).inflate(R.layout.custom_alert_dialog, null);
+                        TextView message_textView = viewOrder.findViewById(R.id.dialog_message_textView);
+                        message_textView.setText(message);
                         LottieAnimationView animationView = viewOrder.findViewById(R.id.lottieAnimation);
                         animationView.playAnimation();
 
                         builder.setView(viewOrder)
                                 .setTitle("User Registered Successfully")
-                                .setMessage("Enjoy Your Favourite Dish \uD83D\uDE01")
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(UserRegistration.this, MainPage.class);
+                                        Intent intent = new Intent(UserRegistration.this, MasterActivity.class);
                                         startActivity(intent);
                                         finish();
                                         dialog.dismiss();
@@ -113,7 +114,7 @@ public class UserRegistration extends AppCompatActivity {
                                     Toast.makeText(UserRegistration.this, "Weak Password. Please Use Strong Password", Toast.LENGTH_SHORT).show();
                                 }
                                 else{
-                                    Toast.makeText(UserRegistration.this, "Dublicate "+errorMessage+". Please Change your "+errorMessage, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(UserRegistration.this, "Duplicate "+errorMessage+". Please Change your "+errorMessage, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }
@@ -132,7 +133,7 @@ public class UserRegistration extends AppCompatActivity {
 
     }
 
-    public boolean validateUser(RegistrationCallback callback){
+    public void validateUser(RegistrationCallback callback){
         String  user_name, mobile_number, password;
 
         user_name = user_name_editText.getText().toString().trim();
@@ -167,7 +168,7 @@ public class UserRegistration extends AppCompatActivity {
                     BigDecimal phoneBigDecimal = new BigDecimal(phoneNumberValue);
 
                     userDetails.setUsername(user_name);
-                    userDetails.setPhone(phoneBigDecimal);
+                    userDetails.setPhone(mobile_number);
                     userDetails.setPassword(password);
 
                     userDetails.setEmail("");
@@ -182,8 +183,10 @@ public class UserRegistration extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             login_flag = true;
-                            callback.onRegistrationSuccess(response);
-                            loadingDialog.dismissdialog();
+                            Log.d("myTag", "onResponse: response length "+response.trim().length());
+                            Log.d("myTag", "onResponse: response "+response);
+                            callback.onRegistrationSuccess(response.trim().substring(1, 41));
+                            loadingDialog.dismissDialog();
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -191,11 +194,11 @@ public class UserRegistration extends AppCompatActivity {
                             try {
                                 int statusCode = error.networkResponse.statusCode;
                                 String data = new String(error.networkResponse.data);
-                                callback.onRegistrationError(statusCode, data);
-                                loadingDialog.dismissdialog();
+                                callback.onRegistrationError(statusCode, data.trim().replace("\"",""));
+                                loadingDialog.dismissDialog();
                             } catch (Exception e) {
                                 callback.onRegistrationError(0,null);
-                                loadingDialog.dismissdialog();
+                                loadingDialog.dismissDialog();
                             }
                         }
                     });
@@ -205,7 +208,6 @@ public class UserRegistration extends AppCompatActivity {
                     Toast.makeText(UserRegistration.this,"Please fill all correct info", Toast.LENGTH_SHORT).show();
                 }
         }
-        return false;
     }
 
     private void setupDropdown() {

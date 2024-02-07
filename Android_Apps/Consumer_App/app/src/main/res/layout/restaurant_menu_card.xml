@@ -30,7 +30,7 @@
                 android:layout_height="40dp"
                 android:backgroundTint="@color/orange"
                 android:elevation="5dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp">
 
@@ -50,7 +50,7 @@
                 android:id="@+id/numberPicker_constrainLayout"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/minusIcon"

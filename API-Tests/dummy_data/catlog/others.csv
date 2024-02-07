@@ -1,0 +1,17 @@
+name,img_path,tags,price,max_quantity,is_available,current_rating,generic_name
+Plain idli,plain_idli,veg|South Indian,79,20,1,4.0,idali
+Plum Cake,plum_cake,non-veg|Indian,90,12,1,4.4,cake
+Egg Roll,egg_roll,non-veg|Indian,69,10,1,4.3,roll
+Vada Pav,vada_pav,veg|Indian,79,20,1,4.3,vada
+Chocolate Pastry,chocolate_pastry,veg|Indian,60,20,1,4.4,pastry
+Masala Dosa,masala_dosa,veg|South Indian,109,20,1,4.2,dosa
+Gulab Jamun,gulab_jamun,veg|Indian,65,20,1,4.1,gulab_jamun
+Chole Bhature,chole_bhature,veg|North Indian,229,20,1,4.2,chole_bhature
+Cold Coffee,cold_coffee,veg|Indian,160,20,1,4.3,cold_coffee
+Americano Pasta Veg,americano_pasta,veg|American,195,20,1,4.1,pasta
+Aloo Paratha,aloo_paratha,veg|North Indian,70,20,1,3.8,paratha
+Haka Noodles,haka_noodles,veg|Indian,229,20,1,4.2,noodles
+Dal Khichdi,dal_khichadi,veg|Indian,190,20,1,4.2,khichdi
+Chicken Kebab,chicken_kebab,non-veg|Indian,269,20,1,4.5,kebab
+Strawberry Ice Cream,strawberry_ice_cream,veg|Indian,60,20,1,4.8,ice_cream
+

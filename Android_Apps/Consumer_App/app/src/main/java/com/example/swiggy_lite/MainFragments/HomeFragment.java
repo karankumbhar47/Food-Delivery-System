@@ -1,9 +1,13 @@
 package com.example.swiggy_lite.MainFragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -11,25 +15,31 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.swiggy_lite.AppConstants;
+import com.example.swiggy_lite.Common_Fragment.ItemDetailsFragment;
 import com.example.swiggy_lite.DummyData;
 import com.example.swiggy_lite.Home_Fragments.MainFilterFragment;
 import com.example.swiggy_lite.Home_Fragments.category_search;
+import com.example.swiggy_lite.MainActivity;
 import com.example.swiggy_lite.R;
-import com.example.swiggy_lite.RestaurantInfo;
+import com.example.swiggy_lite.Home_Fragments.RestaurantInfo;
 import com.example.swiggy_lite.SearchActivity;
 import com.example.swiggy_lite.adapters.CategoryAdapter;
 import com.example.swiggy_lite.adapters.ItemDetailsAdapter;
-import com.example.swiggy_lite.Common_Fragment.ItemDetailsFragment;
-import com.example.swiggy_lite.models.FoodModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.openapi.deliveryApp.model.OrderItem;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -39,59 +49,88 @@ public class HomeFragment extends Fragment {
     }
 
     RecyclerView category_recyclerView, recommendation_recyclerView;
-    RecyclerView.Adapter categoryAdapter, recommendationAdapter;
-    ArrayList<FoodModel> foodItemList;
+    CategoryAdapter categoryAdapter;
+    ItemDetailsAdapter recommendationAdapter;
     private PopupWindow popupWindow;
-    CheckBox sort_button;
+    CheckBox sort_button,cuisine,filter_button,fast_delivery,pureVeg,offers;
+    SearchView food_item_searchView;
+    CardView search_bar_cardView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        {
+            category_recyclerView = view.findViewById(R.id.category_recyclerView);
+            food_item_searchView = view.findViewById(R.id.food_item_searchView);
+            filter_button = view.findViewById(R.id.filter_textView);
+            fast_delivery = view.findViewById(R.id.fast_delivery_textView);
+            cuisine = view.findViewById(R.id.cuisine_textView);
+            pureVeg = view.findViewById(R.id.pure_veg_textView);
+            offers = view.findViewById(R.id.offers_textView);
+            sort_button = view.findViewById(R.id.sort_textView);
+            search_bar_cardView = view.findViewById(R.id.search_bar_cardView);
+        }
 
-        category_recyclerView = view.findViewById(R.id.category_recyclerView);
         category_recyclerView.setLayoutManager(new GridLayoutManager(this.requireContext(), 1, RecyclerView.HORIZONTAL, false));
         categoryAdapter = new CategoryAdapter(DummyData.categoryList, this.requireContext());
+        category_recyclerView.setAdapter(categoryAdapter);
         CategoryAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                load(new category_search());
-            }
-        });
-        category_recyclerView.setAdapter(categoryAdapter);
-
-        SearchView food_item_searchView = view.findViewById(R.id.food_item_searchView);
-        food_item_searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                intent.putExtra("isSearchBarActivated", true);
-                startActivity(intent);
+                load(new category_search(AppConstants.LIST_CATEGORY.get(position)));
             }
         });
 
         recommendation_recyclerView = view.findViewById(R.id.recommendation_recyclerView);
-        recommendation_recyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(),RecyclerView.VERTICAL,false));
-        recommendationAdapter = new ItemDetailsAdapter(DummyData.foodItemList, this.requireContext());
+        recommendation_recyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(), RecyclerView.VERTICAL, false));
+        recommendationAdapter = new ItemDetailsAdapter(DummyData.dummyFood, this.requireContext());
         ItemDetailsAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                load(new RestaurantInfo(DummyData.foodItemList));
+                load(new RestaurantInfo());
             }
         });
         recommendation_recyclerView.setAdapter(recommendationAdapter);
 
-        CheckBox filter_button = view.findViewById(R.id.filter_textView);
+//        search_bar_cardView.setOnClickListener(v -> {
+//            Intent intent = new Intent(requireActivity(), SearchActivity.class);
+//            startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
+//        });
+
+        setSearchViewOnClickListener(food_item_searchView,new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSearch(v);
+            }
+        });
+//
+//        food_item_searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                Intent intent = new Intent(requireActivity(), SearchActivity.class);
+//                startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                Intent intent = new Intent(requireActivity(), SearchActivity.class);
+//                startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
+//                return true;
+//            }
+//        });
+
+
         filter_button.setOnClickListener(v -> {
             BottomSheetDialogFragment filter_fragment = new MainFilterFragment(filter_button);
             if (filter_button.isChecked()) {
                 FragmentManager fragmentManager = this.getFragmentManager();
-                filter_fragment.show(Objects.requireNonNull(fragmentManager),"filter");
+                filter_fragment.show(Objects.requireNonNull(fragmentManager), "filter");
             } else {
             }
         });
-
-        CheckBox fast_delivery = view.findViewById(R.id.fast_delivery_textView);
-        fast_delivery.setOnClickListener( v -> {
+        fast_delivery.setOnClickListener(v -> {
             if (fast_delivery.isChecked()) {
                 fast_delivery.setBackgroundResource(R.drawable.active_button_background);
                 fast_delivery.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel_icon, 0);
@@ -100,9 +139,7 @@ public class HomeFragment extends Fragment {
                 fast_delivery.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         });
-
-        CheckBox cuisine = view.findViewById(R.id.cuisine_textView);
-        cuisine.setOnClickListener( v -> {
+        cuisine.setOnClickListener(v -> {
             if (cuisine.isChecked()) {
                 cuisine.setBackgroundResource(R.drawable.active_button_background);
                 cuisine.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel_icon, 0);
@@ -111,9 +148,7 @@ public class HomeFragment extends Fragment {
                 cuisine.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         });
-
-        CheckBox pureVeg = view.findViewById(R.id.pure_veg_textView);
-        pureVeg.setOnClickListener( v -> {
+        pureVeg.setOnClickListener(v -> {
             if (pureVeg.isChecked()) {
                 pureVeg.setBackgroundResource(R.drawable.active_button_background);
                 pureVeg.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel_icon, 0);
@@ -122,9 +157,7 @@ public class HomeFragment extends Fragment {
                 pureVeg.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         });
-
-        CheckBox offers = view.findViewById(R.id.offers_textView);
-        offers.setOnClickListener( v -> {
+        offers.setOnClickListener(v -> {
             if (offers.isChecked()) {
                 offers.setBackgroundResource(R.drawable.active_button_background);
                 offers.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel_icon, 0);
@@ -133,18 +166,18 @@ public class HomeFragment extends Fragment {
                 offers.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         });
-
-        sort_button = view.findViewById(R.id.sort_textView);
-        sort_button.setOnClickListener( v -> { if (sort_button.isChecked()) {showCustomDialog(v);}
+        sort_button.setOnClickListener(v -> {
+            if (sort_button.isChecked()) {
+                showCustomDialog(v);
+            }
         });
-
         return view;
     }
 
-    void load(Fragment fragment){
+    void load(Fragment fragment) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_frame,fragment);
+        fragmentTransaction.replace(R.id.main_frame, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -180,4 +213,39 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+       if (requestCode == AppConstants.SECOND_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK && data != null) {
+                String resultData = data.getStringExtra(AppConstants.KEY_ITEM_ID);
+                load(new ItemDetailsFragment(resultData));
+            }
+        }
+    }
+
+    public void openSearch(View view) {
+        Intent intent = new Intent(requireActivity(), SearchActivity.class);
+        startActivityForResult(intent, AppConstants.SECOND_ACTIVITY_REQUEST_CODE);
+    }
+
+    public static void setSearchViewOnClickListener(View v, View.OnClickListener listener) {
+        if (v instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup)v;
+            int count = group.getChildCount();
+            for (int i = 0; i < count; i++) {
+                View child = group.getChildAt(i);
+                if (child instanceof LinearLayout || child instanceof RelativeLayout) {
+                    setSearchViewOnClickListener(child, listener);
+                }
+
+                if (child instanceof TextView) {
+                    TextView text = (TextView)child;
+                    text.setFocusable(false);
+                }
+                child.setOnClickListener(listener);
+            }
+        }
+    }
 }

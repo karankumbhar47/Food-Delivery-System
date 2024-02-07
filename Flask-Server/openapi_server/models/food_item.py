@@ -28,7 +28,7 @@ class FoodItem(Model):
         :param rating: The rating of this FoodItem.  # noqa: E501
         :type rating: float
         :param rated_by: The rated_by of this FoodItem.  # noqa: E501
-        :type rated_by: float
+        :type rated_by: int
         :param tags: The tags of this FoodItem.  # noqa: E501
         :type tags: List[str]
         """
@@ -39,7 +39,7 @@ class FoodItem(Model):
             'vendor': str,
             'price': float,
             'rating': float,
-            'rated_by': float,
+            'rated_by': int,
             'tags': List[str]
         }
 
@@ -213,22 +213,22 @@ class FoodItem(Model):
         self._rating = rating
 
     @property
-    def rated_by(self) -> float:
+    def rated_by(self) -> int:
         """Gets the rated_by of this FoodItem.
 
 
         :return: The rated_by of this FoodItem.
-        :rtype: float
+        :rtype: int
         """
         return self._rated_by
 
     @rated_by.setter
-    def rated_by(self, rated_by: float):
+    def rated_by(self, rated_by: int):
         """Sets the rated_by of this FoodItem.
 
 
         :param rated_by: The rated_by of this FoodItem.
-        :type rated_by: float
+        :type rated_by: int
         """
 
         self._rated_by = rated_by

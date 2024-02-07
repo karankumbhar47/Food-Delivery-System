@@ -11,16 +11,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.swiggy_lite.R;
-import com.example.swiggy_lite.models.FoodModel;
+import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.example.swiggy_lite.models.OrderModel;
+import com.openapi.deliveryApp.model.OrderItem;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.viewHolder> {
-    ArrayList<OrderModel> orderedList;
+    List<OrderModel> orderedList;
     Context context;
 
-    public HistoryListAdapter(ArrayList<OrderModel> items,Context context) {
+    public HistoryListAdapter(List<OrderModel> items,Context context) {
         this.orderedList = items;
         this.context = context;
     }
@@ -34,7 +37,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
         listener = clickListener;
     }
 
-    public void setList(ArrayList<OrderModel> updateList){
+    public void setList(List<OrderModel> updateList){
         this.orderedList = updateList;
         notifyDataSetChanged();
     }
@@ -49,17 +52,17 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         OrderModel orderModel = orderedList.get(position);
-        ArrayList<FoodModel> foodModelArrayList = orderModel.getOrderedItems();
-        int sum = 0;
-        for(FoodModel foodModel: foodModelArrayList){
-            sum += foodModel.getQuantity() * foodModel.getPrice();
+        Float sum = 0f; // Initialize sum as BigDecimal.ZERO
+
+        for (OrderItemAdvanced foodModel : orderModel.getOrderItemAdvanced()) {
+            sum += foodModel.getPrice()*foodModel.getQuantity();
         }
 
-        holder.order_date_textView.setText(orderModel.getDate()+", "+orderModel.getTime());
-        holder.order_total_textView.setText("₹ "+String.valueOf(sum));
+        holder.order_date_textView.setText(String.format("%s, %s", orderModel.getDate(), orderModel.getTime()));
+        holder.order_total_textView.setText(String.format("₹ %s", String.valueOf(sum)));
         holder.view_details_button.setOnClickListener(v -> listener.viewDetails(position));
 
-        HistoryItemsDetailsAdapter itemList = new HistoryItemsDetailsAdapter(foodModelArrayList);
+        HistoryItemsDetailsAdapter itemList = new HistoryItemsDetailsAdapter(orderModel.getOrderItemAdvanced());
         holder.item_list_recyclerView.setLayoutManager(new LinearLayoutManager(context,RecyclerView.VERTICAL, false));
         holder.item_list_recyclerView.setAdapter(itemList);
     }

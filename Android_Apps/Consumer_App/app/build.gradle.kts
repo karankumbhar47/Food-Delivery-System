@@ -1,3 +1,5 @@
+import org.openapitools.generator.gradle.plugin.extensions.OpenApiGeneratorGenerateExtension
+
 plugins {
     id("com.android.application")
     id("org.openapi.generator")
@@ -53,14 +55,13 @@ openApiGenerate {
     apiPackage.set("com.openapi.deliveryApp.api")
     invokerPackage.set("com.openapi.deliveryApp.invoker")
     modelPackage.set("com.openapi.deliveryApp.model")
+    typeMappings.set(mapOf("number" to "Float"))
     configOptions.set(mapOf("dateLibrary" to "java8"))
 }
 
 //tasks.build {
 //    dependsOn("assemble", "openApiGenerate")
 //}
-
-
 
 dependencies {
     implementation("com.google.android.material:material:1.11.0")
@@ -85,4 +86,9 @@ dependencies {
     implementation(group = "org.apache.httpcomponents", name = "httpmime", version = "4.3") {
         exclude(group = "org.apache.httpcomponents", module = "httpclient")
     }
+    implementation("io.reactivex.rxjava2:rxandroid:2.0.2")
+    implementation("io.reactivex.rxjava2:rxjava:2.1.13")
+    implementation("androidx.core:core-splashscreen:1.0.0")
+
 }
+

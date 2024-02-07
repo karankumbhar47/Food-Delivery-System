@@ -18,10 +18,10 @@ import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.adapters.HistoryListAdapter;
 
 public class HistoryFragment extends Fragment {
-    public HistoryFragment() {}
-
     RecyclerView recyclerView;
     HistoryListAdapter historyListAdapter;
+
+    public HistoryFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,22 +30,17 @@ public class HistoryFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.order_history_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(),LinearLayoutManager.VERTICAL,false));
-        historyListAdapter = new HistoryListAdapter(DummyData.orderList,requireContext());
-
+        historyListAdapter = new HistoryListAdapter(DummyData.dummyOrderList,requireContext());
         historyListAdapter.setOnItemClickListener(new HistoryListAdapter.OnItemClickListener() {
             @Override
             public void viewDetails(int position) {
-                DummyData.historyDetails = DummyData.orderList.get(position).getOrderedItems();
-                DummyData.position = position;
-                load(new HistoryDetailsFragment());
+                load(new HistoryDetailsFragment(position));
             }
         });
         recyclerView.setAdapter(historyListAdapter);
 
-
         return view;
     }
-
 
     void load(Fragment fragment){
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
