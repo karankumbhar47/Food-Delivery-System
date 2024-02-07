@@ -5,7 +5,7 @@
     android:id="@+id/idRLContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DD7B30"
+    android:background="@color/dark_green"
     android:orientation="vertical"
     android:textAlignment="center"
 
@@ -21,7 +21,7 @@
         android:layout_height="140dp"
         android:layout_marginTop="170dp"
         app:cardCornerRadius="190dp"
-        app:cardBackgroundColor="#381C06"
+        app:cardBackgroundColor="@color/dark_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
                 android:id="@+id/app_logo_imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#381C06"
+                android:background="@color/dark_green"
                 android:visibility="visible"
                 app:srcCompat="@drawable/app_logo" />
         </androidx.cardview.widget.CardView>

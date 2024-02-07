@@ -15,11 +15,11 @@ public class SectionsPagerAdapter extends FragmentStateAdapter {
         // Return the appropriate Fragment for each position
         switch (position) {
             case 0:
-                return new OrdersFragment("New Orders");
+                return new MainPage.OrdersFragment("New Orders");
             case 1:
-                return new OrdersFragment("Ongoing Orders");
+                return new MainPage.OrdersFragment("Ongoing Orders");
             case 2:
-                return new OrdersFragment("Completed Orders");
+                return new MainPage.OrdersFragment("Completed Orders");
             default:
                 throw new IllegalArgumentException("Invalid position: " + position);
         }

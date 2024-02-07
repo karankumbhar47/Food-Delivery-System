@@ -1,4 +1,4 @@
-package com.example.swiggy_lite;
+package com.example.delivery_app;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
