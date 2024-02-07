@@ -98,7 +98,7 @@
                     android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#E87600"
+                    android:background="@color/dark_green"
                     android:gravity="center|center_vertical"
                     android:text="Login"
                     android:textAlignment="center"
@@ -135,7 +135,7 @@
                     android:layout_marginStart="2dp"
                     android:layout_weight="1"
                     android:text="Register"
-                    android:textColor="#E87600"
+                    android:textColor="@color/dark_green"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -165,7 +165,8 @@
                         android:drawablePadding="20dp"
                         android:hint="User Name"
                         android:inputType="text"
-                        android:padding="12dp" />
+                        android:padding="12dp"
+                        android:backgroundTint="@color/white"/>
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView

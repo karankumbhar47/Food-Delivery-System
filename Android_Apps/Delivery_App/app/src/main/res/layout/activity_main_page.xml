@@ -5,14 +5,14 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main_page" >
+    tools:context=".MainPage" >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#381C06"
-        app:cardBackgroundColor="#422308"
+        android:background="@color/dark_green"
+        app:cardBackgroundColor="@color/dark_green"
         app:cardCornerRadius="50dp"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -35,7 +35,7 @@
                 android:fontFamily="cursive"
                 android:text="UnWrap 'n' Savour \n         delivery"
                 android:textAlignment="center"
-                android:textColor="#FFAB2F"
+                android:textColor="@color/white"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/userImageCard"
@@ -69,8 +69,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topBar"
-        app:tabIndicatorColor="#DD7B30"
-        app:tabSelectedTextColor="#DD7B30">
+        app:tabIndicatorColor="@color/dark_green"
+        app:tabSelectedTextColor="@color/primary">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/newOrderTab"
