@@ -1,8 +1,8 @@
 name,img_path,tags,price,max_quantity,is_available,current_rating,generic_name
-Schezwan Maggi,schezwan_maggi,veg|Indian,90,13,1,4.0,maggi
-McChicken Burger,mcChicken_burgur,non-veg|Indian,138.10,10,1,4.4,burger
-Roasted Biryani,roasted_biryani,non-veg|Indian,140,8,1,4.2,biryani 
-Mexican Pizza,mexican_pizza, veg|Indian, 309,5,1,4.3,pizza  
-Plain idli,plain_idli,veg|South Indian,79,20,1,4.0,idali
-Americano Pasta Veg,americano_pasta,veg|American,195,20,1,4.1,pasta
-Haka Noodles,haka_noodles,veg|Indian,229,20,1,4.2,noodles
+Schezwan Maggi,schezwan_maggi,veg|Indian|maggi,90,13,1,4.0,maggi
+McChicken Burger,mcChicken_burgur,non-veg|Indian|burger,138.10,10,1,4.4,burger
+Roasted Biryani,roasted_biryani,non-veg|Indian|biryani ,140,8,1,4.2,biryani 
+Mexican Pizza,mexican_pizza,veg|Indian|pizza  , 309,5,1,4.3,pizza  
+Plain idli,plain_idli,veg|South Indian|idali,79,20,1,4.0,idali
+Americano Pasta Veg,americano_pasta,veg|American|pasta,195,20,1,4.1,pasta
+Haka Noodles,haka_noodles,veg|Indian|noodles,229,20,1,4.2,noodles

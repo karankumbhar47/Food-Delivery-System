@@ -1,23 +1,34 @@
 import sys
 import csv
 import os
-import time
 import argparse
+sys.path.insert(0,"/home/karan/Templates/Food-Delivery-System/API-Tests/")
 import FoodDeliveryAPI
 from FoodDeliveryAPI.rest import ApiException
-from pprint import pprint
 
-from FoodDeliveryAPI.models.vendor_details import VendorDetails
-from FoodDeliveryAPI.models.user_details import UserDetails 
 from FoodDeliveryAPI.models.login_request import LoginRequest
 from FoodDeliveryAPI.models.vendor_add_product_request import VendorAddProductRequest
 
+
 vendor_data_path = "./API-Tests/dummy_data/vendor/vendor.csv"
 
-def create_vendor_product(row):
+def getImgId(path,api_instance,session_id):
+    with open(path, 'rb') as file:
+        image_data = file.read()
+        try:
+            api_response = api_instance.put_file(session_id, image_data)
+            print(f"Added image {path}, image id is {api_response.strip()}\n")
+            return api_response.strip()
+        except ApiException as e:
+            print("Exception when sending image: %s\n" % e)
+            return None 
+
+def create_vendor_product(row,api_instance,session_id):
+    img_path = f"./API-Tests/dummy_data/catlog/images/{row['img_path']}.jpg" 
+    img_id = getImgId(img_path,api_instance,session_id)
     return {
         "name": row['name'],
-        "thumbnail": f"$some_path/{row['img_path']}.jpg",
+        "thumbnail": img_id,
         "price": float(row['price']),
         "maxQuantity": int(row['max_quantity']),
         "imageUrls": [],  
@@ -25,17 +36,16 @@ def create_vendor_product(row):
     }
 
 
-def read_menu_items(file_path):
+def read_menu_items(file_path, api_instance,session_id):
     items = []
     with open(file_path, 'r', newline='') as file:
         reader = csv.DictReader(file)
         for row in reader:
-            items.append(create_vendor_product(row))
+            items.append(create_vendor_product(row,api_instance,session_id))
     return items
 
 
 def add_product(v_username, v_password, catlog_data_path,api_instance):
-    items = read_menu_items(catlog_data_path)
 
     try:
         print(f"Trying to logging in for vendor {v_username}")
@@ -46,15 +56,14 @@ def add_product(v_username, v_password, catlog_data_path,api_instance):
 
         session_id = str.strip(api_response)
         print(f"Session Id for vendor {v_username}: "+session_id)
-        print(f"length of sesstion id is {len(session_id)}\n")
         print(f"Registering products with session id {session_id} ")
+        items = read_menu_items(catlog_data_path,api_instance,session_id)
         for item in items:
             try:
+                print(item)
                 api_response = api_instance.vendor_add_product(session_id, VendorAddProductRequest.from_dict(item))
-                print(f"Added product {item['name']}, product id is {api_response.strip()}\n")
             except ApiException as e:
                 print("Exception when calling login_vendor: %s\n" % e)
-
     except ApiException as e:
         print(f"Exception when calling login_vendor {v_username}: %s\n" % e)
 

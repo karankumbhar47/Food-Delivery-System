@@ -1,8 +1,8 @@
 name,img_path,tags,price,max_quantity,is_available,current_rating,generic_name
-Veg Maggi,veg_maggi,veg|Indian,110,34,1,4.0,maggi
-Masala Maggi,masala_maggi,veg|Indian,70,8,1,4.1,maggi
-Mutton Biryani,mutton_biryani,non-veg|Indian,250,10,1,4.1,biryani
-Chicken Tikka Pizza,chicken_tikka_pizza, veg|Indian, 499, 2,1,4.3,pizza
-Gulab Jamun,gulab_jamun,veg|Indian,65,20,1,4.1,gulab_jamun
-Chicken Kebab,chicken_kebab,non-veg|Indian,269,20,1,4.5,kebab
-Strawberry Ice Cream,strawberry_ice_cream,veg|Indian,60,20,1,4.8,ice_cream
+Veg Maggi,veg_maggi,veg|Indian|maggi,110,34,1,4.0,maggi
+Masala Maggi,masala_maggi,veg|Indian|maggi,70,8,1,4.1,maggi
+Mutton Biryani,mutton_biryani,non-veg|Indian|biryani,250,10,1,4.1,biryani
+Chicken Tikka Pizza,chicken_tikka_pizza,veg|Indian|pizza, 499, 2,1,4.3,pizza
+Gulab Jamun,gulab_jamun,veg|Indian|gulab_jamun,65,20,1,4.1,gulab_jamun
+Chicken Kebab,chicken_kebab,non-veg|Indian|kebab,269,20,1,4.5,kebab
+Strawberry Ice Cream,strawberry_ice_cream,veg|Indian|ice_cream,60,20,1,4.8,ice_cream
