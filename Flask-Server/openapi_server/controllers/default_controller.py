@@ -334,7 +334,7 @@ def get_file():  # noqa: E501
         return ("", 404)
 
 
-def get_orders(session_id, body):  # noqa: E501
+def get_orders():  # noqa: E501
     """get_orders
 
      # noqa: E501
@@ -346,7 +346,28 @@ def get_orders(session_id, body):  # noqa: E501
 
     :rtype: Union[VendorGetRequestedOrders200ResponseInner, Tuple[VendorGetRequestedOrders200ResponseInner, int], Tuple[VendorGetRequestedOrders200ResponseInner, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    session_id = connexion.request.headers.get("sessionId")
+    order_id = connexion.request.headers.get("orderId")
+    database.open()
+    verify_status = database.verify_session_id(session_id)
+    order_id_exists = database.check_exists(order_id, "order_id", "FoodOrder")
+    if verify_status is not None and order_id_exists:
+        _, user_type = verify_status
+        if user_type == "Consumer":
+            database.sqlCursor.execute(f'''SELECT *
+                                          FROM FoodOrder
+                                          WHERE order_id = "{order_id}"
+                                       ''')
+            result = database.sqlCursor.fetchone()[0]
+            order = VendorGetRequestedOrders200ResponseInner(
+                 result[0], result[5],result[6], result[4], result[1], result[3], result[2]
+            )
+            database.close()
+            return order, 200
+        database.close()
+        return VendorGetRequestedOrders200ResponseInner(), 401, {"error": "Unathorized user"}
+    database.close()
+    return VendorGetRequestedOrders200ResponseInner(), 401, {"error": "Incorrect orderId or sessionId"}
 
 
 def get_product(id_):  # noqa: E501
@@ -489,10 +510,10 @@ def place_order():  # noqa: E501
                 query =  f'''INSERT INTO FoodOrder (order_id, items, delivery_location, pickup_location, vendor_id,  consumer_id )
                             VALUES ('{order_id}', "{values}", '{place_order_request.location}','{location}','{key}', '{consumer_id}' );'''
                 print(query)
-                database.sqlCursor.execute(f'{query}')
+                database.sqlCursor.execute(query)
                 order_ids.append(order_id)
                 database.sqlConnection.commit()
-            return (f'{order_ids}', 200)   
+            return ('{order_ids}', 200)   
         return ('Unauthorized', 401)
     return ('Unauthorized', 401)
 
@@ -819,7 +840,7 @@ def vendor_edit_product():  # noqa: E501
 
 
 
-def vendor_get_accepted_orders(session_id):  # noqa: E501
+def vendor_get_accepted_orders():  # noqa: E501
     """vendor_get_accepted_orders
 
      # noqa: E501
@@ -829,10 +850,38 @@ def vendor_get_accepted_orders(session_id):  # noqa: E501
 
     :rtype: Union[List[VendorGetRequestedOrders200ResponseInner], Tuple[List[VendorGetRequestedOrders200ResponseInner], int], Tuple[List[VendorGetRequestedOrders200ResponseInner], int, Dict[str, str]]
     """
-    return 'do some magic!'
+    session_id = connexion.request.headers.get("sessionId")
+    database.open()
+    verify_status = database.verify_session_id(session_id)
+    if verify_status is not None:
+        _, user_type = verify_status
+        if user_type == "Vendor":
+            database.sqlCursor.execute(f'''SELECT user_id 
+                                          FROM Session
+                                          WHERE session_id = "{session_id}"
+                                       ''')
+            user_id = database.sqlCursor.fetchone()[0]
+            query = f'''SELECT * 
+                        FROM FoodOrder 
+                        WHERE vendor_id = "{user_id}" AND status is accepted 
+                    '''
+            database.sqlCursor.execute(query)
+            result = database.sqlCursor.fetchall()
+            accpeted_list = []
+            for ele in result:
+                request = VendorGetRequestedOrders200ResponseInner(
+                    ele[0], ele[5], ele[6], ele[4], ele[1], ele[3], ele[2]
+                )
+                accpeted_list.append(request)
+            database.close()
+            return accpeted_list, 200
+        database.close()
+        return ["Unauthorized Session Id"], 403 
+    database.close()
+    return ["Session Id Not Found"], 404
 
 
-def vendor_get_requested_orders(session_id):  # noqa: E501
+def vendor_get_requested_orders():  # noqa: E501
     """vendor_get_requested_orders
 
      # noqa: E501
@@ -842,8 +891,36 @@ def vendor_get_requested_orders(session_id):  # noqa: E501
 
     :rtype: Union[List[VendorGetRequestedOrders200ResponseInner], Tuple[List[VendorGetRequestedOrders200ResponseInner], int], Tuple[List[VendorGetRequestedOrders200ResponseInner], int, Dict[str, str]]
     """
-    return 'do some magic!'
-
+    session_id = connexion.request.headers.get("sessionId")
+    database.open()
+    verify_status = database.verify_session_id(session_id)
+    if verify_status is not None:
+        _, user_type = verify_status
+        if user_type == "Vendor":
+            database.sqlCursor.execute(f'''SELECT user_id 
+                                          FROM Session
+                                          WHERE session_id = "{session_id}"
+                                       ''')
+            user_id = database.sqlCursor.fetchone()[0]
+            query = f'''SELECT * 
+                        FROM FoodOrder 
+                        WHERE vendor_id = "{user_id}" AND status is NULL 
+                    '''
+            database.sqlCursor.execute(query)
+            result = database.sqlCursor.fetchall()
+            print(result)
+            requested_list = []
+            for ele in result:
+                request = VendorGetRequestedOrders200ResponseInner(
+                    ele[0], ele[5], ele[6], ele[4], ele[1], ele[3], ele[2]
+                )
+                requested_list.append(request)
+            database.close()
+            return requested_list, 200
+        database.close()
+        return ["Unauthorized Session Id"], 403 
+    database.close()
+    return ["Session Id Not Found"], 404
 
 def register_vendor():
     if connexion.request.is_json:
