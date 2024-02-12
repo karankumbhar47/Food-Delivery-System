@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 SharedPreferences preferences = getSharedPreferences(AppConstants.PREF_LOGIN,MODE_PRIVATE);
-                boolean login_flag = false; // preferences.getBoolean(AppConstants.KEY_LOGIN_FLAG,false);
+                boolean login_flag = preferences.getBoolean(AppConstants.KEY_LOGIN_FLAG,false);
                 String sessionId = preferences.getString(AppConstants.KEY_SESSION_ID,"");
 
                 Intent intent;

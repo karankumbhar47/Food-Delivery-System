@@ -28,7 +28,6 @@ public class VendorLoginActivity extends AppCompatActivity {
     CardView login_button;
     EditText username_textView;
     EditTextWithDrawableClick password_textView;
-    String sessionId;
     DefaultApi api;
     LoadingDialog loadingDialog;
     ImageView appLogo;
@@ -88,7 +87,7 @@ public class VendorLoginActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String result) {
                             editor.putBoolean(AppConstants.KEY_LOGIN_FLAG, true);
-                            editor.putString(AppConstants.KEY_SESSION_ID, sessionId);
+                            editor.putString(AppConstants.KEY_SESSION_ID, result);
                             editor.apply();
 
                             String message = "Happy Serving!";

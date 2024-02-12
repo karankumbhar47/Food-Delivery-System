@@ -180,7 +180,7 @@
                         android:background="@color/surface"
                         android:drawableStart="@drawable/user_logo"
                         android:drawablePadding="20dp"
-                        android:hint="User Name"
+                        android:hint="username"
                         android:inputType="text"
                         android:padding="12dp" />
                 </androidx.cardview.widget.CardView>
