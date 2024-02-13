@@ -530,6 +530,7 @@ def put_file():  # noqa: E501
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
+    database.open()
     data = connexion.request.get_data()
     session_id = connexion.request.headers.get("sessionId")
     verify_status = database. verify_session_id(session_id)
@@ -564,17 +565,15 @@ def query():  # noqa: E501
                                    WHERE session_id = "{session_id}"
                                    ''')
         count = database.sqlCursor.fetchone()[0]
-
         if count == 1:
             database.open()
-            tags = query_request
-            tags = tags.lower()
+            searchText = query_request.lower()
 
             where_conditions = f'''
-                    LOWER(item_name) LIKE '%{tags}%' OR LOWER(tags) LIKE '%{tags}%'
+                    LOWER(item_name) LIKE '%{searchText}%' OR LOWER(tags) LIKE '%{searchText}%'
                 '''
             query =f'''
-                    SELECT item_id, item_name, thumbnail_picture, vendor, price, current_rating
+                    SELECT item_id, item_name, thumbnail_picture, vendor, price, current_rating, tags
                     FROM Catalog
                     WHERE {where_conditions}'''
 
@@ -583,7 +582,9 @@ def query():  # noqa: E501
             if result:
                 ItemList = []
                 for i in range(len(result)):
-                   ItemList.append(FoodItem(*result[i])) 
+                    last_item_list = result[i][-1].split('|')
+                    modified_tuple = tuple(list(result[i][:-1]) + [None] + [last_item_list])
+                    ItemList.append(FoodItem(*modified_tuple)) 
                 return ItemList  
             return ("Product Not Found", 404)
 
@@ -703,11 +704,13 @@ def vendor_add_product():  # noqa: E501
                                            ''')
                 result1 = database.sqlCursor.fetchone()
                 if result1[0] == 0: 
+                    tags = "|".join(request.tags)
                     query = f'''INSERT INTO Catalog (item_id, item_name,
-                                                     thumbnail_picture, price,
-                                                     max_quantity, vendor)
+                                                     thumbnail_picture, price, tags,
+                                                     max_quantity, vendor )
                                 VALUES ('{item_id}', '{request.name}',
                                         '{request.thumbnail}', '{request.price}',
+                                        '{tags}',
                                         '{request.max_quantity}', '{user_id}');'''
                     database.sqlCursor.execute(f'{query}')
                     database.sqlConnection.commit()
