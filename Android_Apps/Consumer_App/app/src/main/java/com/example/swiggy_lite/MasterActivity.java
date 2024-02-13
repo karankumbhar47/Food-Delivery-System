@@ -43,6 +43,8 @@ public class MasterActivity extends AppCompatActivity {
             bottomNavigationBar = findViewById(R.id.bottom_navigation_bar);
         }
 
+        Log.d("myTag", "url "+AppConstants.url);
+
         load(new HomeFragment());
         bottomNavigationBar.setOnNavigationItemSelectedListener(item -> {
             int id = item.getItemId();

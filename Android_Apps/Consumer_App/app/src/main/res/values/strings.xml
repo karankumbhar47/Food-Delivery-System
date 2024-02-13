@@ -15,4 +15,72 @@
     <string name="team_member_4">Sandesh Ahire (Frontend + Backend + Testing )</string>
     <string name="select_gender">Select Gender</string>
 
+    <array name="address_map">
+        <item>Kanhar Hostel (BH1)</item>
+        <item>Indravati Hostel (GH1)</item>
+        <item>Shivnath Hostel (Married Student Housing)</item>
+        <item>Mess Block (Pakadarpanalaya)</item>
+        <item>Health Centre (Sushrut)</item>
+        <item>Shopping Center(Gauraiyya Haat Shopping Centre)</item>
+        <item>Delta Housing(Gaurlata Housing)</item>
+    </array>
+
+
+    <array name="address_names">
+        <item>Kanhar Hostel </item>
+        <item>Indravati Hostel </item>
+        <item>Shivnath Hostel </item>
+        <item>Mess Block </item>
+        <item>Sushrut</item>
+        <item>Gauraiyya Haat ShoppingCentre</item>
+        <item>Gaurlata Housing</item>
+
+    </array>
+
+    <array name="address_codes">
+        <item>BH1</item>
+        <item>GH1</item>
+        <item>Married StudentHousing</item>
+        <item>Pakadarpanalaya</item>
+        <item>Shopping Center</item>
+        <item>Health Centre </item>
+        <item>Delta Housing</item>
+    </array>
+
+    <array name="academic_areas_map">
+        <item>Engineering Department I &amp; II(Agastya &amp; Bhardwaju)</item>
+        <item>Science Department 1&amp;2 (Bhaskaracharya &amp; Brahmagupta)</item>
+        <item>Central Instrumentation Facility (Varāhamihira Bhavan)</item>
+        <item>Central Prototyping Facility(Vishwakarma Bhavan )</item>
+        <item>Library and ITIS(Kumaragupta)</item>
+        <item>Nalanda Lecture Hall(500 Capacity Room)</item>
+        <item>Central Instrumentation Facility(Varāhamihira Bhavan)</item>
+        <item>Science Buildings(Bhaskaracharya &amp; Brahmagupta)</item>
+        <item>Engineering Buildings (Agastya &amp; Bhardwaj)</item>
+    </array>
+
+    <array name="academic_areas_code">
+        <item>Agastya &amp;Bhardwaju</item>
+        <item>Bhaskaracharya &amp;Brahmagupta</item>
+        <item>VarāhamihiraBhavan</item>
+        <item>VishwakarmaBhavan </item>
+        <item>Kumaragupta</item>
+        <item>Nalanda Lecture Hall</item>
+        <item>VarāhamihiraBhavan</item>
+        <item>Bhaskaracharya &amp;Brahmagupta</item>
+        <item>Agastya &amp;Bhardwaj</item>
+    </array>
+
+
+    <array name="academic_areas_short">
+        <item>Engineering Department I &amp; II</item>
+        <item>Science Department 1&amp;2 </item>
+        <item>Central Instrumentation Facility </item>
+        <item>Central Prototyping Facility</item>
+        <item>Library and ITIS</item>
+        <item>(500 CapacityRoom</item>
+        <item>Central Instrumentation Facility</item>
+        <item>Science Buildings</item>
+        <item>Engineering Buildings </item>
+    </array>
 </resources>
