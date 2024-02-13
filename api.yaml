@@ -3,7 +3,7 @@ info:
     title: FDS
     description: |
         This API allows to communicate with FDS (Food Delivery System) server.
-    version: 0.0.5
+    version: 0.0.6
 paths:
     # Registration and Authentication paths
     /register:
@@ -305,9 +305,7 @@ paths:
                         image/*:
                             schema:
                                 type: string
-                                # contentMediaType: image/*
-                                # contentEncoding: base64
-                                example: [binary file]
+                                format: binary
                 "401":
                     description: "Unauthorized"
                 "404":
