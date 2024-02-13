@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -146,6 +147,11 @@ public class SearchActivity extends AppCompatActivity {
             public void onResponse(List<FoodItem> response) {
                 if(response != null) {
                     searchedList = (ArrayList<FoodItem>) response;
+                    Log.d("myTag", "item "+searchedList.get(0).getThumbnail());
+                    Log.d("myTag", "item "+searchedList.get(0).getItemId());
+                    Log.d("myTag", "item "+searchedList.get(0).getName());
+                    Log.d("myTag", "item "+searchedList.get(0).getTags().toString());
+                    Log.d("myTag", "item "+searchedList.get(0).getPrice());
                     listItemsAdapter.setList(searchedList, text);
                 }
                 else{
