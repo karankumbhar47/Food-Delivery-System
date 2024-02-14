@@ -3,7 +3,7 @@ info:
   description: |
     This API allows to communicate with FDS (Food Delivery System) server.
   title: FDS
-  version: 0.0.5
+  version: 0.0.6
 servers:
 - url: http://13.233.99.87:8080
 paths:
@@ -182,40 +182,6 @@ paths:
       summary: Register a new deliveryPerson
       x-openapi-router-controller: openapi_server.controllers.default_controller
   /file:
-    get:
-      description: "Retrieve a file, typically an image, based on the provided file\
-        \ ID."
-      operationId: get_file
-      parameters:
-      - description: ID of the file to retrieve
-        explode: false
-        in: header
-        name: fileId
-        required: true
-        schema:
-          $ref: '#/components/schemas/fileId'
-        style: simple
-      - explode: false
-        in: header
-        name: sessionId
-        required: false
-        schema:
-          $ref: '#/components/schemas/sessionId'
-        style: simple
-      responses:
-        "200":
-          content:
-            image/*:
-              schema:
-                example: "[\"binary file\"]"
-                type: string
-          description: OK
-        "401":
-          description: Unauthorized
-        "404":
-          description: File Not Found
-      summary: Get file by file ID
-      x-openapi-router-controller: openapi_server.controllers.default_controller
     put:
       description: Upload an image to server for referencing elsewhere.
       operationId: put_file
@@ -244,6 +210,41 @@ paths:
         "401":
           description: Unauthorized (if user not valid to upload file)
       summary: Upload a file
+      x-openapi-router-controller: openapi_server.controllers.default_controller
+  /file/{fileId}:
+    get:
+      description: "Retrieve a file, typically an image, based on the provided file\
+        \ ID."
+      operationId: get_file
+      parameters:
+      - description: ID of the file to retrieve
+        explode: false
+        in: path
+        name: fileId
+        required: true
+        schema:
+          $ref: '#/components/schemas/fileId'
+        style: simple
+      - explode: false
+        in: header
+        name: sessionId
+        required: false
+        schema:
+          $ref: '#/components/schemas/sessionId'
+        style: simple
+      responses:
+        "200":
+          content:
+            image/*:
+              schema:
+                format: binary
+                type: string
+          description: OK
+        "401":
+          description: Unauthorized
+        "404":
+          description: File Not Found
+      summary: Get file by file ID
       x-openapi-router-controller: openapi_server.controllers.default_controller
   /login:
     post:
@@ -648,35 +649,6 @@ paths:
         "403":
           description: Forbidden
       x-openapi-router-controller: openapi_server.controllers.default_controller
-  /vendor/product/addImages:
-    post:
-      operationId: vendor_add_product_images
-      parameters:
-      - explode: false
-        in: header
-        name: sessionId
-        required: true
-        schema:
-          $ref: '#/components/schemas/sessionId'
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/vendorAddProductImages_request'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/fileId'
-                type: array
-          description: OK
-        "403":
-          description: Forbidden
-      x-openapi-router-controller: openapi_server.controllers.default_controller
   /vendor/product/changeAvailable:
     post:
       operationId: vendor_change_product_availabile
@@ -777,7 +749,6 @@ components:
     fileId:
       maxLength: 40
       minLength: 40
-      title: fileId
       type: string
     profile:
       example:
@@ -1229,23 +1200,6 @@ components:
       required:
       - itemId
       title: vendorEditProduct_request
-      type: object
-    vendorAddProductImages_request:
-      properties:
-        itemId:
-          maxLength: 40
-          minLength: 40
-          title: itemId
-          type: string
-        imageUrls:
-          items:
-            $ref: '#/components/schemas/fileId'
-          minItems: 1
-          title: imageUrls
-          type: array
-      required:
-      - itemId
-      title: vendorAddProductImages_request
       type: object
     vendorChangeProductAvailabile_request:
       properties:

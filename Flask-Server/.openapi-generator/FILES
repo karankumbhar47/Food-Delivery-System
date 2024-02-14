@@ -22,7 +22,6 @@ openapi_server/models/place_order_request.py
 openapi_server/models/place_order_request_item_cart_inner.py
 openapi_server/models/profile.py
 openapi_server/models/user_details.py
-openapi_server/models/vendor_add_product_images_request.py
 openapi_server/models/vendor_add_product_request.py
 openapi_server/models/vendor_change_product_availabile_request.py
 openapi_server/models/vendor_details.py
