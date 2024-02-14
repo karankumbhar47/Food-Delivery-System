@@ -34,6 +34,9 @@ import com.android.volley.toolbox.ImageLoader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -132,12 +135,22 @@ public class ListItemsAdapter extends RecyclerView.Adapter<ListItemsAdapter.view
                 Log.d("myTag", "file "+file.toString());
                 Log.d("myTag", "file "+file.getAbsolutePath());
                 try {
-                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    view.setImageBitmap(bitmap);
-//                    Glide.with(context)
-//                            .asBitmap()
-//                            .load(file)
-//                            .into(view);
+                    String filePath = "./images/image1";
+
+                    try {
+                        FileOutputStream fos = new FileOutputStream(filePath);
+                        FileInputStream fis = new FileInputStream(file);
+                        byte[] buffer = new byte[1024];
+                        int length;
+                        while ((length = fis.read(buffer)) > 0) {
+                            fos.write(buffer, 0, length);
+                        }
+                        fos.close();
+                        fis.close();
+                    } catch (IOException e) {
+                        Log.d("myTag", "exception while saving "+e);
+                    }
+
                 } catch (Exception e) {
                     Log.d("myTag", "exception "+e);
                 }
