@@ -1,8 +1,8 @@
 name,img_path,tags,price,max_quantity,is_available,current_rating,generic_name
-Plain Maggi,plain_maggi,veg|Indian,99,16,1,4.1,maggi
-American Burger,american_burgur,veg|American,150,5,1,4.2,burger
-Paneer Biryani,paneer_biryani,veg|Indian,130,8,1,4.2,biryani
-Capsicum Pizza,capsicum_pizza, veg|Indian,109,16,1,4.1,pizza
-Egg Roll,egg_roll,non-veg|Indian,69,10,1,4.3,roll
-Cold Coffee,cold_coffee,veg|Indian,160,20,1,4.3,cold_coffee
-Aloo Paratha,aloo_paratha,veg|North Indian,70,20,1,3.8,paratha
+Plain Maggi,plain_maggi,veg|Indian|maggi,99,16,1,4.1,maggi
+American Burger,american_burgur,veg|American|burger,150,5,1,4.2,burger
+Paneer Biryani,paneer_biryani,veg|Indian|biryani,130,8,1,4.2,biryani
+Capsicum Pizza,capsicum_pizza,veg|Indian|pizza,109,16,1,4.1,pizza
+Egg Roll,egg_roll,non-veg|Indian|roll,69,10,1,4.3,roll
+Cold Coffee,cold_coffee,veg|Indian|cold_coffee,160,20,1,4.3,cold_coffee
+Aloo Paratha,aloo_paratha,veg|North Indian|paratha,70,20,1,3.8,paratha

@@ -35,7 +35,7 @@ def addVendorProduct(host):
         # Create an instance of the API class
         api_instance = FoodDeliveryAPI.DefaultApi(api_client)
         id = 'id_example'
-        menu_file_path = "./API-Tests/dummy_data/food_item.csv"
+        menu_file_path = "./API-Tests/dummy_data/catlog/food_item.csv"
         count = 56
         session_id = ''
 

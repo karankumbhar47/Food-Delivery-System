@@ -16,6 +16,8 @@ def init():
 def store_file(data: bytes) -> str:
     filename = new_file_name()
     filepath = os.path.join(STORAGE_LOCATION, filename)
+    os.makedirs(STORAGE_LOCATION, exist_ok=True)
+
     with open(filepath, 'wb') as f:
         f.write(data)
     return filename

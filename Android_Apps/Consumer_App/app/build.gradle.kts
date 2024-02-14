@@ -30,10 +30,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-//    tasks.named("preBuild") {
-//        dependsOn("openApiGenerate")
-//    }
+/*
+    tasks.named("preBuild") {
+        dependsOn("openApiGenerate")
+    }*/
 
     sourceSets {
         getByName("main").java.srcDirs("src/main/java", "build/FDS_Api/src/main/java")
