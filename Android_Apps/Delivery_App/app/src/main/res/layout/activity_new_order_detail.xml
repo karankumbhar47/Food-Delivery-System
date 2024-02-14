@@ -25,7 +25,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/backButton_imageView"
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:layout_marginStart="5dp"
@@ -62,16 +62,22 @@
             android:layout_height="match_parent">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView6"
+                android:id="@+id/userImage_cardView"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                app:cardCornerRadius="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <ImageView
+                    android:id="@+id/userImage_imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:src="@tools:sample/avatars" />
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/userName_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -79,20 +85,21 @@
                 android:text="Mr. Karan"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/cardView6"
+                app:layout_constraintStart_toEndOf="@+id/userImage_cardView"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/date_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:text="Today at 12:30 PM"
                 android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/cardView6"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintStart_toEndOf="@+id/userImage_cardView"
+                app:layout_constraintTop_toBottomOf="@+id/userName_textView" />
 
             <TextView
+                android:id="@+id/orderId_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -117,7 +124,7 @@
             android:layout_height="219dp">
 
             <TextView
-                android:id="@+id/textView52"
+                android:id="@+id/emailButton_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -129,11 +136,12 @@
                 android:text="Email"
                 android:textColor="@color/primary"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/OrderId_textView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView8" />
+                app:layout_constraintTop_toTopOf="@+id/OrderId_textView" />
 
             <TextView
-                android:id="@+id/textView53"
+                android:id="@+id/pick_navigationButton_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -147,69 +155,47 @@
                 android:text="Navigation"
                 android:textColor="@color/primary"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/pickLocation_textView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView9" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView10"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView7" />
+                app:layout_constraintTop_toTopOf="@+id/pickLocation_textView" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/phone_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
                 android:text="+91 8055190425"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/cardView10"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView11"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView8">
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView12"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView17" />
+                app:layout_constraintBottom_toBottomOf="@+id/imageView10"
+                app:layout_constraintStart_toEndOf="@+id/imageView10"
+                app:layout_constraintTop_toTopOf="@+id/imageView10" />
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/OrderId_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="6dp"
                 android:text="karansunilk@iitbhilai.ac.in"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/cardView11"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                app:layout_constraintBottom_toBottomOf="@+id/imageView8"
+                app:layout_constraintStart_toEndOf="@+id/imageView8"
+                app:layout_constraintTop_toTopOf="@+id/imageView8" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/pickLocation_textView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="35dp"
                 android:text="Tech Cafe, IIT Bhilai, Chattisgarh India "
                 android:textSize="12sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/textView53"
-                app:layout_constraintStart_toEndOf="@+id/cardView12"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                app:layout_constraintEnd_toStartOf="@+id/pick_navigationButton_textView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/OrderId_textView" />
 
             <TextView
-                android:id="@+id/textView51"
+                android:id="@+id/callButton_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -221,11 +207,12 @@
                 android:text="Call"
                 android:textColor="@color/primary"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/phone_textView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView7" />
+                app:layout_constraintTop_toTopOf="@+id/phone_textView" />
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/message_textView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -239,11 +226,11 @@
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:text=" Message:"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView3" />
+                app:layout_constraintTop_toBottomOf="@+id/dropLocation_textView" />
 
             <TextView
                 android:id="@+id/textView17"
@@ -251,15 +238,8 @@
                 android:layout_height="wrap_content"
                 android:text="Pick Location:"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/textView9"
-                app:layout_constraintStart_toStartOf="@+id/textView9" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView3"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView18" />
+                app:layout_constraintBottom_toTopOf="@+id/pickLocation_textView"
+                app:layout_constraintStart_toStartOf="@+id/pickLocation_textView" />
 
             <TextView
                 android:id="@+id/textView18"
@@ -268,22 +248,22 @@
                 android:layout_marginTop="5dp"
                 android:text="Drop Location:"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/textView9"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                app:layout_constraintStart_toStartOf="@+id/pickLocation_textView"
+                app:layout_constraintTop_toBottomOf="@+id/pickLocation_textView" />
 
             <TextView
-                android:id="@+id/textView19"
+                android:id="@+id/dropLocation_textView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Ward No. 2, Vasagade Kolhapur, Maharashtra, India "
                 android:textSize="12sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/textView20"
+                app:layout_constraintEnd_toStartOf="@+id/drop_navigationButton_textView"
                 app:layout_constraintStart_toStartOf="@+id/textView18"
                 app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
             <TextView
-                android:id="@+id/textView20"
+                android:id="@+id/drop_navigationButton_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -297,8 +277,29 @@
                 android:text="Navigation"
                 android:textColor="@color/primary"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/dropLocation_textView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView19" />
+                app:layout_constraintTop_toTopOf="@+id/dropLocation_textView" />
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/phone_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/gmail_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView10" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -366,7 +367,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView15"
+                android:id="@+id/declineOrderButton_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
@@ -380,7 +381,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView16"
+                android:id="@+id/acceptOrderButton_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
@@ -392,7 +393,7 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView15"
+                app:layout_constraintStart_toEndOf="@+id/declineOrderButton_textView"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

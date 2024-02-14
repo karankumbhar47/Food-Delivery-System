@@ -8,7 +8,7 @@
     tools:context=".MainPage" >
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/topBar"
+        android:id="@+id/topBar_cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/dark_green"
@@ -21,7 +21,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/app_logo"
+                android:id="@+id/appLogo_imageView"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,7 @@
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/userImageCard"
-                app:layout_constraintStart_toEndOf="@+id/app_logo"
+                app:layout_constraintStart_toEndOf="@+id/appLogo_imageView"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topBar"
+        app:layout_constraintTop_toBottomOf="@+id/topBar_cardView"
         app:tabIndicatorColor="@color/dark_green"
         app:tabSelectedTextColor="@color/primary">
 

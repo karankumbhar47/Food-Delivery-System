@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserLogin" >
+    tools:context=".VendorRegister" >
 
     <FrameLayout
         android:id="@+id/frameLayout4"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:background="@drawable/login_screen_background"
+        android:layout_height="200dp"
+        android:background="@drawable/activity_login_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,7 +24,6 @@
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 app:cardCornerRadius="190dp"
-                app:cardBackgroundColor="@color/dark_green"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -41,30 +40,45 @@
                         android:id="@+id/app_logo_imageView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/dark_green"
+                        android:background="@color/login_orange"
                         android:visibility="visible"
-                        app:srcCompat="@drawable/app_logo" />
-
+                        app:srcCompat="@drawable/activity_app_logo" />
                 </androidx.cardview.widget.CardView>
 
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:cardCornerRadius="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5">
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/app_logo_foreground" />
+            </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/message_textView"
+                android:id="@+id/textView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="24dp"
-
-                android:text="Registration"
+                android:fontFamily="@font/jetbrains_mono"
+                android:text="Register"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
@@ -72,7 +86,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-
+        android:background="@color/login_screen_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,6 +102,7 @@
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:layout_marginTop="55dp"
+                android:clickable="true"
                 app:cardCornerRadius="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -96,11 +111,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/user_info_linearLayout">
 
                 <TextView
-                    android:id="@+id/registerButton_textview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
-                    android:background="@color/dark_green"
+                    android:background="@color/login_orange"
+                    android:fontFamily="@font/jetbrains_mono"
                     android:gravity="center|center_vertical"
                     android:text="Register"
                     android:textAlignment="center"
@@ -137,9 +151,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
                     android:layout_weight="1"
-
+                    android:fontFamily="@font/jetbrains_mono"
                     android:text="Login"
-                    android:textColor="@color/dark_green"
+                    android:textColor="@color/login_orange"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -155,11 +169,32 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/user"
+                    android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     app:cardCornerRadius="20dp">
+
+                    <EditText
+                        android:id="@+id/user_editText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:drawableStart="@drawable/user_logo"
+                        android:drawablePadding="20dp"
+                        android:hint="Name"
+                        android:inputType="text"
+                        android:padding="12dp" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="20dp" >
+
+
 
                     <EditText
                         android:id="@+id/user_name_editText"
@@ -174,7 +209,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/email_cardView"
+                    android:id="@+id/Email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -185,13 +220,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:drawableStart="@drawable/gmail_icon"
+                        android:drawableStart="@drawable/user_logo"
                         android:drawablePadding="20dp"
                         android:hint="Email"
                         android:inputType="text"
                         android:padding="12dp" />
                 </androidx.cardview.widget.CardView>
 
+                <!-- <Spinner
+                     android:id="@+id/gender_dropdown_spinner"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_margin="8dp"
+                     android:visibility="gone" />
+ -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/phone_number_cardView"
                     android:layout_width="match_parent"
@@ -207,6 +249,26 @@
                         android:drawableStart="@drawable/phone_icon"
                         android:drawablePadding="20dp"
                         android:hint="Phone Number"
+                        android:inputType="text"
+                        android:padding="12dp" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/location_cardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="20dp">
+
+                    <EditText
+                        android:id="@+id/location_editText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:drawableStart="@drawable/password_icon"
+                        android:drawableEnd="@drawable/show_password_icon"
+                        android:drawablePadding="20dp"
+                        android:hint="Location of Store"
                         android:inputType="text"
                         android:padding="12dp" />
                 </androidx.cardview.widget.CardView>
