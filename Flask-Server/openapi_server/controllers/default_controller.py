@@ -22,6 +22,7 @@ from openapi_server.models.vendor_add_product_request import VendorAddProductReq
 from openapi_server.models.vendor_change_product_availabile_request import VendorChangeProductAvailabileRequest  # noqa: E501
 from openapi_server.models.vendor_edit_product_request import VendorEditProductRequest  # noqa: E501
 from openapi_server.models.vendor_get_requested_orders200_response_inner import VendorGetRequestedOrders200ResponseInner  # noqa: E501
+from openapi_server.models.vendor_get_requested_orders200_response_inner_order_items_inner import  VendorGetRequestedOrders200ResponseInnerOrderItemsInner as OrderDetails 
 from openapi_server import util
 
 import openapi_server.database as database
@@ -354,13 +355,21 @@ def get_orders():  # noqa: E501
     if verify_status is not None and order_id_exists:
         _, user_type = verify_status
         if user_type == "Consumer":
-            database.sqlCursor.execute(f'''SELECT *
-                                          FROM FoodOrder
-                                          WHERE order_id = "{order_id}"
+            database.sqlCursor.execute(f'''
+                                        SELECT order_id, items, total_price, delivery_location, pickup_location, consumer_id, vendor_id
+                                        FROM FoodOrder
+                                        WHERE order_id = "{order_id}"
                                        ''')
-            result = database.sqlCursor.fetchone()[0]
+            result = database.sqlCursor.fetchone()
+
+            data_list = eval(list(result)[1])
+            order_items = [OrderDetails(**item) for item in data_list]
+
             order = VendorGetRequestedOrders200ResponseInner(
-                 result[0], result[5],result[6], result[4], result[1], result[3], result[2]
+                 order_id=result[0], user_id=result[5],
+                 vendor_id=result[6], pickup_location=result[4], 
+                 order_items=order_items,location=result[3], 
+                 price=result[2]
             )
             database.close()
             return order, 200
@@ -468,7 +477,6 @@ def place_order():  # noqa: E501
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
-
     if connexion.request.is_json:
         database.init()
         session_id = connexion.request.headers.get("sessionId")
@@ -493,6 +501,7 @@ def place_order():  # noqa: E501
                         item_carts[result[0]] = [i]
             order_ids = []
             for key, values in item_carts.items():
+                print(values[0])
                 database.sqlCursor.execute(f'''SELECT location 
                                            FROM Vendor 
                                            WHERE user_id = "{key}"
@@ -513,7 +522,9 @@ def place_order():  # noqa: E501
                 database.sqlCursor.execute(query)
                 order_ids.append(order_id)
                 database.sqlConnection.commit()
-            return ('{order_ids}', 200)   
+                orderIdsString = ','.join(map(str, order_ids))
+                print(f'order ids:- {orderIdsString}')
+            return (orderIdsString, 200)   
         return ('Unauthorized', 401)
     return ('Unauthorized', 401)
 

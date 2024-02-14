@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import com.openapi.deliveryApp.model.PlaceOrderRequestItemCartInner;
 import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -59,7 +61,9 @@ public class SelectAddressFragment extends Fragment {
     private DefaultApi api;
     private LoadingDialog loadingDialog;
     private SharedPreferences prefLogin;
+    private SharedPreferences prefOrders;
     private SharedPreferences.Editor prefEdit;
+    private SharedPreferences.Editor prefOrderEdit;
 
     public SelectAddressFragment(OrderModel orderModel){
         this.orderModel = orderModel;
@@ -72,7 +76,9 @@ public class SelectAddressFragment extends Fragment {
             api = new DefaultApi();
             loadingDialog = new LoadingDialog(requireActivity());
             prefLogin = getActivity().getSharedPreferences(AppConstants.PREF_LOGIN, Context.MODE_PRIVATE);
+            prefOrders = getActivity().getSharedPreferences(AppConstants.PREF_ORDERS,Context.MODE_PRIVATE);
             prefEdit = prefLogin.edit();
+            prefOrderEdit = prefOrders.edit();
             sessionId = prefLogin.getString(AppConstants.KEY_SESSION_ID,"");
             radioGroup = view.findViewById(R.id.radioGroup);
             khanar_room = view.findViewById(R.id.khanar_room_picker_editText);
@@ -132,6 +138,7 @@ public class SelectAddressFragment extends Fragment {
                     this.Address = "Academic Area " + this.Address;
                     isAddressValid = true;
                 } else if (selectedId == R.id.director_house_radioButton) {
+                    this.Address = selectedRadioButton.getText().toString();
                     this.Address = this.Address.replace("'","");
                     isAddressValid = true;
                 } else {
@@ -144,13 +151,11 @@ public class SelectAddressFragment extends Fragment {
             }
 
             if (isAddressValid) {
+                Log.d("myTag", "address");
                 String message = "Your order has been successfully placed!";
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
                 //Inflate the layout for the dialog
-
-
-
                 Date currentDate = new Date();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                 SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
@@ -160,7 +165,18 @@ public class SelectAddressFragment extends Fragment {
                 orderModel.setTime(timeFormat.format(currentDate));
                 placeOrder(sessionId, new OrderCallback() {
                     @Override
-                    public void onOrderPlaced(String orderId) {
+                    public void onOrderPlaced(String response) {
+                        String[] id_list = response.split(",");
+                        for (int i = 0; i < id_list.length; i++) {
+                            try{
+                                String id = id_list[i].trim().replace("\"", "");
+                                prefOrderEdit.putString(id,AppConstants.STATUS_ONGOING);
+                                prefOrderEdit.apply();
+                            }catch (Exception e){
+                                Toast.makeText(requireContext(),"Order id "+id_list[i]+"not saved",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
                         View viewOrder = LayoutInflater.from(requireContext()).inflate(R.layout.custom_alert_dialog, null);
                         LottieAnimationView animationView = viewOrder.findViewById(R.id.lottieAnimation);
                         TextView message = viewOrder.findViewById(R.id.dialog_message_textView);
@@ -260,7 +276,7 @@ public class SelectAddressFragment extends Fragment {
         api.placeOrder(sessionId, placeOrderRequest, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                callback.onOrderPlaced(response.trim().toString().substring(1,41));
+                callback.onOrderPlaced(response);
             }
         }, new Response.ErrorListener() {
             @Override
