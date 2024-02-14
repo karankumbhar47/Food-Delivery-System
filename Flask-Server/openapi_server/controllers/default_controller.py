@@ -42,7 +42,7 @@ def check_product_available(id_, count):  # noqa: E501
 
     :rtype: Union[bool, Tuple[bool, int], Tuple[bool, int, Dict[str, str]]
     """
-    database.init()
+    database.open()
     try : 
         database.sqlCursor.execute(f'''SELECT is_available, max_quantity 
                                    FROM Catalog 
@@ -51,12 +51,15 @@ def check_product_available(id_, count):  # noqa: E501
         result = database.sqlCursor.fetchone()
         if  result:
             if result[0] and result[1] >= count:
+                database.close()
                 return True
+            database.close()
             return False
         else:
-            print(f'{id_} doesnot exists')
+            database.close()
             return ("Unauthorized", 401)
     except:
+        database.close()
         return 500
 
 
@@ -79,6 +82,7 @@ def confirm_order():  # noqa: E501
         database.open()
         verify_status = database.verify_session_id(session_id)
         if verify_status is None:
+            database.close()
             return "Unauthorized", 401
         _, userType = verify_status
         if userType == "Consumer":
@@ -103,6 +107,7 @@ def confirm_order():  # noqa: E501
             return  "Not Found", 404
         database.close()
         return  "Unauthorized", 401
+    return "Bad request", 400
 
 
 def delivery_accept_order( delivery_accept_order_request=None):  # noqa: E501
@@ -123,6 +128,7 @@ def delivery_accept_order( delivery_accept_order_request=None):  # noqa: E501
         database.open()
         verify_status = database.verify_session_id(session_id)
         if verify_status is None:
+            database.close()
             return "Unauthorized", 401
         _, userType = verify_status
         if userType == "Other":
@@ -164,6 +170,7 @@ def delivery_drop( delivery_drop_request=None):  # noqa: E501
         database.open()
         verify_status = database.verify_session_id(session_id)
         if verify_status is None:
+            database.close()
             return "Unauthorized", 401
         _, userType = verify_status
         if userType == "Other":
@@ -173,7 +180,6 @@ def delivery_drop( delivery_drop_request=None):  # noqa: E501
                                        ''')
             result = database.sqlCursor.fetchone()
             database.close()
-            print(result)
             if result[0] == delivery_drop_request.otp:
                 return "Drop", 200
             return "Incorrect OTP", 401
@@ -199,6 +205,7 @@ def delivery_pick():  # noqa: E501
     database.open()
     verify_status = database.verify_session_id(session_id)
     if verify_status is None:
+        database.close()
         return ["Unauthorized"], 401
     _, userType = verify_status
     if userType == "Other":
@@ -250,6 +257,7 @@ def delivery_view_accepted_orders():  # noqa: E501
     database.open()
     verify_status = database.verify_session_id(session_id)
     if verify_status is None:
+        database.close()
         return ["Unauthorized"], 401
     _, userType = verify_status
     if userType == "Other":
@@ -284,6 +292,7 @@ def delivery_view_waiting_orders():  # noqa: E501  # status == complete need to 
     database.open()
     verify_status = database.verify_session_id(session_id)
     if verify_status is None:
+        database.close()
         return ["Unauthorized"], 401
     _, userType = verify_status
     if userType == "Other":
@@ -292,7 +301,6 @@ def delivery_view_waiting_orders():  # noqa: E501  # status == complete need to 
                                    WHERE  delivery_person_id is NULL ;
                                    ''')
         result = database.sqlCursor.fetchall()
-        print(result)
         order_list = []
         if len(result):
             for i in result: 
@@ -314,7 +322,7 @@ def delivery_view_waiting_orders():  # noqa: E501  # status == complete need to 
 
 
 
-def get_file():  # noqa: E501
+def get_file(file_id):  # noqa: E501
     """Get file by file ID
 
     Retrieve a file, typically an image   6                             $ref: '#/components/schemas/orderId'
@@ -327,7 +335,6 @@ def get_file():  # noqa: E501
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
-    file_id = connexion.request.headers.get("fileId")
     data = store.get_file(file_id)
     if data:
         return data
@@ -389,7 +396,7 @@ def get_product(id_):  # noqa: E501
 
     :rtype: Union[FoodItemFull, Tuple[FoodItemFull, int], Tuple[FoodItemFull, int, Dict[str, str]]
     """
-    database.init()
+    database.open()
     query = '''
         SELECT Catalog.item_id, Catalog.item_name, Catalog.thumbnail_picture, Catalog.price,
             Vendor.username, Vendor.location, Catalog.current_rating, Catalog.is_available,
@@ -402,7 +409,10 @@ def get_product(id_):  # noqa: E501
     result = database.sqlCursor.fetchone()
 
     if result:
-        return FoodItemFull(*result)
+        itemDetails =  FoodItemFull(*result)
+        database.close()
+        return itemDetails
+    database.close()
     return ("Product Not Found", 404)
 
 
@@ -478,15 +488,15 @@ def place_order():  # noqa: E501
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
     if connexion.request.is_json:
-        database.init()
+        database.open()
         session_id = connexion.request.headers.get("sessionId")
         verify_status = database.verify_session_id(session_id)
         if verify_status is None:
+            database.close()
             return "Unauthorized", 401
         _, userType = verify_status
         place_order_request = PlaceOrderRequest.from_dict(connexion.request.get_json())  # noqa: E501
         if place_order_request and userType.lower() == 'consumer':
-            database.open()
             item_carts = {}
             for  i in place_order_request.item_cart:
                 database.sqlCursor.execute(f'''SELECT vendor 
@@ -501,7 +511,6 @@ def place_order():  # noqa: E501
                         item_carts[result[0]] = [i]
             order_ids = []
             for key, values in item_carts.items():
-                print(values[0])
                 database.sqlCursor.execute(f'''SELECT location 
                                            FROM Vendor 
                                            WHERE user_id = "{key}"
@@ -518,13 +527,13 @@ def place_order():  # noqa: E501
                 consumer_id = database.sqlCursor.fetchone()[0]
                 query =  f'''INSERT INTO FoodOrder (order_id, items, delivery_location, pickup_location, vendor_id,  consumer_id )
                             VALUES ('{order_id}', "{values}", '{place_order_request.location}','{location}','{key}', '{consumer_id}' );'''
-                print(query)
                 database.sqlCursor.execute(query)
                 order_ids.append(order_id)
                 database.sqlConnection.commit()
                 orderIdsString = ','.join(map(str, order_ids))
-                print(f'order ids:- {orderIdsString}')
+            database.close()
             return (orderIdsString, 200)   
+        database.close()
         return ('Unauthorized', 401)
     return ('Unauthorized', 401)
 
@@ -546,11 +555,14 @@ def put_file():  # noqa: E501
     session_id = connexion.request.headers.get("sessionId")
     verify_status = database. verify_session_id(session_id)
     if verify_status is None:
+        database.close()
         return "Unauthorized", 401
     _, userType = verify_status
     if data and userType == "Vendor":
+        database.close()
         return store.store_file(data)
     else:
+        database.close()
         return "Only Vendor can upload files", 401
 
 
@@ -570,14 +582,13 @@ def query():  # noqa: E501
     query_request = connexion.request.headers.get("query")
 
     if query_request:
-        database.init()
+        database.open()
         database.sqlCursor.execute(f'''SELECT COUNT(*) 
                                    FROM Session 
                                    WHERE session_id = "{session_id}"
                                    ''')
         count = database.sqlCursor.fetchone()[0]
         if count == 1:
-            database.open()
             searchText = query_request.lower()
 
             where_conditions = f'''
@@ -596,7 +607,9 @@ def query():  # noqa: E501
                     last_item_list = result[i][-1].split('|')
                     modified_tuple = tuple(list(result[i][:-1]) + [None] + [last_item_list])
                     ItemList.append(FoodItem(*modified_tuple)) 
+                database.close()
                 return ItemList  
+            database.close()
             return ("Product Not Found", 404)
 
 def register():  # noqa: E501
@@ -689,9 +702,7 @@ def vendor_add_product():  # noqa: E501
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
     session_id = connexion.request.headers.get("sessionId")
-    if session_id:
-        print(session_id)
-    else:
+    if not session_id:
         return ("Session Id missing in headers", 400)
     if connexion.request.is_json:
         database.open()
@@ -737,22 +748,6 @@ def vendor_add_product():  # noqa: E501
     return ('Bad Request', 403)
 
 
-def vendor_add_product_images(session_id, vendor_add_product_images_request):  # noqa: E501
-    """vendor_add_product_images
-
-     # noqa: E501
-
-    :param session_id: 
-    :type session_id: str
-    :param vendor_add_product_images_request: 
-    :type vendor_add_product_images_request: dict | bytes
-
-    :rtype: Union[List[str], Tuple[List[str], int], Tuple[List[str], int, Dict[str, str]]
-    """
-    if connexion.request.is_json:
-        vendor_add_product_images_request = VendorAddProductImagesRequest.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
-
 def vendor_change_availabile():  # noqa: E501
     """vendor_change_availabile
 
@@ -795,13 +790,13 @@ def vendor_change_product_availabile():  # noqa: E501
                     '''
                     database.sqlCursor.execute(query)
                     database.sqlConnection.commit()
-                    database.sqlCursor.close()
+                    database.close()
                     return  None, 200, {"message":"Successfully changed availability of the product."}
-                database.sqlCursor.close()
+                database.close()
                 return None, 404,  {"error": "itemId not found"}
-            database.sqlCursor.close()
+            database.close()
             return  None, 403, {"error": "You are not authorized to perform this action."}
-        database.sqlCursor.close()
+        database.close()
         return   None, 404, {"error": "Session ID does not exist."}
     return  None, 404, {"error": "Nothing in request."} 
 
@@ -849,7 +844,6 @@ def vendor_edit_product():  # noqa: E501
             return FoodItemFull(), 403, {"error": "You are not authorized to perform this action."}
         database.close()
         return FoodItemFull(), 404, {"error": "Session ID does not exist."}
-    database.close()
     return  FoodItemFull(), 404, {"error": "Nothing in request."} 
 
 
@@ -922,7 +916,6 @@ def vendor_get_requested_orders():  # noqa: E501
                     '''
             database.sqlCursor.execute(query)
             result = database.sqlCursor.fetchall()
-            print(result)
             requested_list = []
             for ele in result:
                 request = VendorGetRequestedOrders200ResponseInner(
@@ -997,7 +990,6 @@ def register_vendor():
 def login_vendor():
     if connexion.request.is_json:
         login_request = LoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
-        print(login_request)
         database.open()
         # Check if the user is valid
         if not database.check_exists(login_request.username,
@@ -1090,7 +1082,6 @@ def register_delivery_person():
 def login_delivery_person():
     if connexion.request.is_json:
         login_request = LoginRequest.from_dict(connexion.request.get_json())  # noqa: E501
-        print(login_request)
         database.open()
         # Check if the user is valid
         if not database.check_exists(login_request.username,
