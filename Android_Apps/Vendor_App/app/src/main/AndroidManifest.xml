@@ -33,5 +33,7 @@
         <activity
             android:name=".HomePageActivity"
             android:exported="false" />
+        <activity android:name=".AddNewItemActivity"
+            android:exported="false" />
     </application>
 </manifest>

@@ -12,33 +12,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vendor_app.Controller.AddNewItemController;
 import com.example.vendor_app.Controller.AddNewItemController.Callbacks;
 import com.example.vendor_app.Controller.AddNewItemController.FoodType;
 import com.google.android.material.textfield.TextInputEditText;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 public class AddNewItemActivity extends AppCompatActivity {
 
     // UI elements
     private CardView thumbnailImageCard;
     private ImageView thumbnailImageView;
-    private TextView uploadImageBtn;
     private CardView vegCategoryBtn, nonVegCategoryBtn;
     private TextInputEditText productNameTextBox, maxQuantityTextBox, priceTextBox, tagsTextBox;
     private CardView saveBtn;
@@ -69,7 +61,6 @@ public class AddNewItemActivity extends AppCompatActivity {
             context = this;
             thumbnailImageCard = findViewById(R.id.thumbnailImageCard);
             thumbnailImageView = findViewById(R.id.thumbnailImageView);
-            uploadImageBtn = findViewById(R.id.uploadImageBtn);
             vegCategoryBtn = findViewById(R.id.veg_btn);
             nonVegCategoryBtn = findViewById(R.id.non_veg_btn);
             productNameTextBox = findViewById(R.id.productNameTextBox);
