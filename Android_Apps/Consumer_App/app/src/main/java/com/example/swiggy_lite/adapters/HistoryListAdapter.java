@@ -55,8 +55,9 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
         Float sum = 0f; // Initialize sum as BigDecimal.ZERO
 
         for (OrderItemAdvanced foodModel : orderModel.getOrderItemAdvanced()) {
-            sum += foodModel.getPrice()*foodModel.getQuantity();
+            sum += foodModel.getPrice() * foodModel.getQuantity();
         }
+
 
         holder.order_date_textView.setText(String.format("%s, %s", orderModel.getDate(), orderModel.getTime()));
         holder.order_total_textView.setText(String.format("₹ %s", String.valueOf(sum)));
