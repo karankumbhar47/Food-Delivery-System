@@ -15,6 +15,7 @@ openapi_server/models/delivery_person_details.py
 openapi_server/models/filter.py
 openapi_server/models/food_item.py
 openapi_server/models/food_item_full.py
+openapi_server/models/get_orders200_response.py
 openapi_server/models/login_request.py
 openapi_server/models/order.py
 openapi_server/models/order_item.py
