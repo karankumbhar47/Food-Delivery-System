@@ -23,6 +23,7 @@ from openapi_server.models.vendor_change_product_availabile_request import Vendo
 from openapi_server.models.vendor_edit_product_request import VendorEditProductRequest  # noqa: E501
 from openapi_server.models.vendor_get_requested_orders200_response_inner import VendorGetRequestedOrders200ResponseInner  # noqa: E501
 from openapi_server.models.vendor_get_requested_orders200_response_inner_order_items_inner import  VendorGetRequestedOrders200ResponseInnerOrderItemsInner as OrderDetails 
+from openapi_server.models.get_orders200_response import  GetOrders200Response  
 from openapi_server import util
 
 import openapi_server.database as database
@@ -69,7 +70,8 @@ def confirm_order():  # noqa: E501
     Confirm Order Delivery # noqa: E501
 
     :param session_id: 
-    :type  stringsession_id: str
+    :type  string
+    session_id: str
     :param body: 
     :type body: str
 
@@ -102,7 +104,7 @@ def confirm_order():  # noqa: E501
                                            ''')
                 database.sqlConnection.commit()
                 database.close()
-                return f"{otp}", 200
+                return otp, 200
             database.close()
             return  "Not Found", 404
         database.close()
@@ -179,9 +181,16 @@ def delivery_drop( delivery_drop_request=None):  # noqa: E501
                                        WHERE order_id ="{delivery_drop_request.order_id}"
                                        ''')
             result = database.sqlCursor.fetchone()
-            database.close()
             if result[0] == delivery_drop_request.otp:
+                database.sqlCursor.execute(f'''
+                                           Update FoodOrder 
+                                           SET status="Dropped"
+                                           WHERE order_id ="{delivery_drop_request.order_id}"
+                                            ''')
+                database.sqlConnection.commit()
+                database.close()
                 return "Drop", 200
+            database.close()
             return "Incorrect OTP", 401
         database.close()
         return "Unauthorized", 401
@@ -363,7 +372,7 @@ def get_orders():  # noqa: E501
         _, user_type = verify_status
         if user_type == "Consumer":
             database.sqlCursor.execute(f'''
-                                        SELECT order_id, items, total_price, delivery_location, pickup_location, consumer_id, vendor_id
+                                        SELECT order_id, items, total_price, delivery_location, pickup_location, consumer_id, vendor_id, status
                                         FROM FoodOrder
                                         WHERE order_id = "{order_id}"
                                        ''')
@@ -372,18 +381,18 @@ def get_orders():  # noqa: E501
             data_list = eval(list(result)[1])
             order_items = [OrderDetails(**item) for item in data_list]
 
-            order = VendorGetRequestedOrders200ResponseInner(
+            order =  GetOrders200Response(
                  order_id=result[0], user_id=result[5],
                  vendor_id=result[6], pickup_location=result[4], 
                  order_items=order_items,location=result[3], 
-                 price=result[2]
+                 price=result[2],status=result[7]
             )
             database.close()
             return order, 200
         database.close()
-        return VendorGetRequestedOrders200ResponseInner(), 401, {"error": "Unathorized user"}
+        return GetOrders200Response(), 401, {"error": "Unathorized user"}
     database.close()
-    return VendorGetRequestedOrders200ResponseInner(), 401, {"error": "Incorrect orderId or sessionId"}
+    return GetOrders200Response(), 401, {"error": "Incorrect orderId or sessionId"}
 
 
 def get_product(id_):  # noqa: E501
@@ -525,12 +534,13 @@ def place_order():  # noqa: E501
                                            WHERE session_id = "{session_id}"
                                            ''')
                 consumer_id = database.sqlCursor.fetchone()[0]
-                query =  f'''INSERT INTO FoodOrder (order_id, items, delivery_location, pickup_location, vendor_id,  consumer_id )
-                            VALUES ('{order_id}', "{values}", '{place_order_request.location}','{location}','{key}', '{consumer_id}' );'''
+                query =  f'''INSERT INTO FoodOrder (order_id, items, delivery_location, pickup_location, vendor_id,  consumer_id , status)
+                            VALUES ('{order_id}', "{values}", '{place_order_request.location}','{location}','{key}', '{consumer_id}', "accepted" );'''
                 database.sqlCursor.execute(query)
                 order_ids.append(order_id)
                 database.sqlConnection.commit()
                 orderIdsString = ','.join(map(str, order_ids))
+                print("added order "+order_id)
             database.close()
             return (orderIdsString, 200)   
         database.close()
@@ -912,7 +922,7 @@ def vendor_get_requested_orders():  # noqa: E501
             user_id = database.sqlCursor.fetchone()[0]
             query = f'''SELECT * 
                         FROM FoodOrder 
-                        WHERE vendor_id = "{user_id}" AND status is NULL 
+                        WHERE vendor_id = "{user_id}" AND status is accepted 
                     '''
             database.sqlCursor.execute(query)
             result = database.sqlCursor.fetchall()
