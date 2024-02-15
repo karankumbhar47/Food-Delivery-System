@@ -58,7 +58,6 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
             sum += foodModel.getPrice() * foodModel.getQuantity();
         }
 
-
         holder.order_date_textView.setText(String.format("%s, %s", orderModel.getDate(), orderModel.getTime()));
         holder.order_total_textView.setText(String.format("₹ %s", String.valueOf(sum)));
         holder.view_details_button.setOnClickListener(v -> listener.viewDetails(position));

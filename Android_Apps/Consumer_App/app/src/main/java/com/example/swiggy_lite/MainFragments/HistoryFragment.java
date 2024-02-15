@@ -211,52 +211,6 @@ public class HistoryFragment extends Fragment {
         requiredItem.setPrice(40f);
         requiredItem.setMaxQuantity(29);
         return requiredItem;
-        // Check if item details are already loaded
-//        if (foodItemDetails.containsKey(item.getItemId())) {
-//            FoodItemFull itemFromMap = foodItemDetails.get(item.getItemId());
-//            requiredItem.setMaxQuantity(itemFromMap.getMaxQuantity());
-//            requiredItem.setItemName(itemFromMap.getItemName());
-//            requiredItem.setPrice(itemFromMap.getPrice());
-//
-//            if (productsProcessed.incrementAndGet() == totalProducts) {
-//                // Notify UI that order details are updated
-//                orderItemAdvanced.add(requiredItem);
-//                updateUI();
-//            }
-//        } else {
-//            // Fetch item details asynchronously
-//            getProductDetails(item.getItemId(), new ProductDetailsCallback() {
-//                @Override
-//                public void onSuccess(FoodItemFull itemDetails) {
-//                    // Update item details
-//                    requiredItem.setPrice(itemDetails.getPrice());
-//                    requiredItem.setMaxQuantity(itemDetails.getMaxQuantity());
-//                    requiredItem.setItemName(itemDetails.getItemName());
-//                    orderItemAdvanced.add(requiredItem);
-//                    Log.d("myTag", "adding item "+requiredItem.getItemName());
-//                    foodItemDetails.put(itemDetails.getItemId(), itemDetails);
-//
-//                    // Check if all products for this order are processed and update UI
-//                    if (productsProcessed.incrementAndGet() == totalProducts) {
-//                        // Notify UI that order details are updated
-//                        updateUI();
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(int statusCode, String errorMessage) {
-//                    Log.d("myTag", "failed to load data of item " + item.getItemId());
-//                    Log.d("myTag", "error message is " + errorMessage);
-//                    orderItemAdvanced.add(requiredItem);
-//
-//                    // Check if all products for this order are processed and update UI
-//                    if (productsProcessed.incrementAndGet() == totalProducts) {
-//                        // Notify UI that order details are updated
-//                        updateUI();
-//                    }
-//                }
-//            });
-//        }
     }
 
     // Method to check if all orders are processed and update UI
