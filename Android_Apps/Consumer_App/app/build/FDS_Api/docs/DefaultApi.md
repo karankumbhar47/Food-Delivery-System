@@ -11,7 +11,7 @@ Method | HTTP request | Description
 [**deliveryPick**](DefaultApi.md#deliveryPick) | **POST** /delivery/pickupOrder | Pickup Order
 [**deliveryViewAcceptedOrders**](DefaultApi.md#deliveryViewAcceptedOrders) | **GET** /delivery/getAcceptedOrders | Get List of Accepted Orders
 [**deliveryViewWaitingOrders**](DefaultApi.md#deliveryViewWaitingOrders) | **GET** /delivery/viewWaitingOrders | View Waiting Orders
-[**getFile**](DefaultApi.md#getFile) | **GET** /file | Get file by file ID
+[**getFile**](DefaultApi.md#getFile) | **GET** /file/{fileId} | Get file by file ID
 [**getOrders**](DefaultApi.md#getOrders) | **GET** /order | 
 [**getProduct**](DefaultApi.md#getProduct) | **GET** /product/{id} | Get Product Details
 [**getProfile**](DefaultApi.md#getProfile) | **GET** /profile | 
@@ -26,7 +26,6 @@ Method | HTTP request | Description
 [**registerVendor**](DefaultApi.md#registerVendor) | **POST** /vendor/register | Register a new vendor
 [**updateProfile**](DefaultApi.md#updateProfile) | **POST** /profile/update | 
 [**vendorAddProduct**](DefaultApi.md#vendorAddProduct) | **POST** /vendor/product/add | 
-[**vendorAddProductImages**](DefaultApi.md#vendorAddProductImages) | **POST** /vendor/product/addImages | 
 [**vendorChangeAvailabile**](DefaultApi.md#vendorChangeAvailabile) | **POST** /vendor/changeAvailable | 
 [**vendorChangeProductAvailabile**](DefaultApi.md#vendorChangeProductAvailabile) | **POST** /vendor/product/changeAvailable | 
 [**vendorEditProduct**](DefaultApi.md#vendorEditProduct) | **POST** /vendor/product/edit | 
@@ -85,7 +84,7 @@ No authorization required
 
 ## confirmOrder
 
-> Integer confirmOrder(sessionId, body)
+> String confirmOrder(sessionId, body)
 
 Confirm Order
 
@@ -101,7 +100,7 @@ DefaultApi apiInstance = new DefaultApi();
 String sessionId = null; // String | 
 String body = "body_example"; // String | 
 try {
-    Integer result = apiInstance.confirmOrder(sessionId, body);
+    String result = apiInstance.confirmOrder(sessionId, body);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#confirmOrder");
@@ -119,7 +118,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**Integer**
+**String**
 
 ### Authorization
 
@@ -404,7 +403,7 @@ No authorization required
 
 ## getOrders
 
-> VendorGetRequestedOrders200ResponseInner getOrders(sessionId, orderId)
+> GetOrders200Response getOrders(sessionId, orderId)
 
 
 
@@ -418,7 +417,7 @@ DefaultApi apiInstance = new DefaultApi();
 String sessionId = null; // String | 
 String orderId = null; // String | 
 try {
-    VendorGetRequestedOrders200ResponseInner result = apiInstance.getOrders(sessionId, orderId);
+    GetOrders200Response result = apiInstance.getOrders(sessionId, orderId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#getOrders");
@@ -436,7 +435,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**VendorGetRequestedOrders200ResponseInner**](VendorGetRequestedOrders200ResponseInner.md)
+[**GetOrders200Response**](GetOrders200Response.md)
 
 ### Authorization
 
@@ -1043,52 +1042,6 @@ Name | Type | Description  | Notes
 ### Return type
 
 **String**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-
-## vendorAddProductImages
-
-> List&lt;String&gt; vendorAddProductImages(sessionId, vendorAddProductImagesRequest)
-
-
-
-### Example
-
-```java
-// Import classes:
-//import com.openapi.deliveryApp.api.DefaultApi;
-
-DefaultApi apiInstance = new DefaultApi();
-String sessionId = null; // String | 
-VendorAddProductImagesRequest vendorAddProductImagesRequest = new VendorAddProductImagesRequest(); // VendorAddProductImagesRequest | 
-try {
-    List<String> result = apiInstance.vendorAddProductImages(sessionId, vendorAddProductImagesRequest);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling DefaultApi#vendorAddProductImages");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **sessionId** | **String**|  | [default to null]
- **vendorAddProductImagesRequest** | [**VendorAddProductImagesRequest**](VendorAddProductImagesRequest.md)|  |
-
-### Return type
-
-**List&lt;String&gt;**
 
 ### Authorization
 

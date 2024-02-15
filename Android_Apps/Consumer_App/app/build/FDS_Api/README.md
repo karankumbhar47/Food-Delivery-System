@@ -91,7 +91,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**deliveryPick**](docs/DefaultApi.md#deliveryPick) | **POST** /delivery/pickupOrder | Pickup Order
 *DefaultApi* | [**deliveryViewAcceptedOrders**](docs/DefaultApi.md#deliveryViewAcceptedOrders) | **GET** /delivery/getAcceptedOrders | Get List of Accepted Orders
 *DefaultApi* | [**deliveryViewWaitingOrders**](docs/DefaultApi.md#deliveryViewWaitingOrders) | **GET** /delivery/viewWaitingOrders | View Waiting Orders
-*DefaultApi* | [**getFile**](docs/DefaultApi.md#getFile) | **GET** /file | Get file by file ID
+*DefaultApi* | [**getFile**](docs/DefaultApi.md#getFile) | **GET** /file/{fileId} | Get file by file ID
 *DefaultApi* | [**getOrders**](docs/DefaultApi.md#getOrders) | **GET** /order | 
 *DefaultApi* | [**getProduct**](docs/DefaultApi.md#getProduct) | **GET** /product/{id} | Get Product Details
 *DefaultApi* | [**getProfile**](docs/DefaultApi.md#getProfile) | **GET** /profile | 
@@ -106,7 +106,6 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**registerVendor**](docs/DefaultApi.md#registerVendor) | **POST** /vendor/register | Register a new vendor
 *DefaultApi* | [**updateProfile**](docs/DefaultApi.md#updateProfile) | **POST** /profile/update | 
 *DefaultApi* | [**vendorAddProduct**](docs/DefaultApi.md#vendorAddProduct) | **POST** /vendor/product/add | 
-*DefaultApi* | [**vendorAddProductImages**](docs/DefaultApi.md#vendorAddProductImages) | **POST** /vendor/product/addImages | 
 *DefaultApi* | [**vendorChangeAvailabile**](docs/DefaultApi.md#vendorChangeAvailabile) | **POST** /vendor/changeAvailable | 
 *DefaultApi* | [**vendorChangeProductAvailabile**](docs/DefaultApi.md#vendorChangeProductAvailabile) | **POST** /vendor/product/changeAvailable | 
 *DefaultApi* | [**vendorEditProduct**](docs/DefaultApi.md#vendorEditProduct) | **POST** /vendor/product/edit | 
@@ -122,6 +121,7 @@ Class | Method | HTTP request | Description
  - [Filter](docs/Filter.md)
  - [FoodItem](docs/FoodItem.md)
  - [FoodItemFull](docs/FoodItemFull.md)
+ - [GetOrders200Response](docs/GetOrders200Response.md)
  - [LoginRequest](docs/LoginRequest.md)
  - [Order](docs/Order.md)
  - [OrderItem](docs/OrderItem.md)
@@ -129,7 +129,6 @@ Class | Method | HTTP request | Description
  - [PlaceOrderRequestItemCartInner](docs/PlaceOrderRequestItemCartInner.md)
  - [Profile](docs/Profile.md)
  - [UserDetails](docs/UserDetails.md)
- - [VendorAddProductImagesRequest](docs/VendorAddProductImagesRequest.md)
  - [VendorAddProductRequest](docs/VendorAddProductRequest.md)
  - [VendorChangeProductAvailabileRequest](docs/VendorChangeProductAvailabileRequest.md)
  - [VendorDetails](docs/VendorDetails.md)

@@ -8,6 +8,7 @@ docs/DeliveryPersonDetails.md
 docs/Filter.md
 docs/FoodItem.md
 docs/FoodItemFull.md
+docs/GetOrders200Response.md
 docs/LoginRequest.md
 docs/Order.md
 docs/OrderItem.md
@@ -15,7 +16,6 @@ docs/PlaceOrderRequest.md
 docs/PlaceOrderRequestItemCartInner.md
 docs/Profile.md
 docs/UserDetails.md
-docs/VendorAddProductImagesRequest.md
 docs/VendorAddProductRequest.md
 docs/VendorChangeProductAvailabileRequest.md
 docs/VendorDetails.md
@@ -48,6 +48,7 @@ src/main/java/com/openapi/deliveryApp/model/DeliveryPersonDetails.java
 src/main/java/com/openapi/deliveryApp/model/Filter.java
 src/main/java/com/openapi/deliveryApp/model/FoodItem.java
 src/main/java/com/openapi/deliveryApp/model/FoodItemFull.java
+src/main/java/com/openapi/deliveryApp/model/GetOrders200Response.java
 src/main/java/com/openapi/deliveryApp/model/LoginRequest.java
 src/main/java/com/openapi/deliveryApp/model/Order.java
 src/main/java/com/openapi/deliveryApp/model/OrderItem.java
@@ -55,7 +56,6 @@ src/main/java/com/openapi/deliveryApp/model/PlaceOrderRequest.java
 src/main/java/com/openapi/deliveryApp/model/PlaceOrderRequestItemCartInner.java
 src/main/java/com/openapi/deliveryApp/model/Profile.java
 src/main/java/com/openapi/deliveryApp/model/UserDetails.java
-src/main/java/com/openapi/deliveryApp/model/VendorAddProductImagesRequest.java
 src/main/java/com/openapi/deliveryApp/model/VendorAddProductRequest.java
 src/main/java/com/openapi/deliveryApp/model/VendorChangeProductAvailabileRequest.java
 src/main/java/com/openapi/deliveryApp/model/VendorDetails.java

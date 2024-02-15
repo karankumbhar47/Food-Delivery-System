@@ -18,7 +18,7 @@ import io.swagger.annotations.*;
 import com.google.gson.annotations.SerializedName;
 
 @ApiModel(description = "")
-public class VendorGetRequestedOrders200ResponseInner {
+public class GetOrders200Response {
   
   @SerializedName("orderId")
   private String orderId = null;
@@ -34,6 +34,8 @@ public class VendorGetRequestedOrders200ResponseInner {
   private String location = null;
   @SerializedName("price")
   private Float price = null;
+  @SerializedName("status")
+  private String status = null;
 
   /**
    **/
@@ -106,6 +108,16 @@ public class VendorGetRequestedOrders200ResponseInner {
     this.price = price;
   }
 
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public String getStatus() {
+    return status;
+  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -115,14 +127,15 @@ public class VendorGetRequestedOrders200ResponseInner {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    VendorGetRequestedOrders200ResponseInner vendorGetRequestedOrders200ResponseInner = (VendorGetRequestedOrders200ResponseInner) o;
-    return (this.orderId == null ? vendorGetRequestedOrders200ResponseInner.orderId == null : this.orderId.equals(vendorGetRequestedOrders200ResponseInner.orderId)) &&
-        (this.userId == null ? vendorGetRequestedOrders200ResponseInner.userId == null : this.userId.equals(vendorGetRequestedOrders200ResponseInner.userId)) &&
-        (this.vendorID == null ? vendorGetRequestedOrders200ResponseInner.vendorID == null : this.vendorID.equals(vendorGetRequestedOrders200ResponseInner.vendorID)) &&
-        (this.pickupLocation == null ? vendorGetRequestedOrders200ResponseInner.pickupLocation == null : this.pickupLocation.equals(vendorGetRequestedOrders200ResponseInner.pickupLocation)) &&
-        (this.orderItems == null ? vendorGetRequestedOrders200ResponseInner.orderItems == null : this.orderItems.equals(vendorGetRequestedOrders200ResponseInner.orderItems)) &&
-        (this.location == null ? vendorGetRequestedOrders200ResponseInner.location == null : this.location.equals(vendorGetRequestedOrders200ResponseInner.location)) &&
-        (this.price == null ? vendorGetRequestedOrders200ResponseInner.price == null : this.price.equals(vendorGetRequestedOrders200ResponseInner.price));
+    GetOrders200Response getOrders200Response = (GetOrders200Response) o;
+    return (this.orderId == null ? getOrders200Response.orderId == null : this.orderId.equals(getOrders200Response.orderId)) &&
+        (this.userId == null ? getOrders200Response.userId == null : this.userId.equals(getOrders200Response.userId)) &&
+        (this.vendorID == null ? getOrders200Response.vendorID == null : this.vendorID.equals(getOrders200Response.vendorID)) &&
+        (this.pickupLocation == null ? getOrders200Response.pickupLocation == null : this.pickupLocation.equals(getOrders200Response.pickupLocation)) &&
+        (this.orderItems == null ? getOrders200Response.orderItems == null : this.orderItems.equals(getOrders200Response.orderItems)) &&
+        (this.location == null ? getOrders200Response.location == null : this.location.equals(getOrders200Response.location)) &&
+        (this.price == null ? getOrders200Response.price == null : this.price.equals(getOrders200Response.price)) &&
+        (this.status == null ? getOrders200Response.status == null : this.status.equals(getOrders200Response.status));
   }
 
   @Override
@@ -135,13 +148,14 @@ public class VendorGetRequestedOrders200ResponseInner {
     result = 31 * result + (this.orderItems == null ? 0: this.orderItems.hashCode());
     result = 31 * result + (this.location == null ? 0: this.location.hashCode());
     result = 31 * result + (this.price == null ? 0: this.price.hashCode());
+    result = 31 * result + (this.status == null ? 0: this.status.hashCode());
     return result;
   }
 
   @Override
   public String toString()  {
     StringBuilder sb = new StringBuilder();
-    sb.append("class VendorGetRequestedOrders200ResponseInner {\n");
+    sb.append("class GetOrders200Response {\n");
     
     sb.append("  orderId: ").append(orderId).append("\n");
     sb.append("  userId: ").append(userId).append("\n");
@@ -150,6 +164,7 @@ public class VendorGetRequestedOrders200ResponseInner {
     sb.append("  orderItems: ").append(orderItems).append("\n");
     sb.append("  location: ").append(location).append("\n");
     sb.append("  price: ").append(price).append("\n");
+    sb.append("  status: ").append(status).append("\n");
     sb.append("}\n");
     return sb.toString();
   }
