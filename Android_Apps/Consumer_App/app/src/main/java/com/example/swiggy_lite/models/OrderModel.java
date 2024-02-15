@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.openapi.deliveryApp.model.Order;
 import com.openapi.deliveryApp.model.OrderItem;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +20,14 @@ public class OrderModel extends Order {
     private String date = null ;
     private String time = null ;
     private List<OrderItemAdvanced> orderItemAdvanced = null;
+    private String status = AppConstants.STATUS_ONGOING;
+    private int OTP = 0;
     private int tip = 0;
 
     public OrderModel(){
         super();
     }
+
 
     public List<OrderItemAdvanced> getOrderItemAdvanced() {
         return orderItemAdvanced;
@@ -141,4 +145,19 @@ public class OrderModel extends Order {
         this.setOrderDetails(this.convertToOrderItemList(this.getOrderItemAdvanced()));
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getOTP() {
+        return OTP;
+    }
+
+    public void setOTP(int OTP) {
+        this.OTP = OTP;
+    }
 }

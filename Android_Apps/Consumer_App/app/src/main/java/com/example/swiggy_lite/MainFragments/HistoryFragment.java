@@ -2,7 +2,6 @@ package com.example.swiggy_lite.MainFragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.GnssAntennaInfo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -19,15 +18,16 @@ import android.view.ViewGroup;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.swiggy_lite.AppConstants;
-import com.example.swiggy_lite.DummyData;
 import com.example.swiggy_lite.History_Fragments.HistoryDetailsFragment;
 import com.example.swiggy_lite.LoadingDialog;
 import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.adapters.HistoryListAdapter;
 import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.example.swiggy_lite.models.OrderModel;
+import com.google.gson.Gson;
 import com.openapi.deliveryApp.api.DefaultApi;
 import com.openapi.deliveryApp.model.FoodItemFull;
+import com.openapi.deliveryApp.model.GetOrders200Response;
 import com.openapi.deliveryApp.model.VendorGetRequestedOrders200ResponseInner;
 import com.openapi.deliveryApp.model.VendorGetRequestedOrders200ResponseInnerOrderItemsInner;
 
@@ -38,12 +38,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class HistoryFragment extends Fragment {
     public interface OrderDetailsCallback {
-        void onSuccess(VendorGetRequestedOrders200ResponseInner orderId);
+        void onSuccess(GetOrders200Response orderId);
         void onFailure(int statusCode, String errorMessage);
     }
 
@@ -56,9 +55,10 @@ public class HistoryFragment extends Fragment {
     HistoryListAdapter historyListAdapter;
     SharedPreferences prefLogin;
     SharedPreferences prefOrders;
+    static SharedPreferences prefOrdersHistory;
     Context context;
     ArrayList<String> order_ids;
-    List<OrderModel> orderHistory;
+    public static List<OrderModel> orderHistory;
     String sessionId;
     LoadingDialog loadingDialog;
     Map<String, FoodItemFull> foodItemDetails;
@@ -74,8 +74,9 @@ public class HistoryFragment extends Fragment {
         {
             recyclerView = view.findViewById(R.id.order_history_recyclerView);
             context = requireContext();
-            prefOrders = context.getSharedPreferences(AppConstants.PREF_ORDERS, Context.MODE_PRIVATE);
+            prefOrders = context.getSharedPreferences(AppConstants.PREF_ORDERS_IDS, Context.MODE_PRIVATE);
             prefLogin = context.getSharedPreferences(AppConstants.PREF_LOGIN, Context.MODE_PRIVATE);
+            prefOrdersHistory = context.getSharedPreferences(AppConstants.PREF_ORDER_HISTORY, Context.MODE_PRIVATE);
             order_ids = new ArrayList<>();
             sessionId = prefLogin.getString(AppConstants.KEY_SESSION_ID, "");
             loadingDialog = new LoadingDialog(requireActivity());
@@ -88,26 +89,27 @@ public class HistoryFragment extends Fragment {
         String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("HH:mm"));
 
-        loadingDialog.startLoadingDialog();
-
         Map<String, ?> allEntries = prefOrders.getAll();
         int totalOrders = allEntries.size();
         AtomicInteger ordersProcessed = new AtomicInteger(0);
 
-       // Iterate over each order
-        for (String key : allEntries.keySet()) {
-            getOrderDetails(key, new OrderDetailsCallback() {
-                @Override
-                public void onSuccess(VendorGetRequestedOrders200ResponseInner orderDetails) {
-                    processOrder(orderDetails, formattedDate, formattedTime, totalOrders, ordersProcessed);
-                }
+        if(allEntries.size()!=0) {
+            loadingDialog.startLoadingDialog();
+            for (String key : allEntries.keySet()) {
+                Log.d("myTag", "key "+key);
+                getOrderDetails(key, new OrderDetailsCallback() {
+                    @Override
+                    public void onSuccess(GetOrders200Response orderDetails) {
+                        processOrder(orderDetails, formattedDate, formattedTime, totalOrders, ordersProcessed);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, String errorMessage) {
-                    Log.d("myTag", "error for " + key + " " + errorMessage);
-                    checkAndUpdateUI(totalOrders, ordersProcessed);
-                }
-            });
+                    @Override
+                    public void onFailure(int statusCode, String errorMessage) {
+                        Log.d("myTag", "error for " + key + " " + errorMessage);
+                        checkAndUpdateItems(totalOrders, ordersProcessed);
+                    }
+                });
+            }
         }
 
         return view;
@@ -123,9 +125,10 @@ public class HistoryFragment extends Fragment {
 
     public void getOrderDetails(String orderId, OrderDetailsCallback callback) {
         DefaultApi api = new DefaultApi();
-        api.getOrders(sessionId, orderId, new Response.Listener<VendorGetRequestedOrders200ResponseInner>() {
+        api.getOrders(sessionId, orderId, new Response.Listener<GetOrders200Response>() {
             @Override
-            public void onResponse(VendorGetRequestedOrders200ResponseInner response) {
+            public void onResponse(GetOrders200Response response) {
+                Log.d("myTag", "response status "+response.getStatus());
                 Log.d("myTag", "success");
                 callback.onSuccess(response);
             }
@@ -138,7 +141,6 @@ public class HistoryFragment extends Fragment {
                     String data = new String(error.networkResponse.data);
                     Log.d("myTag", "error code " + statusCode);
                     callback.onFailure(statusCode, data.trim());
-                    ;
                 } catch (Exception e) {
                     callback.onFailure(0, null);
                 }
@@ -160,7 +162,6 @@ public class HistoryFragment extends Fragment {
                     int statusCode = error.networkResponse.statusCode;
                     String data = new String(error.networkResponse.data);
                     callback.onFailure(statusCode, data.trim());
-                    ;
                 } catch (Exception e) {
                     callback.onFailure(0, null);
                 }
@@ -170,7 +171,7 @@ public class HistoryFragment extends Fragment {
 
     }
 
-    private void processOrder(VendorGetRequestedOrders200ResponseInner orderDetails, String formattedDate, String formattedTime,
+    private void processOrder(GetOrders200Response orderDetails, String formattedDate, String formattedTime,
                               int totalOrders, AtomicInteger ordersProcessed) {
         OrderModel orderModel = new OrderModel();
         orderModel.setDate(formattedDate);
@@ -184,21 +185,21 @@ public class HistoryFragment extends Fragment {
         List<VendorGetRequestedOrders200ResponseInnerOrderItemsInner> orderItems = orderDetails.getOrderItems();
         List<OrderItemAdvanced> orderItemAdvanced = new ArrayList<>();
 
-        // Keep track of the number of products processed for this order
         AtomicInteger productsProcessed = new AtomicInteger(0);
-
-        // Iterate over each item in the order
         for (VendorGetRequestedOrders200ResponseInnerOrderItemsInner item : orderItems) {
             orderItemAdvanced.add(processOrderItem(item, orderItemAdvanced, productsProcessed, orderItems.size()));
         }
 
+        if(orderDetails.getStatus().toLowerCase().contains("accept")) {
+            orderModel.setStatus(AppConstants.STATUS_ONGOING);
+        }else if (orderDetails.getStatus().toLowerCase().contains("drop")){
+            orderModel.setStatus(AppConstants.STATUS_COMPLETED);
+        }
+
         orderModel.setOrderItemAdvanced(orderItemAdvanced);
-        // Add the order to the list
-
+        Log.d("myTag", "adding to orderhistory "+orderModel.getOrderId());
         orderHistory.add(orderModel);
-
-        // Check if all orders are processed and update UI
-        checkAndUpdateUI(totalOrders, ordersProcessed);
+        checkAndUpdateItems(totalOrders, ordersProcessed);
     }
 
     // Method to process each item in the order
@@ -214,19 +215,76 @@ public class HistoryFragment extends Fragment {
     }
 
     // Method to check if all orders are processed and update UI
-    private void checkAndUpdateUI(int totalOrders, AtomicInteger ordersProcessed) {
+    private void checkAndUpdateItems(int totalOrders, AtomicInteger ordersProcessed) {
         int processed = ordersProcessed.incrementAndGet();
         if (processed == totalOrders) {
-            // Notify UI that all order details are updated
-            updateUI();
-            loadingDialog.dismissDialog();
+            Log.d("myTag", "called updateItems");
+            updateItems();
         }
     }
 
-
-
     // Method to update the UI with the updated order details
-    private void updateUI() {
+    private void updateItems() {
+        int sizeHistory  =  orderHistory.size();
+        AtomicInteger orderCompleted = new AtomicInteger(0);
+        for (OrderModel orderDetails : orderHistory) {
+            List<OrderItemAdvanced> orderItemAdvanced = orderDetails.getOrderItemAdvanced();
+
+            int sizeProduct =  orderItemAdvanced.size();
+            AtomicInteger productProcessed = new AtomicInteger(0);
+
+            for (OrderItemAdvanced item : orderItemAdvanced) {
+                if (!(foodItemDetails != null && foodItemDetails.get(item.getItemId()) != null)){
+                    getProductDetails(item.getItemId(), new ProductDetailsCallback() {
+                        @Override
+                        public void onSuccess(FoodItemFull itemDetails) {
+                            foodItemDetails.put(itemDetails.getItemId(), itemDetails);
+                            int size = productProcessed.incrementAndGet();
+                            if(size==orderItemAdvanced.size()){
+                                int ordersize = orderCompleted.incrementAndGet();
+                                if(orderHistory.size()== ordersize){
+                                    updateUI();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, String errorMessage) {
+                            int size =  productProcessed.incrementAndGet();
+                            if(sizeProduct==size){
+                                int ordersize = orderCompleted.incrementAndGet();
+                                if(sizeHistory == ordersize){
+                                    updateUI();
+                                }
+                            }
+                        }
+                    });
+                }
+                else{
+                    int size =  productProcessed.incrementAndGet();
+                    if(sizeProduct==size){
+                        int ordersize = orderCompleted.incrementAndGet();
+                        if(sizeHistory == ordersize){
+                            updateUI();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void updateUI(){
+        saveHistory();
+        for(OrderModel orderModel : orderHistory){
+            for (OrderItemAdvanced orderItemAdvanced:orderModel.getOrderItemAdvanced()) {
+                if(foodItemDetails!=null && foodItemDetails.get(orderItemAdvanced.getItemId())!=null){
+                    FoodItemFull getItem = foodItemDetails.get(orderItemAdvanced.getItemId());
+                    orderItemAdvanced.setItemName(getItem.getItemName());
+                    orderItemAdvanced.setPrice(getItem.getPrice());
+                    orderItemAdvanced.setMaxQuantity(getItem.getMaxQuantity());
+                }
+            }
+        }
         Log.d("myTag", "called update ui "+orderHistory.size());
         Log.d("myTag", "first item "+orderHistory.get(0).getOrderId());
         Log.d("myTag", "second item "+orderHistory.get(1).getOrderId());
@@ -236,7 +294,7 @@ public class HistoryFragment extends Fragment {
         historyListAdapter.setOnItemClickListener(new HistoryListAdapter.OnItemClickListener() {
             @Override
             public void viewDetails(int position) {
-                load(new HistoryDetailsFragment(position));
+                load(new HistoryDetailsFragment(orderHistory.get(position),position));
             }
         });
         recyclerView.setAdapter(historyListAdapter);
@@ -245,90 +303,17 @@ public class HistoryFragment extends Fragment {
         loadingDialog.dismissDialog();
     }
 
-}
-
-/*
-        orderHistory = new ArrayList<>();
-        for (String key : keys) {
-            getOrderDetails(key, new OrderDetailsCallback() {
-                @Override
-                public void onSuccess(VendorGetRequestedOrders200ResponseInner orderDetails) {
-                    OrderModel orderModel = new OrderModel();
-
-                    orderModel.setDate(formattedDate);
-                    orderModel.setTime(formattedTime);
-                    orderModel.setTip(49);
-                    orderModel.setOrderId(orderDetails.getOrderId());
-                    orderModel.setDeliveryAddress(orderDetails.getLocation());
-                    orderModel.setPickupLocation(orderDetails.getPickupLocation());
-
-                    List<VendorGetRequestedOrders200ResponseInnerOrderItemsInner> orderItems = orderDetails.getOrderItems();
-                    List<OrderItemAdvanced>orderItemAdvanced = new ArrayList<>();
-
-                    AtomicInteger productProcessed = new AtomicInteger(0);
-
-                    for (VendorGetRequestedOrders200ResponseInnerOrderItemsInner item : orderItems) {
-                        OrderItemAdvanced requiredItem = new OrderItemAdvanced();
-                        requiredItem.setItemId(item.getItemId());
-                        requiredItem.setQuantity(item.getQuantity());
-                        requiredItem.setItemName("random name");
-                        requiredItem.setPrice(40f);
-                        requiredItem.setMaxQuantity(29);
-
-                        if (foodItemDetails != null && foodItemDetails.get(item.getItemId()) != null) {
-                            FoodItemFull itemFromMap = foodItemDetails.get(item.getItemId());
-                            requiredItem.setMaxQuantity(itemFromMap.getMaxQuantity());
-                            requiredItem.setItemName(itemFromMap.getItemName());
-                            requiredItem.setPrice(itemFromMap.getPrice());
-                        } else {
-                            getProductDetails(item.getItemId(), new ProductDetailsCallback() {
-                                @Override
-                                public void onSuccess(FoodItemFull itemDetails) {
-                                    requiredItem.setPrice(itemDetails.getPrice());
-                                    requiredItem.setMaxQuantity(itemDetails.getMaxQuantity());
-                                    requiredItem.setItemName(itemDetails.getItemName());
-                                    orderItemAdvanced.add(requiredItem);
-                                    Log.d("myTag", "success get item name " + itemDetails.getItemName());
-
-                                    int allItem = productProcessed.getAndIncrement();
-                                    if(allItem == orderItems.size()){
-                                        orderModel.setOrderItemAdvanced(orderItemAdvanced);
-                                    }
-                                    foodItemDetails.put(itemDetails.getItemId(), itemDetails);
-                                }
-
-                                @Override
-                                public void onFailure(int statusCode, String errorMessage) {
-                                    Log.d("myTag", "failed to load data of item " + item.getItemId());
-                                    Log.d("myTag", "error message is " + errorMessage);
-                                    orderItemAdvanced.add(requiredItem);
-                                    int allItem = productProcessed.getAndIncrement();
-                                    if(allItem == orderItems.size()){
-                                        orderModel.setOrderItemAdvanced(orderItemAdvanced);
-                                    }
-                                }
-                            });
-                        }
-                    }
-
-                    orderHistory.add(orderModel);
-
-                    int processed = ordersProcessed.incrementAndGet();
-                    if (processed == totalOrders) {
-                        updateUI();
-                    }
-                }
-
-                @Override
-                public void onFailure(int statusCode, String errorMessage) {
-                    Log.d("myTag", "error for " + key + " " + errorMessage);
-                    int processed = ordersProcessed.incrementAndGet();
-                    if (processed == totalOrders) {
-                        updateUI();
-                    }
-                }
-            });
-
+    public static void saveHistory(){
+        SharedPreferences.Editor editor = prefOrdersHistory.edit();
+        Gson gson = new Gson();
+        String orderModelString;
+        for(OrderModel orderModel : orderHistory){
+            orderModelString = gson.toJson(orderModel);
+            editor.putString(orderModel.getOrderId(), orderModelString);
+            editor.apply();
         }
 
-     */
+    }
+
+}
+

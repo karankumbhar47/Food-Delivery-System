@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.swiggy_lite.AppConstants;
 import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.example.swiggy_lite.models.OrderModel;
@@ -65,6 +66,12 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
         HistoryItemsDetailsAdapter itemList = new HistoryItemsDetailsAdapter(orderModel.getOrderItemAdvanced());
         holder.item_list_recyclerView.setLayoutManager(new LinearLayoutManager(context,RecyclerView.VERTICAL, false));
         holder.item_list_recyclerView.setAdapter(itemList);
+
+        if(orderModel.getStatus()== AppConstants.STATUS_ONGOING){
+            holder.order_status_textView.setText("In-Progress..");
+        } else if (orderModel.getStatus()==AppConstants.STATUS_COMPLETED) {
+            holder.order_status_textView.setText("Completed");
+        }
     }
 
     @Override
@@ -73,7 +80,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
     }
 
     public static class viewHolder extends  RecyclerView.ViewHolder{
-        TextView order_date_textView, order_total_textView, view_details_button;
+        TextView order_date_textView, order_total_textView, view_details_button, order_status_textView;
         RecyclerView item_list_recyclerView;
 
         public viewHolder(@NonNull View itemView) {
@@ -82,6 +89,7 @@ public class HistoryListAdapter extends RecyclerView.Adapter<HistoryListAdapter.
             order_total_textView = itemView.findViewById(R.id.order_total_textView);
             view_details_button = itemView.findViewById(R.id.view_details_textView);
             item_list_recyclerView = itemView.findViewById(R.id.ordered_list_recyclerView);
+            order_status_textView = itemView.findViewById(R.id.order_status_textView);
         }
     }
 }

@@ -32,18 +32,14 @@ import com.example.swiggy_lite.R;
 import com.example.swiggy_lite.models.OrderItemAdvanced;
 import com.example.swiggy_lite.models.OrderModel;
 import com.openapi.deliveryApp.api.DefaultApi;
-import com.openapi.deliveryApp.model.OrderItem;
 import com.openapi.deliveryApp.model.PlaceOrderRequest;
 import com.openapi.deliveryApp.model.PlaceOrderRequestItemCartInner;
 
-import java.security.PrivilegedAction;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class SelectAddressFragment extends Fragment {
     public interface OrderCallback {
@@ -76,7 +72,7 @@ public class SelectAddressFragment extends Fragment {
             api = new DefaultApi();
             loadingDialog = new LoadingDialog(requireActivity());
             prefLogin = getActivity().getSharedPreferences(AppConstants.PREF_LOGIN, Context.MODE_PRIVATE);
-            prefOrders = getActivity().getSharedPreferences(AppConstants.PREF_ORDERS,Context.MODE_PRIVATE);
+            prefOrders = getActivity().getSharedPreferences(AppConstants.PREF_ORDERS_IDS,Context.MODE_PRIVATE);
             prefEdit = prefLogin.edit();
             prefOrderEdit = prefOrders.edit();
             sessionId = prefLogin.getString(AppConstants.KEY_SESSION_ID,"");

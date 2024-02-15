@@ -5,11 +5,7 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
 public class AppConstants {
     public static final String PREF_LOGIN           = "Login"           ;
@@ -23,10 +19,13 @@ public class AppConstants {
     public static final String KEY_CURRENT_ORDER    = "Current-Order"   ;
     public static final String KEY_IS_DATA_CHANGED  = "Is_Data_Changed" ;
 
-    public static final String PREF_ORDERS          = "Order-Status"    ;
+    public static final String PREF_ORDERS_IDS      = "Order-Status"    ;
     public static final String STATUS_ONGOING       = "1"               ;
     public static final String STATUS_COMPLETED     = "0"               ;
     public static final String STATUS_CANCELLED     = "-1"              ;
+    public static final String STATUS_OTP = "2"               ;
+
+    public static final String PREF_ORDER_HISTORY   = "Pref-Order-History";
 
     public static final String PREF_IMAGE_STORAGE   = "Image-Storage"   ;
 
