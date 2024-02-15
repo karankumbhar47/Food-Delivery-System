@@ -13,7 +13,6 @@ from openapi_server.models.place_order_request import PlaceOrderRequest
 from openapi_server.models.place_order_request_item_cart_inner import PlaceOrderRequestItemCartInner
 from openapi_server.models.profile import Profile
 from openapi_server.models.user_details import UserDetails
-from openapi_server.models.vendor_add_product_images_request import VendorAddProductImagesRequest
 from openapi_server.models.vendor_add_product_request import VendorAddProductRequest
 from openapi_server.models.vendor_change_product_availabile_request import VendorChangeProductAvailabileRequest
 from openapi_server.models.vendor_details import VendorDetails

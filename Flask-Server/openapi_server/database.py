@@ -1,15 +1,20 @@
 from typing import Optional, Tuple
+from threading import Lock
 
 import os
 import sqlite3
 
 sqlConnection = None
 sqlCursor = None
+lock = None
 
 
 def init():
     global sqlConnection
     global sqlCursor
+    global lock
+
+    lock = Lock()
 
     sqlDatabaseFile = os.getenv("FOOD_DELIVERY_DB")
     if sqlDatabaseFile is None:
@@ -134,8 +139,11 @@ def verify_session_id(session_id: str) -> Optional[Tuple[str, str]]:
 def open():
     global sqlConnection
     global sqlCursor
+    global lock
 
-    init()
+    # init()
+    print("DB lock aquired")
+    lock.acquire()
 
     sqlDatabaseFile = os.getenv("FOOD_DELIVERY_DB")
     if sqlDatabaseFile is None:
@@ -147,5 +155,8 @@ def open():
 def close():
     global sqlConnection
     global sqlCursor
+    global lock
     sqlCursor.close()
     sqlConnection.close()
+    lock.release()
+    print("DB lock released")

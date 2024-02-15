@@ -30,8 +30,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-/*
-    tasks.named("preBuild") {
+
+    /*tasks.named("preBuild") {
         dependsOn("openApiGenerate")
     }*/
 
@@ -89,6 +89,5 @@ dependencies {
     implementation("io.reactivex.rxjava2:rxandroid:2.0.2")
     implementation("io.reactivex.rxjava2:rxjava:2.1.13")
     implementation("androidx.core:core-splashscreen:1.0.0")
-
 }
 

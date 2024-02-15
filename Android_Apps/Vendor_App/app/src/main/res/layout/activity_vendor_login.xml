@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/login_screen_background"
-    tools:context=".VendorLogin">
+    tools:context=".VendorLoginActivity">
 
     <FrameLayout
         android:id="@+id/frameLayout4"
@@ -29,7 +28,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:cardBackgroundColor="@color/white">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                         android:id="@+id/app_logo_imageView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/login_orange"
+                        android:background="@color/primary"
                         android:visibility="visible"
                         app:srcCompat="@drawable/activity_app_logo" />
                 </androidx.cardview.widget.CardView>
@@ -87,7 +87,6 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/login_screen_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +113,7 @@
                     android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/login_orange"
+                    android:background="@color/primary"
                     android:fontFamily="@font/jetbrains_mono"
                     android:gravity="center|center_vertical"
                     android:text="Login"
@@ -153,7 +152,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/jetbrains_mono"
                     android:text="Register"
-                    android:textColor="@color/login_orange"
+                    android:textColor="@color/primary_variant"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -178,10 +177,10 @@
                         android:id="@+id/user_name_editText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
+                        android:background="@color/surface"
                         android:drawableStart="@drawable/user_logo"
                         android:drawablePadding="20dp"
-                        android:hint="User Name"
+                        android:hint="username"
                         android:inputType="text"
                         android:padding="12dp" />
                 </androidx.cardview.widget.CardView>
@@ -192,11 +191,11 @@
                     android:layout_margin="10dp"
                     app:cardCornerRadius="20dp">
 
-                    <EditText
+                    <com.example.vendor_app.Widgets.EditTextWithDrawableClick
                         android:id="@+id/password_editText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
+                        android:background="@color/surface"
                         android:drawableStart="@drawable/password_icon"
                         android:drawableEnd="@drawable/show_password_icon"
                         android:drawablePadding="20dp"
@@ -210,8 +209,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    android:textColor="@color/primary_variant"
                     android:layout_marginRight="20dp"
-                    android:text="Forget Password" />
+                    android:text="Forgot Password?" />
 
             </LinearLayout>
 

@@ -23,6 +23,11 @@ public class AppConstants {
     public static final String KEY_CURRENT_ORDER    = "Current-Order"   ;
     public static final String KEY_IS_DATA_CHANGED  = "Is_Data_Changed" ;
 
+    public static final String PREF_ORDERS          = "Order-Status"    ;
+    public static final String STATUS_ONGOING       = "1"               ;
+    public static final String STATUS_COMPLETED     = "0"               ;
+    public static final String STATUS_CANCELLED     = "-1"              ;
+
     public static final String PREF_IMAGE_STORAGE   = "Image-Storage"   ;
 
     public static final String KEY_ITEM_ID          = "Item-Id"         ;

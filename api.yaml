@@ -3,7 +3,7 @@ info:
     title: FDS
     description: |
         This API allows to communicate with FDS (Food Delivery System) server.
-    version: 0.0.6
+    version: 0.0.7
 paths:
     # Registration and Authentication paths
     /register:
@@ -280,15 +280,15 @@ paths:
                                 description: Indicates if the specified quantity is available
                 "401":
                     description: Unauthorized
-
-    /file:
+    
+    /file/{fileId}:
         get:
             summary: Get file by file ID
             description: Retrieve a file, typically an image, based on the provided file ID.
             operationId: getFile
             parameters:
                 - name: fileId
-                  in: header
+                  in: path  
                   description: ID of the file to retrieve
                   required: true
                   schema:
@@ -310,6 +310,8 @@ paths:
                     description: "Unauthorized"
                 "404":
                     description: "File Not Found"
+
+    /file:
         put:
             summary: Upload a file
             description: Upload an image to server for referencing elsewhere.
@@ -598,8 +600,6 @@ paths:
                                     type: string
                                 thumbnail:
                                     type: string
-                                    # contentMediaType: image/*
-                                    # contentEncoding: base64
                                 price:
                                     type: number
                                 maxQuantity:
@@ -651,8 +651,6 @@ paths:
                                     type: string
                                 thumbnail:
                                     type: string
-                                    # contentMediaType: image/*
-                                    # contentEncoding: base64
                                 price:
                                     type: number
                                 maxQuantity:
@@ -665,45 +663,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/foodItemFull'
-                "403":
-                    description: "Forbidden"
-
-    /vendor/product/addImages:
-        post:
-            summary:
-            description:
-            operationId: vendorAddProductImages
-            parameters:
-            - name: sessionId
-              in : header
-              required: true
-              schema:
-                  $ref: '#/components/schemas/sessionId'
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            required:
-                                - itemId
-                            properties:
-                                itemId:
-                                    $ref: '#/components/schemas/itemId'
-                                imageUrls:
-                                    type: array
-                                    items:
-                                        $ref: '#/components/schemas/fileId'
-                                    minItems: 1
-                required: true
-            responses:
-                "200":
-                    description: "OK"
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/fileId'
                 "403":
                     description: "Forbidden"
 
