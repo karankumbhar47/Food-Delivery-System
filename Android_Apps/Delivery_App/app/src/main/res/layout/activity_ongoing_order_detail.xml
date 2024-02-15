@@ -136,9 +136,9 @@
                 android:text="Email"
                 android:textColor="@color/primary"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/OrderId_textView"
+                app:layout_constraintBottom_toBottomOf="@+id/email_textView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/OrderId_textView" />
+                app:layout_constraintTop_toTopOf="@+id/email_textView" />
 
             <TextView
                 android:id="@+id/pick_navigationButton_textView"
@@ -171,7 +171,7 @@
                 app:layout_constraintTop_toTopOf="@+id/imageView4" />
 
             <TextView
-                android:id="@+id/OrderId_textView"
+                android:id="@+id/email_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -191,7 +191,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/pick_navigationButton_textView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/OrderId_textView" />
+                app:layout_constraintTop_toBottomOf="@+id/email_textView" />
 
             <TextView
                 android:id="@+id/callButton_textView"
@@ -366,7 +366,7 @@
             android:layout_height="match_parent" >
 
             <EditText
-                android:id="@+id/password_editText"
+                android:id="@+id/otp_editText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
@@ -376,12 +376,12 @@
                 android:inputType="text"
                 android:padding="3dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/userName_textView"
+                app:layout_constraintEnd_toStartOf="@+id/submit_button_textView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/userName_textView"
+                android:id="@+id/submit_button_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
