@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import deliveryApp.model.LoginRequest;
 
 public class UserLogin extends AppCompatActivity {
     TextView  register_button;
@@ -65,34 +64,34 @@ public class UserLogin extends AppCompatActivity {
                 validateUser(UserLogin.this, new RegistrationCallback() {
                     @Override
                     public void onRegistrationSuccess(String sessionId) {
-                        editor.putBoolean(AppConstants.KEY_LOGIN_FLAG, true);
-                        editor.putString(AppConstants.KEY_SESSION_ID, sessionId);
-                        editor.putString(AppConstants.KEY_PASSWORD,password_textView.getText().toString().trim());
-                        editor.putString(AppConstants.KEY_USER_NAME,user_name_textView.getText().toString().trim());
-                        editor.apply();
-// I don't get it.
-                        String message = "Enjoy Your Favourite Dish \uD83D\uDE01";
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        View viewOrder = LayoutInflater.from(context).inflate(R.layout.custom_alert_dialog, null);
-                        TextView messageTextView = viewOrder.findViewById(R.id.dialog_message_textView);
-                        LottieAnimationView animationView = viewOrder.findViewById(R.id.lottieAnimation);
-
-                        messageTextView.setText(message);
-                        animationView.playAnimation();
-
-                        builder.setView(viewOrder)
-                                .setTitle("User Login Successfully")
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent intent = new Intent(UserLogin.this, MasterActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                        dialog.dismiss();
-                                    }
-                                });
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+//                        editor.putBoolean(AppConstants.KEY_LOGIN_FLAG, true);
+//                        editor.putString(AppConstants.KEY_SESSION_ID, sessionId);
+//                        editor.putString(AppConstants.KEY_PASSWORD,password_textView.getText().toString().trim());
+//                        editor.putString(AppConstants.KEY_USER_NAME,user_name_textView.getText().toString().trim());
+//                        editor.apply();
+//// I don't get it.
+//                        String message = "Enjoy Your Favourite Dish \uD83D\uDE01";
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                        View viewOrder = LayoutInflater.from(context).inflate(R.layout.custom_alert_dialog, null);
+//                        TextView messageTextView = viewOrder.findViewById(R.id.dialog_message_textView);
+//                        LottieAnimationView animationView = viewOrder.findViewById(R.id.lottieAnimation);
+//
+//                        messageTextView.setText(message);
+//                        animationView.playAnimation();
+//
+//                        builder.setView(viewOrder)
+//                                .setTitle("User Login Successfully")
+//                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        Intent intent = new Intent(UserLogin.this, MasterActivity.class);
+//                                        startActivity(intent);
+//                                        finish();
+//                                        dialog.dismiss();
+//                                    }
+//                                });
+//                        AlertDialog dialog = builder.create();
+//                        dialog.show();
                     }
 
                     @Override
@@ -156,51 +155,8 @@ public class UserLogin extends AppCompatActivity {
     }
 
     public void validateUser(Activity activity, RegistrationCallback callback) {
-        String user_name = user_name_textView.getText().toString().trim();
-        String password = password_textView.getText().toString().trim();
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsername(user_name);
-        loginRequest.setPassword(password);
 
-        if (user_name.length() >= 4) {
-            if (password.length() >= 8) {
-                sendRequest(loginRequest,activity,callback);
-            } else {
-                if (password.length() == 0) {
-                    password_textView.setError("Please Enter Valid Password");
-                } else {
-                    password_textView.setError("Password can't be less than 6 characters");
-                }
-            }
-        } else {
-            user_name_textView.setError("Username can't be less than 4 characters");
-        }
     }
 // I don't get it
-    public static void sendRequest(LoginRequest loginRequest, Activity activity ,RegistrationCallback callback){
-        LoadingDialog loadingDialog = new LoadingDialog(activity);
-        DefaultApi api = new DefaultApi();
-        Log.d("myTag", "api "+api.getBasePath());
-        loadingDialog.startLoadingDialog();
-        api.login(loginRequest, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                callback.onRegistrationSuccess(response.trim().substring(1, 41));
-                loadingDialog.dismissDialog();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    int statusCode = error.networkResponse.statusCode;
-                    String data = new String(error.networkResponse.data);
-                    callback.onRegistrationError(statusCode, data.trim().substring(1,41));;
-                    loadingDialog.dismissDialog();
-                } catch (Exception e) {
-                    callback.onRegistrationError(0, null);
-                    loadingDialog.dismissDialog();
-                }
-            }
-        });
-    }
+
 }
