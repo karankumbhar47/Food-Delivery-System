@@ -34,9 +34,9 @@ android {
         viewBinding = true
     }
 
-    tasks.named("preBuild") {
-        dependsOn("openApiGenerate")
-    }
+//    tasks.named("preBuild") {
+//        dependsOn("openApiGenerate")
+//    }
 
     sourceSets {
         getByName("main").java.srcDirs("src/main/java", "build/FDS_Api/src/main/java")

@@ -5,7 +5,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivityPage" >
+    tools:context=".MasterActivity" >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/topBar_cardView"
