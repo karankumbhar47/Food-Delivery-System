@@ -3,7 +3,7 @@ info:
     title: FDS
     description: |
         This API allows to communicate with FDS (Food Delivery System) server.
-    version: 0.0.7
+    version: 0.0.8
 paths:
     # Registration and Authentication paths
     /register:
@@ -223,7 +223,7 @@ paths:
                     content:
                         application/json:
                             schema: #OTP
-                               type: integer
+                               type: string
 
                 "404":
                     description: "Not Found"
@@ -886,6 +886,8 @@ paths:
                                         description: Delivery location.
                                     price:
                                         type: number
+                                    status:
+                                        type: string
                 "401":
                     description: "Unauthorized"
 
